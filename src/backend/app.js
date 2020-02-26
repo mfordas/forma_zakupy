@@ -1,10 +1,13 @@
 import express from 'express';
 import helmet from 'helmet';
-import path from 'path';
-import mongoose from 'mongoose';
 import home from './routes/home.js';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
+import {
+    load,
+    register,
+    connect
+} from './db/index.js';
 const app = express();
 
 const main = async () => {
@@ -15,18 +18,17 @@ const main = async () => {
     }));
     app.use(helmet());
 
-    mongoose.connect('mongodb://localhost:27017/test', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => console.log('Connected'))
-    .catch(err => console.log("Error"))
+    const connection = await connect();
+    const models = load(connection);
+    if (process.env.TEST_ENV || process.env.NODE_ENV) {
+        // await connection.dropDatabase();
+    }
+
+    register(app, connection, models);
 
     app.use('/', home);
     app.use('/api/users', users);
     app.use('/api/auth', auth);
-
-    app.use(express.static(path.join('../frontend/build')));
 
     const host = process.env.HOST || '127.0.0.1';
     const port = process.env.PORT || 8080;

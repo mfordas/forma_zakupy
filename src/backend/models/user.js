@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
-// Joi.objectId = require('joi-objectid')(Joi);
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userSchema = new mongoose.Schema({
@@ -88,6 +87,6 @@ function validateUser(user) {
   return schema.validate(user);
 }
 
-const User = mongoose.model('User', userSchema);
+const user = userSchema;
 
-export {User, validateUser}
+export {user, validateUser}

@@ -17,7 +17,7 @@ function sendEmail(email, url) {
   });
 
   let mailOptions = {
-    from: 'poradnia@formadietetyk.pl',
+    from: 'poradnia',
     to: email,
     subject: 'Confirm Email',
     html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`

@@ -6,9 +6,7 @@ import Store, { StoreProvider } from './Store';
 import setHeaders from './frontend/utils/setHeaders';
 import Home from './frontend/views/Homepage';
 import PublicRoute from './frontend/components/PublicRoute';
-import Register from './frontend/views/Register';
-import logoSrc from "./frontend/img/logotyp-08.png";
-import './frontend/components/Register/register.scss';
+
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
 
@@ -43,10 +41,8 @@ const App = () => {
 
   return (
     <BrowserRouter>
-        <img className="logo" src={logoSrc} alt="Logo"></img>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <PublicRoute path="/register" component={Register} />
+          <PublicRoute path="/home" component={Home} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
     </BrowserRouter>

@@ -1,0 +1,26 @@
+$heart-right-side-color: rgb(233,82,18);
+$heart-left-side-color: rgb(197,60,28);
+$human-color: rgb(245,239,191);
+$leaf-right-side-color: rgb(142,193,79);
+$leaf-left-side-color: rgb(119,170,49);
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@font-face{
+    font-family: 'lovelo';
+    src: url('../fonts/Lovelo-Black.eot');
+    src: url('../fonts/Lovelo-Black.otf');
+    src: url('../fonts/Lovelo-Black.ttf');
+}
+
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    background-color: $human-color;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    min-width: 100vw;
+    min-height: 100vh;
+    font-family: 'lovelo';
+}

@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, NavLink } from 'react-router-dom';
 import Store from '../../../Store';
 import axios from 'axios';
-import './register.scss';
+import './homepage.scss';
 
-class Login extends React.Component {
+class Register extends React.Component {
 
   state = {
     name: '',
@@ -101,26 +101,25 @@ class Login extends React.Component {
 
   render() {
     return (
-      <BrowserRouter>
         <div className="container">
           <div className="registerCard">
             <p>Witamy w programie Forma Zakupy. Jeśli jeszcze nie posiadasz konta - zarejestruj się</p>
             <form>
-              <p>Name</p>
               <input onChange={e => this.setState({ name: e.target.value })}></input>
-              <p>Email</p>
+              <p>Imię</p>
               <input onChange={e => this.setState({ email: e.target.value })}></input>
-              <p>Password</p>
+              <p>E-mail</p>
               <input onChange={e => this.setState({ password: e.target.value })}></input>
-              <p>Confirm password</p>
+              <p>Hasło</p>
               <input onChange={e => this.setState({ confirmPassword: e.target.value })}></input>
-              <button onClick={this.onButtonSubmit}>Confirm</button>
+              <p>Powierdź hasło</p>
+              <button className="button" onClick={this.onButtonSubmit}>Zarejestruj</button>
+              <NavLink className="button" to="/home">Strona główna</NavLink>
             </form>
           </div>
         </div>
-      </BrowserRouter>
     );
   }
 }
 
-export default Login;
+export default Register;

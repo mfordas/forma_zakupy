@@ -1,14 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import logoSrc from "../../img/logotyp-08.png";
-import './homepage.scss';
+import '../../main_styling/main_styling.scss';
 
 
 class LogoHomePage extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
 
     render() {
         return (

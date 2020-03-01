@@ -41,4 +41,15 @@ router.get('/me', auth, async (req, res) => {
   res.send(_.pick(user, ['_id', 'name', 'email']));
 });
 
+
+router.get('/', async (req, res) => {
+  const User = res.locals.models.user;
+
+  const users = await User.find()
+  .select('_id email')
+  .sort('email');
+  
+  res.send(users);
+})
+
 export default router;

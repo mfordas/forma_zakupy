@@ -1,16 +1,22 @@
 import React from 'react';
-import { BrowserRouter, Redirect, NavLink } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 import Store from '../../../Store';
 import axios from 'axios';
 import jwt from 'jwt-decode';
-import './homepage.scss';
+import '../../main_styling/main_styling.scss';
+import ErrorMessage from '../ReusableComponents/ErrorMessage'
 
 class Login extends React.Component {
+  constructor(props){
+    super(props)
 
-  state = {
-    email: '',
-    password: '',
+    this.state = {
+      email: '',
+      password: '',
+      emailVerified: true
+    }
   }
+  
 
   static contextType = Store;
 
@@ -31,7 +37,7 @@ class Login extends React.Component {
 
       if(res.status === 203) {
         localStorage.setItem('email', this.state.email);
-        document.location.href = '/login/notVerified';
+        this.setState({emailVerified: false});
       } else if (res.status === 200) {
         const token = res.headers["x-auth-token"];
         localStorage.setItem('token', token);
@@ -49,8 +55,11 @@ class Login extends React.Component {
   }
 
   loginValidate = (e) => {
-    if (this.state.invalidData) {
-      return console.log('Invalid email or password');
+    if (this.state.emailVerified === true && this.state.invalidData) {
+      return <ErrorMessage message='Zły e-mail lub hasło'/>
+    }
+    if (this.state.emailVerified === false && this.state.invalidData){
+      return <ErrorMessage message='Adres e-mail niezweryfikowany'/>
     }
     else { return null }
   }
@@ -59,7 +68,6 @@ class Login extends React.Component {
     if (this.context.isLogged) return <Redirect to="/" />;
   
     return (
-      <BrowserRouter>
         <div className="container">
           <div className="registerCard">
             <p>Witamy w programie Forma Zakupy. Jeśli jeszcze nie posiadasz konta - zarejestruj się</p>
@@ -68,12 +76,11 @@ class Login extends React.Component {
               <p>E-mail</p>
               <input onChange={e => this.setState({ password: e.target.value })}></input>
               <p>Hasło</p>
+              {this.loginValidate()}
               <button className="button" onClick={this.onButtonSubmit}>Zaloguj</button>
-              <NavLink className="button" to="/home/register">Rejestracja</NavLink>
             </form>
           </div>
         </div>
-      </BrowserRouter>
     );
   }
 }

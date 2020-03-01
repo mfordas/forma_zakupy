@@ -6,6 +6,9 @@ import Store, { StoreProvider } from './Store';
 import setHeaders from './frontend/utils/setHeaders';
 import Home from './frontend/views/Homepage';
 import PublicRoute from './frontend/components/PublicRoute';
+import MenuBar from './frontend/views/Menu';
+import Login from './frontend/views/Login';
+import Register from './frontend/views/Register';
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -19,17 +22,11 @@ const App = () => {
           localStorage.removeItem('token');
           changeStore('isLogged', false);
           changeStore('me', null);
-          changeStore('hasCharacter', null);
           return;
         }
         const data = await response.json();
         changeStore('isLogged', true);
         changeStore('me', data);
-        if(data.character_id){
-          changeStore('hasCharacter', true);
-        } else {
-          changeStore('hasCharacter', false);
-        }    
       } catch (ex) {
         console.error('Serwer nie odpowiada');
         console.error('Error', ex);
@@ -41,8 +38,11 @@ const App = () => {
 
   return (
     <BrowserRouter>
+        <Home/>
+        <MenuBar />
         <Switch>
-          <PublicRoute path="/home" component={Home} />
+          <PublicRoute exact path="/home" component={Login}/>
+          <Route exact path="/register" component={Register} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
     </BrowserRouter>

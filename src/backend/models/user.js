@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import Joi from '@hapi/joi';
+import JoiObjectId from 'joi-objectid';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Schema.Types.ObjectId;
+Joi.objectId = JoiObjectId(Joi);
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,17 +30,17 @@ const userSchema = new mongoose.Schema({
   },
   shopping_lists_id: {
     type: [ObjectId],
-    ref: 'Shopping_list',
+    ref: 'ShoppingList',
     default: [],
   },
   common_shopping_lists_id: {
     type: [ObjectId],
-    ref: 'Common_shopping_list',
+    ref: 'CommonShoppingList',
     default: [],
   },
-  custom_things_id: {
-    type: [ObjectId],
-    ref: 'Custom_things',
+  custom_products: {
+    type: [Object],
+    ref: 'Products',
     default: [],
   },
   isAdmin: {
@@ -76,10 +78,9 @@ function validateUser(user) {
       .max(26)
       .required()
       .trim(),
-      shopping_lists_id: Joi.array().items(Joi.object()),
-      common_shopping_lists_id: Joi.array().items(Joi.object()),
-      custom_things_id: Joi.array().items(Joi.object()),
-    character_id: Joi.object(),
+      shopping_lists_id: Joi.array().items(Joi.objectId()),
+      common_shopping_lists_id: Joi.array().items(Joi.objectId()),
+      custom_products: Joi.array().items(Joi.object()),
     isAdmin: Joi.boolean(),
     isVerified: Joi.boolean()
   });

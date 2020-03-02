@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import _ from 'lodash';
 import {validateUser} from '../models/user.js';
+import {validateProduct} from '../models/product.js';
 import {sendEmail} from './email.js';
 import {auth} from '../middleware/authorization.js';
 import express from 'express';
@@ -50,6 +51,34 @@ router.get('/', async (req, res) => {
   .sort('email');
   
   res.send(users);
+})
+
+router.put('/:id/product', async (req, res)=> {
+  const User = res.locals.models.user;
+
+  const Product = res.locals.models.product;
+  const product = new Product(req.body);
+  const {
+    error
+  } = validateProduct(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  await product.save();
+
+  const userHandler = await User.findById(req.params.id, 'custom_products', { lean: true });
+    userHandler.custom_products.push(product);
+  
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        custom_products: userHandler.custom_products,
+      },
+      { new: true },
+    );
+  
+    if (!user) return res.status(404).send('Nie znaleziono użytkowanika z takim ID.');
+    res.send(user);
+
 })
 
 export default router;

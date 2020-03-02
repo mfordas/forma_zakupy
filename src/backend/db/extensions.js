@@ -14,4 +14,20 @@ const User = {
   virtuals: () => {},
 };
 
-export default { ExtensionBase, User };
+const ShoppingList = {
+  methods: () => {},
+  statics: () => {},
+  query: () => {},
+  indexes: () => {},
+  virtuals: () => {},
+};
+
+const Product = {
+  methods: () => {},
+  statics: () => {},
+  query: () => {},
+  indexes: () => {},
+  virtuals: () => {},
+};
+
+export default { ExtensionBase, User, ShoppingList, Product };

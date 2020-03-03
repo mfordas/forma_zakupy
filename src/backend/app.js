@@ -4,6 +4,8 @@ import path from 'path';
 import home from './routes/home.js';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
+import shoppingLists from './routes/shoppingLists.js';
+import products from './routes/products.js';
 import {
     load,
     register,
@@ -31,6 +33,8 @@ const main = async () => {
 
     app.use('/', home);
     app.use('/api/users', users);
+    app.use('/api/shoppingLists', shoppingLists);
+    app.use('/api/products', products);
     app.use('/api/auth', auth);
 
     app.use(express.static(path.join(dirname, './build')));

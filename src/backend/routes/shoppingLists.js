@@ -66,9 +66,8 @@ router.post('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     const ShoppingList = res.locals.models.shoppingList;
     const shoppingList = await ShoppingList.findById(req.params.id);
-  
     if (!shoppingList) return res.status(404).send('Nie znaleziono listy zakupów z takim ID.');
-  
+
     res.send(shoppingList);
   });
 

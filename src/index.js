@@ -6,9 +6,11 @@ import Store, { StoreProvider } from './Store';
 import setHeaders from './frontend/utils/setHeaders';
 import Home from './frontend/views/Homepage';
 import PublicRoute from './frontend/components/PublicRoute';
+import PrivateRoute from './frontend/components/PrivateRoute';
 import MenuBar from './frontend/views/Menu';
 import Login from './frontend/views/Login';
 import Register from './frontend/views/Register';
+import ShoppingList from './frontend/views/ShoppingList';
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -42,6 +44,7 @@ const App = () => {
         <MenuBar />
         <Switch>
           <PublicRoute exact path="/home" component={Login}/>
+          <PrivateRoute exact path="/shoppingLists" component={ShoppingList}/>
           <Route exact path="/register" component={Register} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>

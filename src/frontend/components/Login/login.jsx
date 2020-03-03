@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, NavLink } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Store from '../../../Store';
 import axios from 'axios';
 import jwt from 'jwt-decode';
@@ -13,7 +13,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailVerified: true
+      emailVerified: true,
+      invalidData: false
     }
   }
   
@@ -22,7 +23,8 @@ class Login extends React.Component {
 
   onButtonSubmit = async e => {
     e.preventDefault();
-    const data = this.state;
+    const data = {email: this.state.email,
+      password:this.state.password};
     delete this.state["invalidData"];
     try {
       const res = await axios({

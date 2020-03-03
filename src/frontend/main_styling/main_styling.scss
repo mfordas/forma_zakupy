@@ -156,6 +156,25 @@ p {
     color: red;
 }
 
+.container-shoppingList {
+    max-width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-shoppingLists {
+    max-width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 @media (max-width: 420px){
     .registerCard{
         max-width: 75vw;

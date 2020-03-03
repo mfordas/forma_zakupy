@@ -22,6 +22,10 @@ const shoppingListSchema = new mongoose.Schema({
         type: [ObjectId],
         ref: 'Users',
         default: [],
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
 
 });
@@ -36,6 +40,7 @@ function validateShoppingList(shoppingList) {
             .trim(),
         products_id: Joi.array().items(Joi.object()),
         members_id: Joi.array().items(Joi.objectId()),
+        completed: Joi.boolean(),
 
     });
 

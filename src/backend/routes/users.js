@@ -63,8 +63,6 @@ router.put('/:id/product', async (req, res)=> {
   } = validateProduct(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  await product.save();
-
   const userHandler = await User.findById(req.params.id, 'custom_products', { lean: true });
     userHandler.custom_products.push(product);
   

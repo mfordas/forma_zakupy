@@ -117,13 +117,17 @@ p {
 }
 
 .containerMenu {
-    width: 20vw;
+    min-width: 20vw;
     align-self: center;
     display: flex;
     justify-content: center;
 }
 
 .buttonMenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     border: 2px solid black;
     color: black;
     background-color: white;
@@ -131,12 +135,12 @@ p {
     transition: 1s ease-in-out ;
     font-family: 'lovelo';
     text-decoration: none;
-    text-align: center;
     font-size: 14px;
     flex: 2;
     padding: 10px;
     margin: 10px;
     border-radius: 20px;
+    
 }
 .buttonMenu.active {
     border:none;

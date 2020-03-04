@@ -4,7 +4,8 @@ import Store from '../../../Store';
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import '../../main_styling/main_styling.scss';
-import ErrorMessage from '../ReusableComponents/ErrorMessage'
+import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import setHeaders from '../../utils/setHeaders';
 
 class Login extends React.Component {
   constructor(props){
@@ -31,9 +32,7 @@ class Login extends React.Component {
         method: 'post',
         url: '/api/auth',
         data: data,
-        headers: {
-          'Content-Type': 'application/json',
-        }
+        headers: setHeaders(),
       });
       console.log(res.status);
 

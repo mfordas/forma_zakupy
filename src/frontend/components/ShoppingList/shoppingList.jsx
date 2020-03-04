@@ -1,6 +1,7 @@
 import React from 'react';
-import Store from '../../../Store';
 import axios from 'axios';
+import AddNewShoppingList from './addNewShoppingList';
+import DeleteShoppingList from './deleteShoppingList';
 import '../../main_styling/main_styling.scss';
 
 class ShoppingList extends React.Component {
@@ -8,7 +9,8 @@ class ShoppingList extends React.Component {
         super(props)
 
         this.state = {
-            shoppingLists: []
+            shoppingLists: [],
+            addShoppingListActive: false,
         }
     }
 
@@ -27,25 +29,36 @@ class ShoppingList extends React.Component {
         console.log(this.state.shoppingLists);
     }
 
-    static contextType = Store;
+    openNewShoppingListForm = () => {
+        this.setState({addShoppingListActive: !this.state.addShoppingListActive});
+    }
+
+
 
     componentDidMount() {
         this.getShoppingLists();
+    }
+
+    componentDidUpdate(){
+        
     }
 
 
     render() {
         return (
             <div className="container-shoppingLists">
+                <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button>
+                {this.state.addShoppingListActive ? <AddNewShoppingList/> : null}
                 {this.state.shoppingLists.map(list =>
-                    <div className="container-shoppingList">
+                    <div key={list._id} className="container-shoppingList">
                         <div className="shoppinglist-name">
                             <p>{list.name}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
                             <p>{list.products.length}</p>
                         </div>
-                        <button className="button" onClick={this.getShoppingList}>Przejdź</button></div>)}
+                        <button className="button" onClick={this.getShoppingList}>Przejdź</button>
+                        <DeleteShoppingList id={list._id}/> </div>)}
             </div>
         );
     }

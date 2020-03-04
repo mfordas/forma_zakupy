@@ -79,4 +79,28 @@ router.put('/:id/product', async (req, res)=> {
 
 })
 
+router.delete('/:id/shoppingList/:idSL', async (req, res) => {
+  const User = res.locals.models.user;
+  const ShoppingList = res.locals.models.shoppingList;
+
+  const userHandler = await User.findById(req.params.id, 'shopping_lists_id', { lean: true });
+  const filteredIds = await userHandler.shopping_lists_id.filter(el => el.toString() !== req.params.idSL);
+
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      shopping_lists_id: filteredIds,
+    },
+    { new: true },
+  );
+
+  if (!user) return res.status(404).send('Nie znaleziono użytkowanika z takim ID.');
+  res.send(user);
+  const shoppingList = await ShoppingList.findOneAndDelete({_id: req.params.idSL});
+
+  if (!shoppingList) return res.status(404).send('Nie znaleziono listy zakupów z takim ID.');
+
+  
+
+});
 export default router;

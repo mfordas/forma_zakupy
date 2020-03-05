@@ -44,13 +44,11 @@ class AddNewShoppingList extends React.Component {
 
     render() {
         return (
-            <div className="container-shoppingLists">
-                <form >
+                <form className="container-add-shoppingList">
+                <p>Nazwa listy</p>
                 <input onChange={e => this.setState({ shoppingListName: e.target.value })}></input>
-              <p>Nazwa listy</p>
                 <button className="button" onClick={this.addShoppingList}>Dodaj</button>
                 </form>
-            </div>
         );
     }
 }

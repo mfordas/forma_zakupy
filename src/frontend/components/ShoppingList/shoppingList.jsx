@@ -25,22 +25,12 @@ class ShoppingList extends React.Component {
             .then(res => this.setState({ shoppingLists: res }));
     }
 
-    getShoppingList = async () => {
-        console.log(this.state.shoppingLists);
-    }
-
     openNewShoppingListForm = () => {
         this.setState({addShoppingListActive: !this.state.addShoppingListActive});
     }
 
-
-
     componentDidMount() {
         this.getShoppingLists();
-    }
-
-    componentDidUpdate(){
-        
     }
 
 
@@ -58,7 +48,7 @@ class ShoppingList extends React.Component {
                             <p>{list.products.length}</p>
                         </div>
                         <button className="button" onClick={this.getShoppingList}>Przejdź</button>
-                        <DeleteShoppingList id={list._id}/> </div>)}
+                        <DeleteShoppingList onClick={this.getShoppingLists} id={list._id}/> </div>)}
             </div>
         );
     }

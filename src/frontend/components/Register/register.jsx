@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from '../../../Store';
 import axios from 'axios';
+import setHeaders from '../../utils/setHeaders';
 import '../../main_styling/main_styling.scss';
 import Confirm from './confirm';
 import ErrorMessage from '../ReusableComponents/ErrorMessage'
@@ -37,9 +38,7 @@ class Register extends React.Component {
           email: this.state.email,
           password: this.state.password,
         },
-        headers: {
-          'Content-Type': 'application/json',
-        }
+        headers: setHeaders()
       });
 
       if (res.status === 200) {

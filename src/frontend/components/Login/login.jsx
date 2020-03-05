@@ -1,10 +1,11 @@
 import React from 'react';
-import { Redirect, NavLink } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Store from '../../../Store';
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import '../../main_styling/main_styling.scss';
-import ErrorMessage from '../ReusableComponents/ErrorMessage'
+import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import setHeaders from '../../utils/setHeaders';
 
 class Login extends React.Component {
   constructor(props){
@@ -13,7 +14,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailVerified: true
+      emailVerified: true,
+      invalidData: false
     }
   }
   
@@ -22,16 +24,15 @@ class Login extends React.Component {
 
   onButtonSubmit = async e => {
     e.preventDefault();
-    const data = this.state;
+    const data = {email: this.state.email,
+      password:this.state.password};
     delete this.state["invalidData"];
     try {
       const res = await axios({
         method: 'post',
         url: '/api/auth',
         data: data,
-        headers: {
-          'Content-Type': 'application/json',
-        }
+        headers: setHeaders(),
       });
       console.log(res.status);
 

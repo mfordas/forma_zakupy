@@ -3,12 +3,11 @@ import { NavLink } from 'react-router-dom';
 import Store from '../../../Store';
 
 const Menu = () => {
-    const { isLogged, changeStore, me } = useContext(Store);
+    const { isLogged, changeStore } = useContext(Store);
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         changeStore('isLogged', false);
-        changeStore('me', null);
         changeStore('hasCharacter', null)
         window.location.reload();
     };
@@ -25,9 +24,9 @@ const Menu = () => {
     {isLogged &&
     (
         <>
-        <NavLink className="buttonMenu" to="/home">Moje Listy zakupów</NavLink>
-        <NavLink className="buttonMenu" to="/home/register">Wspólne listy zakupów</NavLink>
-        <NavLink className="buttonMenu" to="/home/register">Wyloguj</NavLink>
+        <NavLink className="buttonMenu" to="/shoppingLists">Moje Listy zakupów</NavLink>
+        <NavLink className="buttonMenu" to="/commonShoppingLists">Wspólne listy zakupów</NavLink>
+        <NavLink className="buttonMenu" to="/logout" onClick={handleLogout}>Wyloguj</NavLink>
         </>
     )}
         </div>

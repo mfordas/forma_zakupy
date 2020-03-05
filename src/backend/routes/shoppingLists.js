@@ -27,12 +27,11 @@ router.post('/', async (req, res) => {
 
   router.post('/:id/shoppingList', async (req, res) => {
     const User = res.locals.models.user;
-
     const ShoppingList = res.locals.models.shoppingList;
-    const { error } = validateShoppingList(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
     let shoppingList = new ShoppingList(req.body);
     shoppingList.members_id.push(req.params.id);
+    const { error } = validateShoppingList(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     await shoppingList.save();
 
@@ -66,11 +65,10 @@ router.post('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     const ShoppingList = res.locals.models.shoppingList;
     const shoppingList = await ShoppingList.findById(req.params.id);
-  
     if (!shoppingList) return res.status(404).send('Nie znaleziono listy zakupów z takim ID.');
-  
+
     res.send(shoppingList);
   });
 
-  
+
   export default router;

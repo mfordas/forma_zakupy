@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {validateProduct} from '../models/product.js';
 import express from 'express';
 const router = express.Router();
@@ -6,7 +5,7 @@ const router = express.Router();
 
 
 
-//add new shoppingList
+//add new product
 router.post('/', async (req, res) => {
     const Product = res.locals.models.product;
     const { error } = validateProduct(req.body);
@@ -18,11 +17,11 @@ router.post('/', async (req, res) => {
     res.send(product);
   });
   
-  //get all shoppingLists
+  //get all products
   router.get('/', async (req, res) => {
     const Product = res.locals.models.product;
     const product = await Product.find().sort('name');
     res.send(product);
   });
-  
+
   export default router;

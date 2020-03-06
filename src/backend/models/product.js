@@ -18,6 +18,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         enum: ['', 'kg', 'g', 'l', 'ml', 'szt'],
         default: '',
+    },
+    bought: {
+        type: Boolean,
+        default: false
     }
 
 });
@@ -29,9 +33,11 @@ function validateProduct(product) {
         name: Joi.string()
             .min(3)
             .max(26)
-            .trim(),
-        amount: Joi.number().min(0),
-        unit: Joi.valid('kg', 'g', 'l', 'ml', 'szt'),
+            .trim()
+            .required(),
+        amount: Joi.number().min(0).required(),
+        unit: Joi.valid('kg', 'g', 'l', 'ml', 'szt').required(),
+        bought: Joi.boolean(),
 
     });
 

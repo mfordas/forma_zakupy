@@ -39,7 +39,7 @@ function validateShoppingList(shoppingList) {
             .max(26)
             .trim()
             .required(),
-        products_id: Joi.array().items(Joi.object()),
+        products: Joi.array().items(Joi.object()),
         members_id: Joi.array().items(Joi.objectId()),
         completed: Joi.boolean(),
 

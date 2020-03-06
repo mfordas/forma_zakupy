@@ -38,7 +38,7 @@ class ShoppingList extends React.Component {
         return (
             <div className="container-shoppingLists">
                 <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button>
-                {this.state.addShoppingListActive ? <AddNewShoppingList/> : null}
+                {this.state.addShoppingListActive ? <AddNewShoppingList onClick={this.getShoppingLists}/> : null}
                 {this.state.shoppingLists.map(list =>
                     <div key={list._id} className="container-shoppingList">
                         <div className="shoppinglist-name">

@@ -1,10 +1,11 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 import AddNewShoppingList from './addNewShoppingList';
 import DeleteShoppingList from './deleteShoppingList';
 import '../../main_styling/main_styling.scss';
 
-class ShoppingList extends React.Component {
+class ShowShoppingLists extends React.Component {
     constructor(props) {
         super(props)
 
@@ -47,11 +48,11 @@ class ShoppingList extends React.Component {
                         <div className="shoppinglist-productsNumber">
                             <p>{list.products.length}</p>
                         </div>
-                        <button className="button" onClick={this.getShoppingList}>Przejdź</button>
+                        <Link className="button" to={{pathname:`/shoppingList/${list.name}`, listInfo:{id:list._id, name:list.name}}}>Przejdź</Link>
                         <DeleteShoppingList onClick={this.getShoppingLists} id={list._id}/> </div>)}
             </div>
         );
     }
 }
 
-export default ShoppingList;
+export default ShowShoppingLists;

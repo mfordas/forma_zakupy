@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import AddProduct from './addProduct';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList'
 import '../../main_styling/main_styling.scss';
@@ -36,7 +37,10 @@ class ShowShoppingList extends React.Component {
     render() {
         return (
             <div className="container-products">
+                <div className="containerMenu">
                 <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
+                <Link className="button" to={`/shoppingLists`}>Powrót do list zakupów</Link>
+                </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList}/> : null}
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-shoppingList">

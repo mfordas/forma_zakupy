@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
 import Store, { StoreProvider } from './Store';
 import setHeaders from './frontend/utils/setHeaders';
@@ -42,12 +42,10 @@ const App = () => {
     <BrowserRouter>
         <Home/>
         <MenuBar />
-        <Switch>
           <PublicRoute exact path="/home" component={Login}/>
           <PrivateRoute exact path="/shoppingLists" component={ShoppingList}/>
           <Route exact path="/register" component={Register} />
           <Route render={() => <Redirect to="/" />} />
-        </Switch>
     </BrowserRouter>
   );
 };

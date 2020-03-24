@@ -8,8 +8,8 @@ class ShoppingListContent extends React.Component {
     render() {
         return (
             <BrowserRouter>
-                <Route exact path="/shoppingLists" component={ShowShoppingLists} />
-                <Route exact path="/shoppingList/:name" component={ShowShoppingList}/>
+                    <Route exact path="/shoppingLists" component={ShowShoppingLists} />
+                    <Route exact path="/shoppingList/:name" component={ShowShoppingList} />
             </BrowserRouter>
         );
     }

@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AddProduct from './addProduct';
+import setHeaders from '../../utils/setHeaders';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList'
 import '../../main_styling/main_styling.scss';
 
@@ -23,29 +24,52 @@ class ShowShoppingList extends React.Component {
             method: "GET"
         });
         const productsArray = products.data;
-        this.setState({products: productsArray});
+        this.setState({ products: productsArray });
     }
 
-    componentDidMount(){
-        this.showShoppingList();
+    crossProduct = async (currentStatus, idProduct) => {
+        const id = this.state.idShoppingList;
+        await axios({
+            url: `/api/shoppingLists/${id}/product/${idProduct}`,
+            method: 'PUT',
+            headers: setHeaders(),
+            data: {
+                bought: !currentStatus,
+            }
+        }).then(res => {
+            if (res.status === 200) {
+                this.showShoppingList();
+            } else {
+                console.log('warrning');
+            }
+        },
+            error => {
+                console.log(error);
+            }
+        );
+
     }
 
     openNewProductForm = () => {
-        this.setState({addProductActive: !this.state.addProductActive});
+        this.setState({ addProductActive: !this.state.addProductActive });
+    }
+
+    componentDidMount() {
+        this.showShoppingList();
     }
 
     render() {
         return (
             <div className="container-products">
                 <div className="containerMenu">
-                <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
-                <Link className="button" to={`/shoppingLists`}>Powrót do list zakupów</Link>
+                    <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
+                    <Link className="button" to={`/shoppingLists`}>Powrót do list zakupów</Link>
                 </div>
-                {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList}/> : null}
+                {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-shoppingList">
-                        <div className="shoppinglist-name">
-                            <p>{product.name}</p>
+                        <div className="shoppinglist-name" onClick={() => this.crossProduct(product.bought, product._id)}>
+                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.name}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
                             <p>{product.amount}</p>
@@ -53,7 +77,7 @@ class ShowShoppingList extends React.Component {
                         <div className="shoppinglist-productsNumber">
                             <p>{product.unit}</p>
                         </div>
-                        <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id}/>
+                        <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />
                     </div>)}
             </div>
         );

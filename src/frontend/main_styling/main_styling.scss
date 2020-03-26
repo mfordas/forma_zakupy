@@ -25,6 +25,11 @@ body, html, #root {
     min-width: 100vw;
     min-height: 100vh;
     font-family: 'lovelo';
+    
+}
+
+a, Link {
+    text-decoration: none;
 }
 
 * {
@@ -90,7 +95,7 @@ input {
     background-color: $leaf-right-side-color;
     border-bottom: 2px solid black;
     text-align: center;
-    font-family: 'Open Sans';
+    font-family: 'Lovelo';
 }
 
 p {
@@ -107,9 +112,9 @@ p {
     box-sizing: border-box;
     transition: .7s ease-in-out ;
     font-family: 'lovelo';
-    text-decoration: none;
     text-align: center;
     font-size: 14px;
+    color: black;
 }
 
 .button:hover {
@@ -169,7 +174,7 @@ p {
     align-items: center;
 }
 
-.container-shoppingLists {
+.container-shoppingLists, .container-products {
     max-width: 100vw;
     max-height: 100vh;
     box-sizing: border-box;
@@ -191,6 +196,21 @@ p {
     input {
         background-color: white;
     }
+}
+
+.progress-bar {
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    transition: .7s ease-in-out ;
+    font-family: 'lovelo';
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    width: 100%;
 }
 
 @media (max-width: 420px){

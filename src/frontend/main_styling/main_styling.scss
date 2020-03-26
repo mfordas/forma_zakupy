@@ -198,6 +198,21 @@ p {
     }
 }
 
+.progress-bar {
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    transition: .7s ease-in-out ;
+    font-family: 'lovelo';
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    width: 100%;
+}
+
 @media (max-width: 420px){
     .registerCard{
         max-width: 75vw;

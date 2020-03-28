@@ -1,5 +1,5 @@
-import models from './models.js';
-import extensions from './extensions.js';
+import models from "./models.js";
+import extensions from "./extensions.js";
 
 const hasProperty = (x, y) => Object.prototype.hasOwnProperty.call(x, y);
 const hasFunction = (x, y) => hasProperty(x, y) && x[y] instanceof Function;
@@ -28,7 +28,7 @@ const load = db => {
     compiledModels[name] = db.model(name, extendedModel);
   }
 
-  console.log('[MongoDB] Extensions and models compiled');
+  console.log("[MongoDB] Extensions and models compiled");
   return compiledModels;
 };
 

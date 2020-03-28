@@ -1,6 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const getByMode = (prod, dev) => (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'production' ? prod : dev);
+const getByMode = (prod, dev) =>
+  process.env.NODE_ENV === "prod" || process.env.NODE_ENV === "production"
+    ? prod
+    : dev;
 
 const config = {
   host: getByMode(process.env.DB_HOST, process.env.DB_HOST_DEV),
@@ -8,10 +11,13 @@ const config = {
   name: getByMode(process.env.DB_NAME, process.env.DB_NAME_DEV),
   username: getByMode(process.env.DB_USER, process.env.DB_USER_DEV),
   password: getByMode(process.env.DB_PASS, process.env.DB_PASS_DEV),
-  protocol: getByMode(process.env.DB_PROT, process.env.DB_PROT_DEV),
+  protocol: getByMode(process.env.DB_PROT, process.env.DB_PROT_DEV)
 };
 
-const mongoUrl = getByMode(`${config.protocol}://${config.username}:${config.password}@${config.host}:${config.port}/${config.name}`, `${config.protocol}://${config.host}:${config.port}/${config.name}`);
+const mongoUrl = getByMode(
+  `${config.protocol}://${config.username}:${config.password}@${config.host}:${config.port}/${config.name}`,
+  `${config.protocol}://${config.host}:${config.port}/${config.name}`
+);
 
 const connectionOnSuccessHandler = connection => {
   console.log(`[MongoDB] Connection to ${mongoUrl} created`);
@@ -27,11 +33,13 @@ const defaultOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false,
+  useFindAndModify: false
 };
 
 const connect = (options = defaultOptions) => {
-  return mongoose.createConnection(`${mongoUrl}`, options).then(connectionOnSuccessHandler, connectionOnErrorHandler);
+  return mongoose
+    .createConnection(`${mongoUrl}`, options)
+    .then(connectionOnSuccessHandler, connectionOnErrorHandler);
 };
 
 export default connect;

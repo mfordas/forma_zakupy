@@ -3,7 +3,7 @@ const ExtensionBase = {
   statics: () => {},
   query: () => {},
   indexes: () => {},
-  virtuals: () => {},
+  virtuals: () => {}
 };
 
 const User = {
@@ -11,7 +11,7 @@ const User = {
   statics: () => {},
   query: () => {},
   indexes: () => {},
-  virtuals: () => {},
+  virtuals: () => {}
 };
 
 const ShoppingList = {
@@ -19,7 +19,7 @@ const ShoppingList = {
   statics: () => {},
   query: () => {},
   indexes: () => {},
-  virtuals: () => {},
+  virtuals: () => {}
 };
 
 const Product = {
@@ -27,7 +27,7 @@ const Product = {
   statics: () => {},
   query: () => {},
   indexes: () => {},
-  virtuals: () => {},
+  virtuals: () => {}
 };
 
 export default { ExtensionBase, User, ShoppingList, Product };

@@ -1,56 +1,48 @@
-import Joi from '@hapi/joi';
-import mongoose from 'mongoose';
-import JoiObjectId from 'joi-objectid';
+import Joi from "@hapi/joi";
+import mongoose from "mongoose";
+import JoiObjectId from "joi-objectid";
 const ObjectId = mongoose.Schema.Types.ObjectId;
 Joi.objectId = JoiObjectId(Joi);
 
-
 const shoppingListSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        minlength: 3,
-        maxlength: 255,
-        trim: true,
-        default: 'Lista zakupow',
-    },
-    products: {
-        type: [Object],
-        ref: 'Shopping_list',
-        default: [],
-    },
-    members_id: {
-        type: [ObjectId],
-        ref: 'Users',
-        default: [],
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    }
-
+  name: {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+    trim: true,
+    default: "Lista zakupow"
+  },
+  products: {
+    type: [Object],
+    ref: "Shopping_list",
+    default: []
+  },
+  members_id: {
+    type: [ObjectId],
+    ref: "Users",
+    default: []
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  }
 });
 
-
-
 function validateShoppingList(shoppingList) {
-    const schema = Joi.object({
-        name: Joi.string()
-            .min(3)
-            .max(26)
-            .trim()
-            .required(),
-        products: Joi.array().items(Joi.object()),
-        members_id: Joi.array().items(Joi.objectId()),
-        completed: Joi.boolean(),
+  const schema = Joi.object({
+    name: Joi.string()
+      .min(3)
+      .max(26)
+      .trim()
+      .required(),
+    products: Joi.array().items(Joi.object()),
+    members_id: Joi.array().items(Joi.objectId()),
+    completed: Joi.boolean()
+  });
 
-    });
-
-    return schema.validate(shoppingList);
+  return schema.validate(shoppingList);
 }
 
 const shoppingList = shoppingListSchema;
 
-export {
-    shoppingList,
-    validateShoppingList
-}
+export { shoppingList, validateShoppingList };

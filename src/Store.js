@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const Context = React.createContext();
 
 export class StoreProvider extends React.Component {
-  state = { 
-    isLogged: localStorage.getItem('token') ? true : false,
-    me: null,
+  state = {
+    isLogged: localStorage.getItem("token") ? true : false,
+    me: null
   };
 
   changeStore = (name, value) => {
@@ -14,7 +14,9 @@ export class StoreProvider extends React.Component {
 
   render() {
     return (
-      <Context.Provider value={{ ...this.state, changeStore: this.changeStore }}>
+      <Context.Provider
+        value={{ ...this.state, changeStore: this.changeStore }}
+      >
         {this.props.children}
       </Context.Provider>
     );

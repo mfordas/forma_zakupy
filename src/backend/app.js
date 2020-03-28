@@ -9,7 +9,8 @@ import products from './routes/products.js';
 import {
     load,
     register,
-    connect
+    connect,
+    initialize
 } from './db/index.js';
 const app = express();
 let dirname = path.resolve();
@@ -27,6 +28,7 @@ const main = async () => {
     const models = load(connection);
     if (process.env.TEST_ENV || process.env.NODE_ENV) {
         // await connection.dropDatabase();
+        // await initialize(models);
     }
 
     register(app, connection, models);

@@ -40,7 +40,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
-    "dev": "concurrently -n react,express -k \"npm run start\" \"npm run mon\""
+    "dev": "concurrently -n react,express -k \"npm run start\" \"npm run mon\"",
+    "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\""
   },
   "eslintConfig": {
     "extends": "react-app"

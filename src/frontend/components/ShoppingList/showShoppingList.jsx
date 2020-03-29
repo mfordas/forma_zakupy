@@ -66,8 +66,8 @@ class ShowShoppingList extends React.Component {
                     <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
                     <Link className="button" to={`/shoppingLists`}>Powrót do list zakupów</Link>
                 </div>
-                <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
+                <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-shoppingList">
                         <div className="shoppinglist-name" onClick={() => this.crossProduct(product.bought, product._id)}>

@@ -12,7 +12,8 @@ class AddProduct extends React.Component {
             productAmount: 0,
             productUnit: 'kg',
             idShoppingList: this.props.id,
-            productAdded: null
+            productAdded: null,
+            productsProposals: []
         }
     }
 
@@ -30,25 +31,48 @@ class AddProduct extends React.Component {
         }).then(res => {
             if (res.status === 200) {
 
-                this.setState({ productAdded: true});
-              } else {
+                this.setState({ productAdded: true });
+            } else {
                 this.setState({ productAdded: false });
-              }
-            },
+            }
+        },
             error => {
-              console.log(error);
+                console.log(error);
             }
         );
 
         this.props.onClick();
 
+    };
+
+
+    showProductsProposals = async (e) => {
+        if (e.target.value.length >= 3) {
+            let productsList = await axios({
+                url: `/api/products/${e.target.value}`,
+                method: 'GET',
+                headers: setHeaders(),
+                data: {
+                    name: this.state.productName,
+                    amount: this.state.productAmount,
+                    unit: this.state.productUnit
+                }
+            });
+            this.setState({ productsProposals: productsList.data });
+        }
     }
 
     render() {
         return (
             <div className="container-add-shoppingList">
                 <p>Nazwa produktu</p>
-                <input onChange={e => this.setState({ productName: e.target.value })}></input>
+                <input list="productsProposals" onChange={e => {
+                    this.showProductsProposals(e);
+                    this.setState({ productName: e.target.value })
+                }} />
+                <datalist id="productsProposals">
+                    {this.state.productsProposals.map(product => <option key={product._id} value={product.name} />)}
+                </datalist>
                 <p>Ilość</p>
                 <input onChange={e => this.setState({ productAmount: e.target.value })}></input>
                 <select className="button" onChange={e => this.setState({ productUnit: e.target.value })}>
@@ -59,7 +83,7 @@ class AddProduct extends React.Component {
                     <option value='szt'>szt</option>
                 </select>
                 <button className="button" onClick={this.addProductToList}>Dodaj</button>
-                </div>
+            </div>
         );
     }
 }

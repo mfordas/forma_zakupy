@@ -213,6 +213,10 @@ p {
   width: 100%;
 }
 
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
 @media (max-width: 420px) {
   .registerCard {
     max-width: 75vw;

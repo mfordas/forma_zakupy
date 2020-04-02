@@ -200,9 +200,6 @@ p {
 
 .progress-bar {
   background-color: white;
-  border: 2px solid black;
-  padding: 10px;
-  margin: 10px;
   border-radius: 20px;
   box-sizing: border-box;
   transition: 0.7s ease-in-out;
@@ -210,6 +207,16 @@ p {
   text-align: center;
   font-size: 14px;
   color: black;
+  width: 100%;
+}
+.progress-bar-container {
+  background-color: white;
+  border: 2px solid black;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  transition: 0.7s ease-in-out;
   width: 100%;
 }
 

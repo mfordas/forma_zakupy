@@ -7,7 +7,8 @@ class ProgressBar extends React.Component {
 
         this.state = {
             percentOfCompletedProducts: 0,
-            backgroundColor: null
+            backgroundColor: null,
+            width: 0
         }
     };
 
@@ -30,16 +31,20 @@ class ProgressBar extends React.Component {
 
     stylingChange = () => {
         if (this.state.percentOfCompletedProducts <= 33) {
-            return this.setState({ backgroundColor: { backgroundColor: 'red' } });
+            return this.setState({ backgroundColor: 'red' ,
+        width: `${this.state.percentOfCompletedProducts}%` });
         }
         else if (this.state.percentOfCompletedProducts <= 66 && this.state.percentOfCompletedProducts > 33) {
-            return this.setState({ backgroundColor: { backgroundColor: 'orange' } });
+            return this.setState({ backgroundColor: 'orange',
+            width: `${this.state.percentOfCompletedProducts}%`});
         }
         else if (this.state.percentOfCompletedProducts > 66 && this.state.percentOfCompletedProducts < 100) {
-            return this.setState({ backgroundColor: { backgroundColor: 'yellow' } });
+            return this.setState({ backgroundColor: 'yellow',
+            width: `${this.state.percentOfCompletedProducts}%`});
         }
         else if (this.state.percentOfCompletedProducts === 100) {
-            return this.setState({ backgroundColor: { backgroundColor: 'green' } });
+            return this.setState({ backgroundColor:'green' ,
+            width: `${this.state.percentOfCompletedProducts}%`});
         }
 
     }
@@ -56,8 +61,8 @@ class ProgressBar extends React.Component {
 
     render() {
         return (
-            <div className="progress-bar" style={this.state.backgroundColor}>
-                {this.state.percentOfCompletedProducts}%
+            <div className="progress-bar-container">
+                <div className="progress-bar" style={{backgroundColor:this.state.backgroundColor, width: this.state.width}} >{this.state.percentOfCompletedProducts}%</div>
             </div>
         );
     };

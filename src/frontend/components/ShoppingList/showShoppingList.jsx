@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { TiArrowSync } from 'react-icons/ti';
 import AddProduct from './addProduct';
 import setHeaders from '../../utils/setHeaders';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList';
@@ -51,6 +52,29 @@ class ShowShoppingList extends React.Component {
 
     }
 
+    resetShoppingList = async () => {
+        const id = this.state.idShoppingList;
+        this.state.products.map(async product => {
+        await axios({
+            url: `/api/shoppingLists/${id}/product/${product._id}`,
+            method: 'PUT',
+            headers: setHeaders(),
+            data: {
+                bought: false,
+            }
+        }).then(res => {
+            if (res.status === 200) {
+                this.showShoppingList();
+            } else {
+                console.log('warrning');
+            }
+        },
+            error => {
+                console.log(error);
+            }
+        );})
+    }
+
     openNewProductForm = () => {
         this.setState({ addProductActive: !this.state.addProductActive });
     }
@@ -65,6 +89,7 @@ class ShowShoppingList extends React.Component {
                 <div className="containerMenu">
                     <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
                     <Link className="button" to={`/shoppingLists`}>Powrót do list zakupów</Link>
+                    <button className="button" onClick={this.resetShoppingList}><TiArrowSync size="1.1rem" /></button>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
                 <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>

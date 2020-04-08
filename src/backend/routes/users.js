@@ -108,4 +108,25 @@ router.delete("/:id/shoppingList/:idSL", async (req, res) => {
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
 });
+
+
+//finding users by name
+router.get("/:name", async (req, res) => {
+  const User = res.locals.models.user;
+
+  const nameParameter = req.params.name;
+
+  const users = await User.find().sort("name");
+
+  const result = filterByValue(users, nameParameter);
+
+  res.send(result);
+});
+
+function filterByValue(names, name) {
+  if (!name) return names;
+  return names.filter(o => {
+    return o.name.toLowerCase().includes(name);
+  });
+}
 export default router;

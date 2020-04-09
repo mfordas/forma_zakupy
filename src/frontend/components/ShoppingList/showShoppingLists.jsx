@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import AddNewShoppingList from './addNewShoppingList';
 import DeleteShoppingList from './deleteShoppingList';
-import AddUserToShoppingList from './addUserToShoppingList';
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingLists extends React.Component {
@@ -12,7 +11,7 @@ class ShowShoppingLists extends React.Component {
 
         this.state = {
             shoppingLists: [],
-            addShoppingListActive: false,
+            addShoppingListActive: false
         }
     }
 
@@ -50,7 +49,7 @@ class ShowShoppingLists extends React.Component {
                             <p>{list.products.length}</p>
                         </div>
                         <Link className="button" to={{pathname:`/shoppingList/${list.name}`, listInfo:{id:list._id, name:list.name}}}>Przejdź</Link>
-                        <AddUserToShoppingList onClick={this.getShoppingLists} id={list._id}/>
+                        
                         <DeleteShoppingList onClick={this.getShoppingLists} id={list._id}/> </div>)}
             </div>
         );

@@ -186,12 +186,13 @@ p {
 
 .container-add-shoppingList {
   width: auto;
-  max-width: 100vw;
+  max-width: 75vw;
   max-height: 100vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: .2rem;
 
   input {
     background-color: white;

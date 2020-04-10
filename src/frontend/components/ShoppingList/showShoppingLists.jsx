@@ -30,6 +30,28 @@ class ShowShoppingLists extends React.Component {
         this.setState({addShoppingListActive: !this.state.addShoppingListActive});
     }
 
+    shoppingListsCompareMethod = (shoppingList, type) => {
+        if (type === 'private') {
+            return shoppingList.length === 1  
+        }  else {
+            return shoppingList.length > 1
+        } 
+    }
+
+    createListOfShoppingLists = (type) => {
+        return  this.state.shoppingLists.map(list => this.shoppingListsCompareMethod(list.members_id, type) ?
+            <div key={list._id} className="container-shoppingList">
+                <div className="shoppinglist-name">
+                    <p>{list.name}</p>
+                </div>
+                <div className="shoppinglist-productsNumber">
+                    <p>{list.products.length}</p>
+                </div>
+                <Link className="button" to={{pathname:`/shoppingList/${list.name}`, listInfo:{id:list._id, name:list.name, members_id:list.members_id}}}>Przejdź</Link>
+                
+                <DeleteShoppingList onClick={this.getShoppingLists} id={list._id}/> </div> : null)
+    }
+
     componentDidMount() {
         this.getShoppingLists();
     }
@@ -40,17 +62,7 @@ class ShowShoppingLists extends React.Component {
             <div className="container-shoppingLists">
                 <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button>
                 {this.state.addShoppingListActive ? <AddNewShoppingList onClick={this.getShoppingLists}/> : null}
-                {this.state.shoppingLists.map(list =>
-                    <div key={list._id} className="container-shoppingList">
-                        <div className="shoppinglist-name">
-                            <p>{list.name}</p>
-                        </div>
-                        <div className="shoppinglist-productsNumber">
-                            <p>{list.products.length}</p>
-                        </div>
-                        <Link className="button" to={{pathname:`/shoppingList/${list.name}`, listInfo:{id:list._id, name:list.name}}}>Przejdź</Link>
-                        
-                        <DeleteShoppingList onClick={this.getShoppingLists} id={list._id}/> </div>)}
+                {this.createListOfShoppingLists(this.props.type)}
             </div>
         );
     }

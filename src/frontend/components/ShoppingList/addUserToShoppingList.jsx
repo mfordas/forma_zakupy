@@ -25,8 +25,8 @@ class AddUserToShoppingList extends React.Component {
 
         }).then(res => {
             if (res.status === 200) {
-
                 this.setState({ userAdded: true });
+                this.props.onClick();
             } else {
                 this.setState({ userAdded: false });
             }
@@ -36,7 +36,6 @@ class AddUserToShoppingList extends React.Component {
             }
         );
 
-        this.props.onClick();
 
     };
 
@@ -52,7 +51,7 @@ class AddUserToShoppingList extends React.Component {
                 }
             });
             this.setState({ usersProposals: usersList.data });
-        }
+        } else { this.setState({ usersProposals: [] }); }
     }
 
     render() {

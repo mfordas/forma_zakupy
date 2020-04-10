@@ -17,6 +17,7 @@ class ShowShoppingList extends React.Component {
             products: [],
             name: props.location.listInfo.name,
             idShoppingList: props.location.listInfo.id,
+            members: props.location.listInfo.members_id,
             addProductActive: false,
             addUserActive: false
         }
@@ -95,7 +96,7 @@ class ShowShoppingList extends React.Component {
                 <div className="containerMenu">
                     <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
                     <button className="button" onClick={this.openNewUserForm}><TiUserAdd size="14px"/></button>
-                    <Link className="button" to={`/shoppingLists`}><TiArrowBack size="14px"/></Link>
+                    <Link className="button" to={ this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists` }><TiArrowBack size="14px"/></Link>
                     <button className="button" onClick={this.resetShoppingList}><TiArrowSync size="14px" /></button>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}

@@ -43,6 +43,16 @@ router.get("/me", auth, async (req, res) => {
   res.send(_.pick(user, ["_id", "name", "email"]));
 });
 
+router.get("/byId/:id", async (req, res) => {
+  const User = res.locals.models.user;
+
+  const user = await User.findById(req.params.id);
+  if (!user)
+    return res.status(404).send("The user with the given ID was not found.");
+
+  res.send(_.pick(user, ["_id", "name", "email"]));
+});
+
 router.get("/", async (req, res) => {
   const User = res.locals.models.user;
 
@@ -79,34 +89,48 @@ router.put("/:id/product", async (req, res) => {
   res.send(user);
 });
 
-router.delete("/:id/shoppingList/:idSL", async (req, res) => {
+router.put("/:id/shoppingList/:idSL", async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
 
-  const userHandler = await User.findById(req.params.id, "shopping_lists_id", {
+  const userHandler = await User.findById(req.params.id, "common_shopping_lists_id", {
     lean: true
   });
-  const filteredIds = await userHandler.shopping_lists_id.filter(
+  const filteredIds = await userHandler.common_shopping_lists_id.filter(
     el => el.toString() !== req.params.idSL
   );
 
   const user = await User.findByIdAndUpdate(
     req.params.id,
     {
-      shopping_lists_id: filteredIds
+      common_shopping_lists_id: filteredIds
     },
     { new: true }
   );
 
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
-  res.send(user);
-  const shoppingList = await ShoppingList.findOneAndDelete({
-    _id: req.params.idSL
+  
+
+  const shoppingListHandler = await ShoppingList.findById(req.params.idSL, "members_id", {
+    lean: true
   });
+  const filteredMembersIds = await shoppingListHandler.members_id.filter(
+    el => el.toString() !== req.params.id
+  );
+
+  const shoppingList = await ShoppingList.findByIdAndUpdate(
+    req.params.idSL,
+    {
+      members_id: filteredMembersIds
+    },
+    { new: true }
+  );
 
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
+    res.send(shoppingList);
 });
 
 

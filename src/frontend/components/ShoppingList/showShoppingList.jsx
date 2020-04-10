@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { TiArrowSync, TiUserAdd, TiArrowBack } from 'react-icons/ti';
+import { TiArrowSync, TiUserAdd, TiArrowBack, TiGroup } from 'react-icons/ti';
 import AddProduct from './addProduct';
 import setHeaders from '../../utils/setHeaders';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList';
 import AddUserToShoppingList from './addUserToShoppingList';
-import ProgressBar from './progressBar'
+import ProgressBar from './progressBar';
+import ShowShoppingListMembers from './showShoppingListMembers'
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingList extends React.Component {
@@ -19,7 +20,8 @@ class ShowShoppingList extends React.Component {
             idShoppingList: props.location.listInfo.id,
             members: props.location.listInfo.members_id,
             addProductActive: false,
-            addUserActive: false
+            addUserActive: false,
+            showShoppingListMembers: false
         }
     }
 
@@ -79,11 +81,14 @@ class ShowShoppingList extends React.Component {
     }
 
     openNewProductForm = () => {
-        this.setState({ addProductActive: !this.state.addProductActive, addUserActive: false });
+        this.setState({ addProductActive: !this.state.addProductActive, addUserActive: false, showShoppingListMembers: false });
     }
 
     openNewUserForm = () => {
-        this.setState({ addUserActive: !this.state.addUserActive, addProductActive: false });
+        this.setState({ addUserActive: !this.state.addUserActive, addProductActive: false, showShoppingListMembers: false });
+    }
+    showShoppingListMembers = () => {
+        this.setState({ showShoppingListMembers: !this.state.showShoppingListMembers, addProductActive: false, addUserActive: false });
     }
 
     componentDidMount() {
@@ -96,11 +101,13 @@ class ShowShoppingList extends React.Component {
                 <div className="containerMenu">
                     <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
                     <button className="button" onClick={this.openNewUserForm}><TiUserAdd size="14px"/></button>
+                    <button className="button" onClick={this.showShoppingListMembers}><TiGroup size="14px"/></button>
                     <Link className="button" to={ this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists` }><TiArrowBack size="14px"/></Link>
                     <button className="button" onClick={this.resetShoppingList}><TiArrowSync size="14px" /></button>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
                 {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} />  : null}
+                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingListMembers} id={this.state.idShoppingList} members={this.state.members} />  : null}
                 <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-shoppingList">

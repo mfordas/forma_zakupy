@@ -42,6 +42,7 @@ const App = () => {
       <MenuBar />
       <PublicRoute exact path="/home" component={Login} />
       <PrivateRoute exact path="/shoppingLists" component={ShoppingList} />
+      <PrivateRoute exact path="/commonShoppingLists" component={ShoppingList} />
       <Route exact path="/register" component={Register} />
       <Route render={() => <Redirect to="/" />} />
     </BrowserRouter>

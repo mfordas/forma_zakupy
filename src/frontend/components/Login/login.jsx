@@ -75,7 +75,7 @@ class Login extends React.Component {
             <form>
               <input onChange={e => this.setState({ email: e.target.value })}></input>
               <p>E-mail</p>
-              <input onChange={e => this.setState({ password: e.target.value })}></input>
+              <input type="password" onChange={e => this.setState({ password: e.target.value })}></input>
               <p>Hasło</p>
               {this.loginValidate()}
               <button className="button" onClick={this.onButtonSubmit}>Zaloguj</button>

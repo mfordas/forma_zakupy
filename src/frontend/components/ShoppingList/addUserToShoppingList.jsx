@@ -58,13 +58,15 @@ class AddUserToShoppingList extends React.Component {
         return (
             <>
                 <div className="container-add-shoppingList">
-                    <p>Nazwa użytkownika</p>
+                    <div className="horizontalFormContainer">
+                    <p>Nazwa</p>
                     <input onChange={e => {
                         this.showUsersProposals(e);
                     }} />
                 </div>
+                </div>
                 <div>
-                    {this.state.usersProposals.map(user => <div key={user._id} id={user._id} value={user.name}>{user.name}<button className="button" onClick={() => this.addUserToList(user._id)}>Dodaj</button></div>)}
+                    {this.state.usersProposals.map(user => <div className="horizontalFormContainer" key={user._id} id={user._id} value={user.name}>{user.name}<button className="button" onClick={() => this.addUserToList(user._id)}>Dodaj</button></div>)}
                 </div>
             </>
         );

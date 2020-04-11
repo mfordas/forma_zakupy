@@ -64,6 +64,7 @@ form {
   text-align: center;
   width: 60%;
   align-self: center;
+  align-items: center;
 }
 
 h1 {
@@ -102,6 +103,8 @@ input {
 
 p {
   margin: 10px;
+  display:flex;
+  align-items: center;
 }
 
 .button {
@@ -116,6 +119,9 @@ p {
   text-align: center;
   font-size: 14px;
   color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button:hover {
@@ -124,6 +130,7 @@ p {
 
 .containerMenu {
   min-width: 20vw;
+  max-width: 70vw;
   align-self: center;
   display: flex;
   justify-content: center;
@@ -217,7 +224,7 @@ p {
   margin: 0px;
   border-radius: 20px;
   box-sizing: border-box;
-  transition: 0.7s ease-in-out;
+  transition: 0.3s ease-in-out;
   width: 100%;
 }
 
@@ -225,7 +232,15 @@ input::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-@media (max-width: 420px) {
+.horizontalFormContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 420px), (max-height: 420px){
   .registerCard {
     max-width: 75vw;
   }
@@ -238,5 +253,13 @@ input::-webkit-calendar-picker-indicator {
   h1 {
     font-size: 6vw;
     margin-right: 6.5vw;
+  }
+
+  .buttonMenu:hover {
+    border: none;
+  }
+
+  .buttonMenu.active {
+    border-bottom: 2px solid black;
   }
 }

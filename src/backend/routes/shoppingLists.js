@@ -153,6 +153,17 @@ router.get("/:id/products", async (req, res) => {
   res.send(products);
 });
 
+router.get("/:id/members", async (req, res) => {
+  const ShoppingList = res.locals.models.shoppingList;
+  const shoppingList = await ShoppingList.findById(req.params.id);
+  if (!shoppingList)
+    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
+  const members = _.filter(shoppingList.members_id);
+
+  res.send(members);
+});
+
 router.put("/:id/product/:idProduct", async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 

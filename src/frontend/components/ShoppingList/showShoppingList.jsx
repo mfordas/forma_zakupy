@@ -107,7 +107,7 @@ class ShowShoppingList extends React.Component {
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
                 {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} />  : null}
-                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingListMembers} id={this.state.idShoppingList} members={this.state.members} />  : null}
+                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingList} id={this.state.idShoppingList} membersIds={this.state.members}/>  : null}
                 <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-shoppingList">

@@ -115,10 +115,10 @@ class ShowShoppingList extends React.Component {
                             <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.name}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
-                            <p>{product.amount}</p>
+                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.amount}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
-                            <p>{product.unit}</p>
+                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.unit}</p>
                         </div>
                         <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />
                     </div>)}

@@ -240,9 +240,13 @@ input::-webkit-calendar-picker-indicator {
   align-items: center;
 }
 
-@media (max-width: 420px), (max-height: 420px){
+@media (max-width: 1024px), (max-height: 420px){
   .registerCard {
     max-width: 75vw;
+  }
+
+  p {
+    margin: 5px;
   }
 
   .logo {

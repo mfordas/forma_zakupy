@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { TiArrowSync, TiUserAdd, TiArrowBack, TiGroup } from 'react-icons/ti';
+import { TiArrowSync, TiUserAdd, TiArrowBack, TiGroup, TiPlus } from 'react-icons/ti';
 import AddProduct from './addProduct';
 import setHeaders from '../../utils/setHeaders';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList';
@@ -99,11 +99,11 @@ class ShowShoppingList extends React.Component {
         return (
             <div className="container-products">
                 <div className="containerMenu">
-                    <button className="button" onClick={this.openNewProductForm}>Dodaj produkt</button>
-                    <button className="button" onClick={this.openNewUserForm}><TiUserAdd size="14px"/></button>
-                    <button className="button" onClick={this.showShoppingListMembers}><TiGroup size="14px"/></button>
-                    <Link className="button" to={ this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists` }><TiArrowBack size="14px"/></Link>
-                    <button className="button" onClick={this.resetShoppingList}><TiArrowSync size="14px" /></button>
+                    <button className="button" onClick={this.openNewProductForm}><TiPlus/></button>
+                    <button className="button" onClick={this.openNewUserForm}><TiUserAdd/></button>
+                    <button className="button" onClick={this.showShoppingListMembers}><TiGroup/></button>
+                    <button className="button" onClick={this.resetShoppingList}><TiArrowSync/></button>
+                    <Link className="button" to={ this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists` }><TiArrowBack/></Link>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
                 {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} />  : null}
@@ -115,10 +115,10 @@ class ShowShoppingList extends React.Component {
                             <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.name}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
-                            <p>{product.amount}</p>
+                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.amount}</p>
                         </div>
                         <div className="shoppinglist-productsNumber">
-                            <p>{product.unit}</p>
+                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.unit}</p>
                         </div>
                         <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />
                     </div>)}

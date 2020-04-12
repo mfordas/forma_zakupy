@@ -126,10 +126,10 @@ class Register extends React.Component {
               <input onChange={e => this.setState({ email: e.target.value })}></input>
               {this.emailValidate()}
               <p>E-mail</p>
-              <input onChange={e => this.setState({ password: e.target.value })}></input>
+              <input type="password" onChange={e => this.setState({ password: e.target.value })}></input>
               {this.passwordValidate()}
               <p>Hasło</p>
-              <input onChange={e => this.setState({ confirmPassword: e.target.value })}></input>
+              <input type="password" onChange={e => this.setState({ confirmPassword: e.target.value })}></input>
               <p>Powierdź hasło</p>
               <button className="button" onClick={this.onButtonSubmit}>Zarejestruj</button>
             </form>

@@ -47,8 +47,10 @@ class AddNewShoppingList extends React.Component {
     render() {
         return (
                 <div className="container-add-shoppingList">
-                <p>Nazwa listy</p>
+                    <div className="horizontalFormContainer">
+                <p>Nazwa</p>
                 <input onChange={e => this.setState({ shoppingListName: e.target.value })}></input>
+                </div>
                 <button className="button" onClick={this.addShoppingList}>Dodaj</button>
                 </div>
         );

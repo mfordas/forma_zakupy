@@ -65,7 +65,8 @@ class AddProduct extends React.Component {
     render() {
         return (
             <div className="container-add-shoppingList">
-                <p>Nazwa produktu</p>
+                <div className="horizontalFormContainer">
+                <p>Nazwa</p>
                 <input list="productsProposals" onChange={e => {
                     this.showProductsProposals(e);
                     this.setState({ productName: e.target.value })
@@ -73,8 +74,10 @@ class AddProduct extends React.Component {
                 <datalist id="productsProposals">
                     {this.state.productsProposals.map(product => <option key={product._id} value={product.name} />)}
                 </datalist>
-                <p>Ilość</p>
-                <input onChange={e => this.setState({ productAmount: e.target.value })}></input>
+                </div>
+                <div className="horizontalFormContainer">
+                <p >Ilość</p>
+                <input style={{maxWidth: '50px'}} onChange={e => this.setState({ productAmount: e.target.value })}></input>
                 <select className="button" onChange={e => this.setState({ productUnit: e.target.value })}>
                     <option value='kg'>kg</option>
                     <option value='g'>g</option>
@@ -82,6 +85,7 @@ class AddProduct extends React.Component {
                     <option value='ml'>ml</option>
                     <option value='szt'>szt</option>
                 </select>
+                </div>
                 <button className="button" onClick={this.addProductToList}>Dodaj</button>
             </div>
         );

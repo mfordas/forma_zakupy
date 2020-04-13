@@ -28,7 +28,7 @@ class Register extends React.Component {
   postUser = async () => {
     try {
       if (this.state.password !== this.state.confirmPassword) {
-        throw 'Both passwords must be the same';
+        throw ErrorMessage('Wrong password');
       }
       const res = await axios({
         method: 'post',

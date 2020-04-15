@@ -7,19 +7,10 @@ import users from "./routes/users.js";
 import shoppingLists from "./routes/shoppingLists.js";
 import products from "./routes/products.js";
 import { load, register, connect, initialize } from "./db/index.js";
-const app = express();
-let dirname = path.resolve();
 
 const main = async () => {
-  app.use(express.json());
-  app.use(
-    express.urlencoded({
-      extended: true
-    })
-  );
-  app.use(express.static(path.join(dirname, "public")));
-  app.use(helmet());
-
+  const app = express();
+  let dirname = path.resolve();
   const connection = await connect();
   const models = load(connection);
   if (process.env.TEST_ENV || process.env.NODE_ENV) {
@@ -29,22 +20,31 @@ const main = async () => {
 
   register(app, connection, models);
 
+  app.use(express.json());
+  app.use(
+    express.urlencoded({
+      extended: true
+    })
+  );
+  // app.use(express.static(path.join(dirname, "build")));
+  // console.log(path.join(dirname, "./build"));
+  app.use(helmet());
+  app.use(express.static(path.join(dirname, "/./build")));
+
   app.use("/", home);
   app.use("/api/users", users);
   app.use("/api/shoppingLists", shoppingLists);
   app.use("/api/products", products);
   app.use("/api/auth", auth);
 
-  app.use(express.static(path.join(dirname, "./build")));
   // Handle React routing, return all requests to React app
   app.get("*", function(req, res) {
-    res.sendFile(path.join(dirname, "./build", "index.html"));
+    res.sendFile(path.join(dirname + "/./build", "index.html"));
   });
 
-  const host = process.env.HOST || "127.0.0.1";
-  const port = process.env.PORT_NODE || 8080;
-  app.listen(port, host, () =>
-    console.log(`Listening on http://${host}:${port}`)
+  const port = process.env.PORT || 8080;
+  app.listen(port, () =>
+    console.log(`Listening on ${port}`)
   );
 };
 

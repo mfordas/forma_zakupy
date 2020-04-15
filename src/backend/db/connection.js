@@ -15,7 +15,7 @@ const config = {
 };
 
 const mongoUrl = getByMode(
-  `${config.protocol}://${config.username}:${config.password}@${config.host}:${config.port}/${config.name}`,
+  `${config.protocol}://${config.username}:${config.password}@${config.host}/${config.name}`,
   `${config.protocol}://${config.host}:${config.port}/${config.name}`
 );
 

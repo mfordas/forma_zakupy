@@ -23,26 +23,27 @@
     "react-dom": "^16.12.0",
     "react-icons": "^3.9.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.0"
   },
   "devDependencies": {
     "concurrently": "^4.1.2",
     "eslint": "^6.1.0",
     "file-loader": "^4.2.0",
-    "node-sass": "^4.13.1",
     "nodemon": "^1.19.3",
-    "prettier": "1.18.2",
-    "sass-loader": "^8.0.0"
+    "prettier": "1.18.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
-    "startTest": "node --experimental-modules ./src/backend/app.js",
-    "dev": "concurrently -n react,express -k \"npm run start\" \"npm run mon\"",
-    "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\""
+    "start": "node --experimental-modules ./src/backend/app.js",
+    "dev": "concurrently -n react,express -k \"npm run startReact\" \"npm run mon\"",
+    "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\"",
+      "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,7 +61,7 @@
     ]
   },
   "engines": {
-    "node": "^10.16.3"
+    "node": "^12.16.0"
   },
   "type": "module",
   "proxy": "http://localhost:8080/"

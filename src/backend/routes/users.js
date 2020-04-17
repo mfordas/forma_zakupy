@@ -5,6 +5,7 @@ import { validateProduct } from "../models/product.js";
 import { sendEmail } from "./email.js";
 import { auth } from "../middleware/authorization.js";
 import express from "express";
+import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -25,7 +26,8 @@ router.post("/", async (req, res) => {
   const token = user.generateAuthToken();
 
   // send email
-  const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
+  // const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
+  const url = `http://localhost:3000/register/verification/${token}`;
   sendEmail(req.body.email, url);
 
   res
@@ -41,6 +43,19 @@ router.get("/me", auth, async (req, res) => {
     return res.status(404).send("The user with the given ID was not found.");
 
   res.send(_.pick(user, ["_id", "name", "email"]));
+});
+
+router.get('/verification/:token', async (req, res) => {
+  const User = res.locals.models.user;
+
+  let user = jwt.verify(req.params.token, process.env.JWTPRIVATEKEY);
+  await User.findByIdAndUpdate(user._id, {
+    isVerified: true
+  }, {
+    new: true
+  });
+
+  res.redirect('http://localhost:3000/register');
 });
 
 router.get("/byId/:id", async (req, res) => {

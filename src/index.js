@@ -11,7 +11,6 @@ import MenuBar from "./frontend/views/Menu";
 import Login from "./frontend/views/Login";
 import Register from "./frontend/views/Register";
 import ShoppingList from "./frontend/views/ShoppingList";
-import Verification from "./frontend/components/Register/verificate";
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -45,8 +44,9 @@ const App = () => {
       <PublicRoute exact path="/home" component={Login} />
       <PrivateRoute exact path="/shoppingLists" component={ShoppingList} />
       <PrivateRoute exact path="/commonShoppingLists" component={ShoppingList} />
+      <PrivateRoute path="/shoppingList/:name" component={ShoppingList} />
       <PublicRoute exact path="/register" component={Register} />
-      <PublicRoute path="/register/verification/:token" component={Verification} />
+      <Route path="/register/verification/:token" component={Register} />
       <Route render={() => <Redirect to="/" />} />
       </Switch>
     </BrowserRouter>

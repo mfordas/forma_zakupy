@@ -17,7 +17,6 @@ class AddNewShoppingList extends React.Component {
 
     addShoppingList = async () => {
         const id = localStorage.getItem('id');
-        console.log(this.state);
         await axios({
             url: `api/shoppingLists/${id}/shoppingList`,
             method: 'POST',

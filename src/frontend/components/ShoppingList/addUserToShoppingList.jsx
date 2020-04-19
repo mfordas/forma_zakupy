@@ -43,7 +43,7 @@ class AddUserToShoppingList extends React.Component {
     showUsersProposals = async (e) => {
         if (e.target.value.length >= 3) {
             let usersList = await axios({
-                url: `/api/users/${e.target.value}`,
+                url: `/api/users/${e.target.value.toLowerCase()}`,
                 method: 'GET',
                 headers: setHeaders(),
                 data: {

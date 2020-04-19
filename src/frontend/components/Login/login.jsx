@@ -73,7 +73,7 @@ class Login extends React.Component {
           <div className="registerCard">
             <p>Witamy w programie Forma Zakupy. Jeśli jeszcze nie posiadasz konta - zarejestruj się</p>
             <form>
-              <input onChange={e => this.setState({ email: e.target.value })}></input>
+              <input onChange={e => this.setState({ email: e.target.value.toLowerCase() })}></input>
               <p>E-mail</p>
               <input type="password" onChange={e => this.setState({ password: e.target.value })}></input>
               <p>Hasło</p>

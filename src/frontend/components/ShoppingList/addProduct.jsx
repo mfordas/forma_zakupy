@@ -49,7 +49,7 @@ class AddProduct extends React.Component {
     showProductsProposals = async (e) => {
         if (e.target.value.length >= 3) {
             let productsList = await axios({
-                url: `/api/products/${e.target.value}`,
+                url: `/api/products/${e.target.value.toLowerCase()}`,
                 method: 'GET',
                 headers: setHeaders(),
                 data: {
@@ -59,7 +59,7 @@ class AddProduct extends React.Component {
                 }
             });
             this.setState({ productsProposals: productsList.data });
-        }
+        } else {this.setState({ productsProposals: [] });}
     }
 
     render() {

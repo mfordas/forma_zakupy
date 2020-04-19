@@ -76,7 +76,6 @@ class Register extends React.Component {
     e.preventDefault();
     this.setState({ emailTaken: false })
     await this.checkEmail();
-    console.log(this.state)
     this.nameValidate(e);
     this.emailValidate(e);
     this.passwordValidate(e);
@@ -120,10 +119,10 @@ class Register extends React.Component {
           {this.state.confirm === false ? <div className="registerCard">
             <p>Witamy w programie Forma Zakupy. Jeśli jeszcze nie posiadasz konta - zarejestruj się</p>
             <form>
-              <input onChange={e => this.setState({ name: e.target.value })}></input>
+              <input onChange={e => this.setState({ name: e.target.value.toLowerCase() })}></input>
               {this.nameValidate()}
               <p>Imię</p>
-              <input onChange={e => this.setState({ email: e.target.value })}></input>
+              <input onChange={e => this.setState({ email: e.target.value.toLowerCase() })}></input>
               {this.emailValidate()}
               <p>E-mail</p>
               <input type="password" onChange={e => this.setState({ password: e.target.value })}></input>

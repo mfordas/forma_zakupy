@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'react-router-dom';
 
 
 class Verification extends React.Component {
@@ -9,13 +10,13 @@ class Verification extends React.Component {
     }
 
     async componentDidMount() {
-        console.log('Verification works');
         const response = await fetch(`/api/users/verification/${this.props.match.params.token}`)
             .catch(() => this.setState({ verified: false }));
 
+
         if (response.status === 200)
             this.setState({ verified: true });
-        else
+        else 
             this.setState({ verified: false });
     }
 
@@ -27,7 +28,12 @@ class Verification extends React.Component {
         }
         else if (this.state.verified === true) {
             return (
+                <>
                 <div>Konto zweryfikowane</div>
+                <div className="containerMenu">
+                <NavLink className="buttonMenu" to="/home">Zaloguj się</NavLink>
+                </div>
+                </>
             );
         }
         else {
@@ -39,9 +45,7 @@ class Verification extends React.Component {
 
     render() {
         return (
-            <>
-                {this.statusComponent()}
-            </>
+                this.statusComponent()
         );
     }
 };

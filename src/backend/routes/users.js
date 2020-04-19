@@ -26,8 +26,9 @@ router.post("/", async (req, res) => {
   const token = user.generateAuthToken();
 
   // send email
-  // const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
-  const url = `http://localhost:3000/register/verification/${token}`;
+  let url;
+  process.env.NODE_ENV === 'production' ? url = `${process.env.VER_LINK_PROD}/${token}` : url = `${process.env.VER_LINK_DEV}/${token}`;
+  
   sendEmail(req.body.email, url);
 
   res
@@ -55,7 +56,7 @@ router.get('/verification/:token', async (req, res) => {
     new: true
   });
 
-  res.redirect('http://localhost:3000/register');
+  res.send(user);
 });
 
 router.get("/byId/:id", async (req, res) => {

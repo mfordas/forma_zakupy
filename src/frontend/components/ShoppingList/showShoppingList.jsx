@@ -110,14 +110,14 @@ class ShowShoppingList extends React.Component {
                 {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingList} id={this.state.idShoppingList} membersIds={this.state.members}/>  : null}
                 <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
                 {this.state.products.map(product =>
-                    <div key={product._id} className="container-shoppingList">
-                        <div className="shoppinglist-name" onClick={() => this.crossProduct(product.bought, product._id)}>
+                    <div key={product._id} className="container-product">
+                        <div className="product-name" onClick={() => this.crossProduct(product.bought, product._id)}>
                             <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.name}</p>
                         </div>
-                        <div className="shoppinglist-productsNumber">
+                        <div className="product-number">
                             <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.amount}</p>
                         </div>
-                        <div className="shoppinglist-productsNumber">
+                        <div className="product-number">
                             <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.unit}</p>
                         </div>
                         <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />

@@ -84,6 +84,8 @@ h1 {
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 1vh;
+  
+  margin-top: 3vh;
 }
 .logo {
   max-width: 35vw;
@@ -114,7 +116,6 @@ p {
   margin: 10px;
   border-radius: 20px;
   box-sizing: border-box;
-  transition: 0.7s ease-in-out;
   font-family: "lovelo";
   text-align: center;
   font-size: 14px;
@@ -145,7 +146,6 @@ p {
   color: black;
   background-color: white;
   box-sizing: border-box;
-  transition: 1s ease-in-out;
   font-family: "lovelo";
   text-decoration: none;
   font-size: 14px;
@@ -183,12 +183,32 @@ p {
 .container-shoppingLists,
 .container-products {
   max-width: 100vw;
-  max-height: 100vh;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.container-product {
+  width: 80%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-name {
+  flex: 3;
+  justify-content: start;
+}
+.product-number {
+  flex: 1;
+  justify-self: center;
+
+  .p{
+    text-justify: auto;
+  }
 }
 
 .container-add-shoppingList {
@@ -266,4 +286,19 @@ input::-webkit-calendar-picker-indicator {
   .buttonMenu.active {
     border-bottom: 2px solid black;
   }
+}
+
+@media (max-height: 420px){
+    .logo {
+    max-width: 50vw;
+    margin: -9.5vw 0 -8.5vw 0;
+    padding-top: 7vh;
+
+    h1 {
+      font-size: 6vw;
+      margin-right: 6vw;
+    }
+
+  }
+  
 }

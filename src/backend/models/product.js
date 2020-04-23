@@ -30,9 +30,14 @@ function validateProduct(product) {
       .min(3)
       .max(26)
       .trim()
-      .required(),
+      .required()
+      .messages({
+        "string.empty": "Please type your name",
+        "string.min": "Name should have at least 3 characters",
+        "string.max": "Name should have maximum 26 characters"
+      }),
     amount: Joi.number()
-      .min(0)
+      .min(1)
       .required(),
     unit: Joi.valid("kg", "g", "l", "ml", "szt").required(),
     bought: Joi.boolean()

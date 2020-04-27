@@ -34,7 +34,12 @@ function validateShoppingList(shoppingList) {
       .min(3)
       .max(26)
       .trim()
-      .required(),
+      .required()
+      .messages({
+        "string.empty": "Please type name of list",
+        "string.min": "List name should have at least 3 characters",
+        "string.max": "List name should have maximum 26 characters"
+      }),
     products: Joi.array().items(Joi.object()),
     members_id: Joi.array().items(Joi.objectId()),
     completed: Joi.boolean()

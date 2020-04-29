@@ -32,7 +32,8 @@
     "eslint": "^6.1.0",
     "file-loader": "^4.2.0",
     "nodemon": "^1.19.3",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "startReact": "react-scripts start",
@@ -43,7 +44,7 @@
     "start": "node --experimental-modules ./src/backend/app.js",
     "dev": "concurrently -n react,express -k \"npm run startReact\" \"npm run mon\"",
     "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\"",
-      "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

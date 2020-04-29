@@ -84,7 +84,6 @@ h1 {
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 1vh;
-  
   margin-top: 3vh;
 }
 .logo {
@@ -155,15 +154,26 @@ p {
   border-radius: 20px;
 }
 .buttonMenu.active {
-  border: none;
   border-radius: 0;
+  border: 2px solid white;
   border-bottom: 2px solid black;
 }
 
 .buttonMenu:hover {
-  border: none;
-  border-radius: 0;
-  border: 2px solid black;
+  border: 2px solid white;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 7px;
+  p{
+    margin: auto;
+   
+    max-width: 50px;
+    font-size: xx-small;
+  }
 }
 
 .errorMessage {

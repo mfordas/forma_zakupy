@@ -16,9 +16,9 @@ class ShowShoppingList extends React.Component {
 
         this.state = {
             products: [],
-            name: '',
-            idShoppingList: '',
-            members: '',
+            name: this.props.location.listInfo.name,
+            idShoppingList: this.props.location.listInfo.id,
+            members: this.props.location.listInfo.members_id,
             addProductActive: false,
             addUserActive: false,
             showShoppingListMembers: false
@@ -93,14 +93,7 @@ class ShowShoppingList extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.location.listInfo !== undefined) {
-            this.setState({
-                name: this.props.location.listInfo.name,
-                idShoppingList: this.props.location.listInfo.id,
-                members: this.props.location.listInfo.members_id
-            })
-            this.showShoppingList();
-        }
+        this.showShoppingList();
     }
 
     render() {

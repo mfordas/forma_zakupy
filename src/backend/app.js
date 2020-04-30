@@ -1,21 +1,29 @@
 import express from "express";
 import helmet from "helmet";
 import path from "path";
+
 import home from "./routes/home.js";
 import auth from "./routes/auth.js";
 import users from "./routes/users.js";
 import shoppingLists from "./routes/shoppingLists.js";
 import products from "./routes/products.js";
-import { load, register, connect, initialize } from "./db/index.js";
+import {
+  load,
+  register,
+  connect,
+  initialize
+} from "./db/index.js";
+
+
+const app = express();
+let dirname = path.resolve();
 
 const main = async () => {
-  const app = express();
-  let dirname = path.resolve();
   const connection = await connect();
   const models = load(connection);
-  if (process.env.TEST_ENV || process.env.NODE_ENV) {
-    // await connection.dropDatabase();
-    // await initialize(models);
+  if (process.env.NODE_ENV === 'test') {
+    await connection.dropDatabase();
+    await initialize(models);
   }
 
   register(app, connection, models);
@@ -38,14 +46,22 @@ const main = async () => {
   app.use("/api/auth", auth);
 
   // Handle React routing, return all requests to React app
-  app.get("*", function(req, res) {
+  app.get("*", function (req, res) {
     res.sendFile(path.join(dirname + "/./build", "index.html"));
   });
 
   const port = process.env.PORT || 8080;
-  app.listen(port, () =>
+  let server = app.listen(port, () =>
     console.log(`Listening on ${port}`)
   );
-};
 
-main();
+  return server
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  main();
+}
+
+export {
+  main
+};

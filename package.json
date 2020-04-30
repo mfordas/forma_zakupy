@@ -32,12 +32,14 @@
     "eslint": "^6.1.0",
     "file-loader": "^4.2.0",
     "nodemon": "^1.19.3",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-coverage": "react-scripts test --watchAll=false --detectOpenHandles --forceExit",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",
@@ -64,5 +66,21 @@
     "node": "^12.16.0"
   },
   "type": "module",
-  "proxy": "http://localhost:8080/"
+  "proxy": "http://localhost:8080/",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": ["text"]
+  }
 }

@@ -45,7 +45,7 @@
     "start": "node --experimental-modules ./src/backend/app.js",
     "dev": "concurrently -n react,express -k \"npm run startReact\" \"npm run mon\"",
     "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\"",
-    "heroku-postbuild": "npm run build"
+      "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

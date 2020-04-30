@@ -16,9 +16,9 @@ class ShowShoppingList extends React.Component {
 
         this.state = {
             products: [],
-            name: props.location.listInfo.name,
-            idShoppingList: props.location.listInfo.id,
-            members: props.location.listInfo.members_id,
+            name: this.props.location.listInfo.name,
+            idShoppingList: this.props.location.listInfo.id,
+            members: this.props.location.listInfo.members_id,
             addProductActive: false,
             addUserActive: false,
             showShoppingListMembers: false
@@ -60,24 +60,25 @@ class ShowShoppingList extends React.Component {
     resetShoppingList = async () => {
         const id = this.state.idShoppingList;
         this.state.products.map(async product => {
-        await axios({
-            url: `/api/shoppingLists/${id}/product/${product._id}`,
-            method: 'PUT',
-            headers: setHeaders(),
-            data: {
-                bought: false,
-            }
-        }).then(res => {
-            if (res.status === 200) {
-                this.showShoppingList();
-            } else {
-                console.log('warrning');
-            }
-        },
-            error => {
-                console.log(error);
-            }
-        );})
+            await axios({
+                url: `/api/shoppingLists/${id}/product/${product._id}`,
+                method: 'PUT',
+                headers: setHeaders(),
+                data: {
+                    bought: false,
+                }
+            }).then(res => {
+                if (res.status === 200) {
+                    this.showShoppingList();
+                } else {
+                    console.log('warrning');
+                }
+            },
+                error => {
+                    console.log(error);
+                }
+            );
+        })
     }
 
     openNewProductForm = () => {
@@ -99,26 +100,41 @@ class ShowShoppingList extends React.Component {
         return (
             <div className="container-products">
                 <div className="containerMenu">
-                    <button className="button" onClick={this.openNewProductForm}><TiPlus/></button>
-                    <button className="button" onClick={this.openNewUserForm}><TiUserAdd/></button>
-                    <button className="button" onClick={this.showShoppingListMembers}><TiGroup/></button>
-                    <button className="button" onClick={this.resetShoppingList}><TiArrowSync/></button>
-                    <Link className="button" to={ this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists` }><TiArrowBack/></Link>
+                    <div className="button-container">
+                        <button className="button" onClick={this.openNewProductForm}><TiPlus /></button>
+                        <p>Dodaj produkt</p>
+                    </div>
+                    <div className="button-container">
+                        <button className="button" onClick={this.openNewUserForm}><TiUserAdd /></button>
+                        <p>Dodaj osobę</p>
+                    </div>
+                    <div className="button-container">
+                        <button className="button" onClick={this.showShoppingListMembers}><TiGroup /></button>
+                        <p>Zobacz osoby</p>
+                    </div>
+                    <div className="button-container">
+                        <button className="button" onClick={this.resetShoppingList}><TiArrowSync /></button>
+                        <p>Reset listy</p>
+                    </div>
+                    <div className="button-container">
+                        <Link className="button" to={this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists`}><TiArrowBack /></Link>
+                        <p>Powrót</p>
+                    </div>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
-                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} />  : null}
-                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingList} id={this.state.idShoppingList} membersIds={this.state.members}/>  : null}
-                <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList}/>
+                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} /> : null}
+                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingList} id={this.state.idShoppingList} membersIds={this.state.members} /> : null}
+                <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList} />
                 {this.state.products.map(product =>
                     <div key={product._id} className="container-product">
                         <div className="product-name" onClick={() => this.crossProduct(product.bought, product._id)}>
-                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.name}</p>
+                            <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.name}</p>
                         </div>
                         <div className="product-number">
-                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.amount}</p>
+                            <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.amount}</p>
                         </div>
                         <div className="product-number">
-                            <p style={product.bought ? {textDecorationLine: 'line-through', color: 'green'} : null}>{product.unit}</p>
+                            <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.unit}</p>
                         </div>
                         <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />
                     </div>)}

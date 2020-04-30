@@ -13,7 +13,10 @@ afterEach(async (done) => {
     done();
 });
 
-
+afterAll (async done => {
+    await server.close();
+    done();
+})
 
 
 describe('/api/products', () => {
@@ -105,10 +108,7 @@ describe('/api/products', () => {
                 expect(res.status).toBe(400);
         });
     })
+
     
-    afterAll (async done => {
-        await server.close();
-        done();
-    })
 
 });

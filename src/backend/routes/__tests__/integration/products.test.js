@@ -2,26 +2,27 @@ import * as request from 'supertest';
 import * as application from '../../../app';
 
 let api;
-let server
+let server;
 
+beforeEach(async () => {
+    server = await application.main();
+    api = request.agent(server);
+});
+afterEach(() => {
+    server.close()
+});
+
+describe('GET /', () => {
+    it('should return all products', async () => {
+        const res = await api.get('/api/products');
+
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(52);
+    });
+});
 
 describe('/api/products', () => {
-    beforeEach(async () => {
-        server = await application.main();
-        api = request.agent(server);
-    });
-    afterEach(() => {
-        server.close()
-    });
-
-    describe('GET /', () => {
-        it('should return all products', async () => {
-            const res = await api.get('/api/products');
-
-            expect(res.status).toBe(200);
-            expect(res.body.length).toBe(52);
-        });
-    });
+    
 
     describe('GET /:name', () => {
         it('should return products which match name', async () => {

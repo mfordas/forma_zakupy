@@ -39,7 +39,7 @@
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "set 'NODE_ENV=test' && react-scripts test",
-    "test-coverage": "set 'NODE_ENV=test' && react-scripts test --coverage --watchAll",
+    "test-coverage": "set 'NODE_ENV=test' && react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",

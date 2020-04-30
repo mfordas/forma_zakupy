@@ -8,9 +8,11 @@ beforeEach(async () => {
     server = await application.main();
     api = request.agent(server);
 });
-afterEach(async () => {
+afterEach(async (done) => {
     await server.close()
+    done();
 });
+
 
 
 
@@ -103,6 +105,10 @@ describe('/api/products', () => {
                 expect(res.status).toBe(400);
         });
     })
-
+    
+    afterAll (async done => {
+        await server.close();
+        done();
+    })
 
 });

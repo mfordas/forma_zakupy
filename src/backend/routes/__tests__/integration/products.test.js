@@ -8,15 +8,9 @@ beforeEach(async () => {
     server = await application.main();
     api = request.agent(server);
 });
-afterEach(async (done) => {
-    await server.close()
-    done();
-});
-
-afterAll (async done => {
+afterEach(async () => {
     await server.close();
-    done();
-})
+});
 
 
 describe('/api/products', () => {

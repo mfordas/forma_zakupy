@@ -39,7 +39,7 @@
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test-coverage": "react-scripts test --coverage --watchAll=false --detectOpenHandles --forceExit",
+    "test-coverage": "react-scripts test --watchAll=false --detectOpenHandles --forceExit",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",

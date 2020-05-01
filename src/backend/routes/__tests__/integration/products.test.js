@@ -1,19 +1,26 @@
+import mongoose from "mongoose";
 import * as request from 'supertest';
 import * as application from '../../../app';
-
 let api;
 let server;
 
-beforeEach(async () => {
-    server = await application.main();
-    api = request.agent(server);
-});
-afterEach(async () => {
-    await server.close();
-});
 
 
 describe('/api/products', () => {
+    beforeEach(async () => {
+        server = await application.main();
+        api = request.agent(server);
+    });
+    afterEach(async () => {
+        await server.close();
+    });
+    
+    afterAll(async () => {
+        // await server.close();
+        await mongoose.connection.dropDatabase();
+        await mongoose.connection.close();
+    });
+
     describe('GET /', () => {
         it('should return all products', async () => {
             const res = await api.get('/api/products');

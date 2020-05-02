@@ -17,10 +17,11 @@ import {
 
 const app = express();
 let dirname = path.resolve();
+let models;
 
 const main = async () => {
   const connection = await connect();
-  const models = load(connection);
+  models = load(connection);
   if (process.env.NODE_ENV === 'test') {
     await connection.dropDatabase();
     await initialize(models);
@@ -63,5 +64,5 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 export {
-  main
+  main, models
 };

@@ -46,6 +46,9 @@ router.post("/:id/shoppingList", async (req, res) => {
   const userHandler = await User.findById(req.params.id, "shopping_lists_id", {
     lean: true
   });
+  if (!userHandler)
+    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+    
   userHandler.shopping_lists_id.push(shoppingList._id);
 
   const user = await User.findByIdAndUpdate(
@@ -58,6 +61,7 @@ router.post("/:id/shoppingList", async (req, res) => {
 
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+  
   res.send(user);
 });
 

@@ -4,30 +4,38 @@ import * as application from '../../../app';
 let api;
 let server;
 let ShoppingList;
+let User;
 
 beforeEach(async () => {
     server = await application.main();
     api = request.agent(server);
-    ShoppingList = application.models.shoppingList;
+    
 });
 afterEach(async () => {
     await server.close();
 });
 
+afterAll(async () => {
+    await server.close();
+})
+
 describe('/api/shoppingLists', () => {
     describe('GET /', () => {
         it('should return all shoppingLists', async () => {
-            const newShoppingList = {
-                name: "Lidl"
-            };
+            const newShoppingLists = [
+                { name: "Lidl"},
+                { name: "Castorama"},
+                { name : "Biedronka"}
+            ];
 
-            const collectionDB = ShoppingList.collection;
-            await collectionDB.insertOne(newShoppingList);
+            ShoppingList = application.models.shoppingList;
+
+            const collectionShoppingList = ShoppingList.collection;
+            await collectionShoppingList.insertMany(newShoppingLists);
                      
             const res = await api.get('/api/shoppingLists');
-            console.log(res.body);
             expect(res.status).toBe(200);
-            expect(res.body.length).toBe(1);
+            expect(res.body.length).toBe(3);
         });
     });
 
@@ -53,6 +61,62 @@ describe('/api/shoppingLists', () => {
             };
 
             const res = await api.post('/api/shoppingLists')
+                .send(shoppingList);
+
+                expect(res.status).toBe(400);
+        });
+
+    });
+
+    describe('POST /:id/shoppingList', () => {
+        
+        it('should save valid shoppinglist in database and user shoppinglists', async () => {
+            const shoppingList = {
+                "name": "Lidl"
+            };
+
+            User = application.models.user;
+            const user = new User(
+                {name: "Mat",
+                email: "mail@mail.com",
+                password: "12345678"
+            });
+
+            user.save();
+
+            const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
+                .send(shoppingList);
+
+                expect(res.status).toBe(200);
+                expect(res.body.shopping_lists_id.length).toBe(1);
+        });
+
+        it('should send 404 if invalid id is passed', async () => {
+            const shoppingList = {
+                "name": "Lidl"
+            };
+
+            const res = await api.post(`/api/shoppingLists/000000000000/shoppingList`)
+                .send(shoppingList);
+
+                expect(res.status).toBe(404);
+        });
+
+        it('should send 400 if invalid shoppinglist is passed', async () => {
+            const shoppingList = {
+                
+            };
+
+            User = application.models.user;
+            const user = new User(
+                {name: "Mat",
+                email: "mail@mail.com",
+                password: "12345678"
+            });
+
+            user.save();
+
+            const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
                 .send(shoppingList);
 
                 expect(res.status).toBe(400);

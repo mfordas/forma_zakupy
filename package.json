@@ -39,7 +39,7 @@
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --runInBand",
-    "test-coverage": "react-scripts test --runInBand --watchAll --detectOpenHandles --forceExit",
+    "test-coverage": "react-scripts test --env=jsdom --runInBand --force-exit --watchAll=false",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",
@@ -81,6 +81,6 @@
         "statements": 90
       }
     },
-    "coverageReporters": ["text"]
+     "coverageReporters": ["json", "html"]
   }
 }

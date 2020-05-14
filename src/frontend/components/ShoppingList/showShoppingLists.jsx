@@ -60,7 +60,8 @@ class ShowShoppingLists extends React.Component {
     render() {
         return (
             <div className="container-shoppingLists">
-                <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button>
+                {this.props.type === 'private' ? 
+                <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button> : null}
                 {this.state.addShoppingListActive ? <AddNewShoppingList onClick={this.getShoppingLists}/> : null}
                 {this.createListOfShoppingLists(this.props.type)}
             </div>

@@ -12,11 +12,13 @@ router.post("/", async (req, res) => {
         .min(5)
         .max(255)
         .required()
+        .trim()
         .email(),
       password: Joi.string()
         .min(8)
         .max(26)
         .required()
+        .trim()
     });
 
     return schema.validate(req);

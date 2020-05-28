@@ -32,7 +32,7 @@ const App = () => {
           changeStore("me", null);
           return;
         }
-        const data = await response.json();
+        const data = await response.data;
         changeStore("isLogged", true);
         changeStore("me", data);
       } catch (ex) {

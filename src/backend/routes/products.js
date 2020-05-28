@@ -23,7 +23,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 //finding products by name
-router.get("/:name", async (req, res) => {
+router.get("/:name", auth, async (req, res) => {
   const Product = res.locals.models.product;
 
   const nameParameter = req.params.name;

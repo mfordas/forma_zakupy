@@ -14,7 +14,7 @@ describe('/api/products', () => {
     afterEach(async () => {
         await server.close();
     });
-    
+
     afterAll(async () => {
         // await server.close();
         await mongoose.connection.dropDatabase();
@@ -23,8 +23,12 @@ describe('/api/products', () => {
 
     describe('GET /', () => {
         it('should return all products', async () => {
-            const res = await api.get('/api/products');
-    
+            const res = await api
+                .get('/api/products')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(52);
         });
@@ -33,7 +37,11 @@ describe('/api/products', () => {
     describe('GET /:name', () => {
         it('should return products which match name', async () => {
             const name = 'pomidor';
-            const res = await api.get(`/api/products/${name}`);
+            const res = await api
+                .get(`/api/products/${name}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY);
 
             expect(res.status).toBe(200);
             expect(res.body[0]).toHaveProperty("name", "Pomidor");
@@ -44,7 +52,11 @@ describe('/api/products', () => {
 
         it('should return empty array if none product match name', async () => {
             const name = 'bumerang';
-            const res = await api.get(`/api/products/${name}`);
+            const res = await api
+                .get(`/api/products/${name}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY);
 
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(0);
@@ -60,13 +72,14 @@ describe('/api/products', () => {
             };
 
             const res = await api.post('/api/products')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
                 .send(product);
 
-                expect(res.status).toBe(200);
-                expect(res.body).toHaveProperty("name", "Marchewka");
-                expect(res.body).toHaveProperty("amount", 1);
-                expect(res.body).toHaveProperty("unit", "kg");
-                expect(res.body).toHaveProperty("bought", false);
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty("name", "Marchewka");
+            expect(res.body).toHaveProperty("amount", 1);
+            expect(res.body).toHaveProperty("unit", "kg");
+            expect(res.body).toHaveProperty("bought", false);
         });
 
         it('should send 400 if product is not valid - missing amount and unit', async () => {
@@ -75,9 +88,12 @@ describe('/api/products', () => {
             };
 
             const res = await api.post('/api/products')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
                 .send(product);
 
-                expect(res.status).toBe(400);
+            expect(res.status).toBe(400);
         });
         it('should send 400 if product is not valid - missing name and unit', async () => {
             const product = {
@@ -85,9 +101,12 @@ describe('/api/products', () => {
             };
 
             const res = await api.post('/api/products')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
                 .send(product);
 
-                expect(res.status).toBe(400);
+            expect(res.status).toBe(400);
         });
         it('should send 400 if product is not valid - missing name and amount', async () => {
             const product = {
@@ -95,21 +114,26 @@ describe('/api/products', () => {
             };
 
             const res = await api.post('/api/products')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
                 .send(product);
 
-                expect(res.status).toBe(400);
+            expect(res.status).toBe(400);
         });
         it('should send 400 if product is not valid - missing all required values', async () => {
-            const product = {
-            };
+            const product = {};
 
             const res = await api.post('/api/products')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', process.env.JWTPRIVATEKEY)
                 .send(product);
 
-                expect(res.status).toBe(400);
+            expect(res.status).toBe(400);
         });
     })
 
-    
+
 
 });

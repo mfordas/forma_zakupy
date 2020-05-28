@@ -1,16 +1,19 @@
 import _ from "lodash";
+import express from "express";
+import mongoose from "mongoose";
+
 import {
   validateShoppingList
 } from "../models/shoppingList.js";
 import {
   validateProduct
 } from "../models/product.js";
-import express from "express";
-import mongoose from "mongoose";
+import { auth } from "../middleware/authorization.js";
+
 const router = express.Router();
 
 //add new shoppingList
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const {
     error
@@ -24,7 +27,7 @@ router.post("/", async (req, res) => {
 });
 
 //get all shoppingLists
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.find().sort("name");
   res.send(shoppingList);
@@ -65,7 +68,7 @@ router.post("/:id/shoppingList", async (req, res) => {
   res.send(user);
 });
 
-router.get("/:id/shoppingLists", async (req, res) => {
+router.get("/:id/shoppingLists", auth, async (req, res) => {
   const User = res.locals.models.user;
   const user = await User.findById(req.params.id);
 
@@ -77,7 +80,7 @@ router.get("/:id/shoppingLists", async (req, res) => {
   res.send(shoppingLists);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.findById(req.params.id);
   if (!shoppingList)
@@ -87,7 +90,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //add product to shoppingList
-router.put("/:id/product", async (req, res) => {
+router.put("/:id/product", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const Product = res.locals.models.product;
   const {
@@ -120,7 +123,7 @@ router.put("/:id/product", async (req, res) => {
 });
 
 //delte product from shoppingList
-router.delete("/:id/product/:idProduct", async (req, res) => {
+router.delete("/:id/product/:idProduct", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingListHandler = await ShoppingList.findById(
@@ -157,7 +160,7 @@ router.get("/:id/products", async (req, res) => {
   res.send(products);
 });
 
-router.get("/:id/members", async (req, res) => {
+router.get("/:id/members", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.findById(req.params.id);
   if (!shoppingList)
@@ -168,7 +171,7 @@ router.get("/:id/members", async (req, res) => {
   res.send(members);
 });
 
-router.put("/:id/product/:idProduct", async (req, res) => {
+router.put("/:id/product/:idProduct", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const product = await ShoppingList.findByIdAndUpdate({
@@ -191,7 +194,7 @@ router.put("/:id/product/:idProduct", async (req, res) => {
 });
 
 //add user to shoppingList
-router.put("/:id/commonShoppingList/:idUser", async (req, res) => {
+router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingListHandler = await ShoppingList.findById(req.params.id, "members_id", {
@@ -228,7 +231,7 @@ router.put("/:id/commonShoppingList/:idUser", async (req, res) => {
 });
 
 //delte user from shoppingList
-router.put("/:id/user/:idUser", async (req, res) => {
+router.put("/:id/user/:idUser", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const User = res.locals.models.user;
 
@@ -277,7 +280,7 @@ router.put("/:id/user/:idUser", async (req, res) => {
 });
 
 //delete shoppingList
-router.delete("/:idSl", async (req, res) => {
+router.delete("/:idSl", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingList = await ShoppingList.findOneAndDelete(

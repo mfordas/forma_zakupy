@@ -8,7 +8,7 @@ import express from "express";
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const User = res.locals.models.user;
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -59,7 +59,7 @@ router.get('/verification/:token', async (req, res) => {
   res.send(user);
 });
 
-router.get("/byId/:id", async (req, res) => {
+router.get("/byId/:id", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const user = await User.findById(req.params.id);
@@ -69,7 +69,7 @@ router.get("/byId/:id", async (req, res) => {
   res.send(_.pick(user, ["_id", "name", "email"]));
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const users = await User.find()
@@ -79,7 +79,7 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
-router.put("/:id/product", async (req, res) => {
+router.put("/:id/product", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const Product = res.locals.models.product;
@@ -105,7 +105,7 @@ router.put("/:id/product", async (req, res) => {
   res.send(user);
 });
 
-router.put("/:id/shoppingList/:idSL", async (req, res) => {
+router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
 
@@ -151,7 +151,7 @@ router.put("/:id/shoppingList/:idSL", async (req, res) => {
 
 
 //finding users by name
-router.get("/:name", async (req, res) => {
+router.get("/:name", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const nameParameter = req.params.name;

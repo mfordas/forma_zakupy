@@ -8,7 +8,7 @@ import express from "express";
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
-router.post("/", auth, async (req, res) => {
+router.post("/", async (req, res) => {
   const User = res.locals.models.user;
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);

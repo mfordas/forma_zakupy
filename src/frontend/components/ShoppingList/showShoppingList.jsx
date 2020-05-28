@@ -28,7 +28,8 @@ class ShowShoppingList extends React.Component {
     showShoppingList = async () => {
         let products = await axios({
             url: `/api/shoppingLists/${this.state.idShoppingList}/products`,
-            method: "GET"
+            method: "GET",
+            headers: setHeaders()
         });
         const productsArray = products.data;
         this.setState({ products: productsArray });

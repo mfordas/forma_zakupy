@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import AddNewShoppingList from './addNewShoppingList';
 import DeleteShoppingList from './deleteShoppingList';
+import setHeaders from '../../utils/setHeaders';
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingLists extends React.Component {
@@ -17,11 +18,24 @@ class ShowShoppingLists extends React.Component {
 
     getShoppingLists = async () => {
         const id = localStorage.getItem('id');
-        let shoppingListIds = await axios.get(`api/shoppingLists/${id}/shoppingLists`);
-
+        let shoppingListIds = await axios(
+            {
+                url:  `api/shoppingLists/${id}/shoppingLists`,
+                method: 'GET',
+                headers: setHeaders()
+            }
+            );
+            
         const idArray = shoppingListIds.data;
 
-        await Promise.all(idArray.map(async listId => (await axios.get(`api/shoppingLists/${listId}`)
+        await Promise.all(idArray.map(async listId => (await axios(
+            {
+                url:  `api/shoppingLists/${listId}`,
+                method: 'GET',
+                headers: setHeaders()
+            }
+            
+            )
             .then(res => res.data))))
             .then(res => this.setState({ shoppingLists: res }));
     }

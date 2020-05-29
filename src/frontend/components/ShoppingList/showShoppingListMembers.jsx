@@ -17,7 +17,8 @@ class ShowShoppingListMembers extends React.Component {
     getMembersIds = async () => {
         let members = await axios({
             url: `/api/shoppingLists/${this.state.shoppingListId}/members`,
-            method: "GET"
+            method: "GET",
+            headers: setHeaders()
         });
         this.setState({ membersIds: members.data });
     }

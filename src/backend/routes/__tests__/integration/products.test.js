@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+
 import * as request from 'supertest';
 import * as application from '../../../app';
 let api;
 let server;
-
-
+const token = jwt.sign(
+    {},
+    process.env.JWTPRIVATEKEY
+  );
 
 describe('/api/products', () => {
     beforeEach(async () => {
@@ -27,7 +31,7 @@ describe('/api/products', () => {
                 .get('/api/products')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
 
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(52);
@@ -41,7 +45,7 @@ describe('/api/products', () => {
                 .get(`/api/products/${name}`)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY);
+                .set('x-auth-token', token);
 
             expect(res.status).toBe(200);
             expect(res.body[0]).toHaveProperty("name", "Pomidor");
@@ -56,7 +60,7 @@ describe('/api/products', () => {
                 .get(`/api/products/${name}`)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY);
+                .set('x-auth-token', token);
 
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(0);
@@ -72,7 +76,7 @@ describe('/api/products', () => {
             };
 
             const res = await api.post('/api/products')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(product);
 
             expect(res.status).toBe(200);
@@ -90,7 +94,7 @@ describe('/api/products', () => {
             const res = await api.post('/api/products')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(product);
 
             expect(res.status).toBe(400);
@@ -103,7 +107,7 @@ describe('/api/products', () => {
             const res = await api.post('/api/products')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(product);
 
             expect(res.status).toBe(400);
@@ -116,7 +120,7 @@ describe('/api/products', () => {
             const res = await api.post('/api/products')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(product);
 
             expect(res.status).toBe(400);
@@ -127,7 +131,7 @@ describe('/api/products', () => {
             const res = await api.post('/api/products')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(product);
 
             expect(res.status).toBe(400);

@@ -1,10 +1,17 @@
 import * as request from 'supertest';
+import jwt from "jsonwebtoken";
 import * as application from '../../../app';
 
 let api;
 let server;
 let ShoppingList;
 let User;
+
+const token = jwt.sign(
+    {},
+    process.env.JWTPRIVATEKEY
+  );
+
 
 beforeEach(async () => {
     server = await application.main();
@@ -41,7 +48,7 @@ describe('/api/shoppingLists', () => {
             const res = await api.get('/api/shoppingLists')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY);
+                .set('x-auth-token', token);
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(3);
         });
@@ -55,7 +62,8 @@ describe('/api/shoppingLists', () => {
 
             const res = await api.post('/api/shoppingLists')
                 .set('Accept', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
                 .send(shoppingList);
 
             expect(res.status).toBe(200);
@@ -72,7 +80,7 @@ describe('/api/shoppingLists', () => {
             const res = await api.post('/api/shoppingLists')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(shoppingList);
 
             expect(res.status).toBe(400);
@@ -98,7 +106,7 @@ describe('/api/shoppingLists', () => {
 
             const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
                 .set('Accept', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(shoppingList);
 
             expect(res.status).toBe(200);
@@ -113,7 +121,7 @@ describe('/api/shoppingLists', () => {
             const res = await api.post(`/api/shoppingLists/000000000000/shoppingList`)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(shoppingList);
 
             expect(res.status).toBe(404);
@@ -136,7 +144,7 @@ describe('/api/shoppingLists', () => {
             const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', process.env.JWTPRIVATEKEY)
+                .set('x-auth-token', token)
                 .send(shoppingList);
 
             expect(res.status).toBe(400);

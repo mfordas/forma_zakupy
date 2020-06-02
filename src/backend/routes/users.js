@@ -1,16 +1,26 @@
 import bcrypt from "bcryptjs";
 import _ from "lodash";
-import { validateUser } from "../models/user.js";
-import { validateProduct } from "../models/product.js";
-import { sendEmail } from "./email.js";
-import { auth } from "../middleware/authorization.js";
+import {
+  validateUser
+} from "../models/user.js";
+import {
+  validateProduct
+} from "../models/product.js";
+import {
+  sendEmail
+} from "./email.js";
+import {
+  auth
+} from "../middleware/authorization.js";
 import express from "express";
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   const User = res.locals.models.user;
-  const { error } = validateUser(req.body);
+  const {
+    error
+  } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({
@@ -19,7 +29,6 @@ router.post("/", async (req, res) => {
   if (user) return res.status(400).send("User already registered.");
 
   user = new User(_.pick(req.body, ["name", "email", "password"]));
-  console.log(user);
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
@@ -28,7 +37,7 @@ router.post("/", async (req, res) => {
   // send email
   let url;
   process.env.NODE_ENV === 'production' ? url = `${process.env.VER_LINK_PROD}/${token}` : url = `${process.env.VER_LINK_DEV}/${token}`;
-  
+
   sendEmail(req.body.email, url);
 
   res
@@ -79,12 +88,30 @@ router.get("/", auth, async (req, res) => {
   res.send(users);
 });
 
+
+//checking if email if taken
+router.get("/:email", async (req, res) => {
+  const User = res.locals.models.user;
+
+  const emailParameter = req.params.email;
+
+  const users = await User.find().sort("email");
+
+  let result = filterEmails(users, emailParameter);
+
+  if (result.length >= 1) return res.send(true);
+
+  if (result.length === 0) return res.send(false);
+});
+
 router.put("/:id/product", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const Product = res.locals.models.product;
   const product = new Product(req.body);
-  const { error } = validateProduct(req.body);
+  const {
+    error
+  } = validateProduct(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const userHandler = await User.findById(req.params.id, "custom_products", {
@@ -93,11 +120,11 @@ router.put("/:id/product", auth, async (req, res) => {
   userHandler.custom_products.push(product);
 
   const user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
+    req.params.id, {
       custom_products: userHandler.custom_products
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 
   if (!user)
@@ -117,16 +144,16 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   );
 
   const user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
+    req.params.id, {
       common_shopping_lists_id: filteredIds
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
-  
+
 
   const shoppingListHandler = await ShoppingList.findById(req.params.idSL, "members_id", {
     lean: true
@@ -136,17 +163,17 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   );
 
   const shoppingList = await ShoppingList.findByIdAndUpdate(
-    req.params.idSL,
-    {
+    req.params.idSL, {
       members_id: filteredMembersIds
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
 
-    res.send(shoppingList);
+  res.send(shoppingList);
 });
 
 
@@ -163,10 +190,36 @@ router.get("/:name", auth, async (req, res) => {
   res.send(result);
 });
 
+
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const User = res.locals.models.user;
+
+    User.findById(req.params.id);
+
+    await User.deleteOne({
+      _id: req.params.id
+    });
+  } catch {
+
+    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+
+  }
+  res.send('Document deleted');
+})
+
 function filterByValue(names, name) {
   if (!name) return names;
   return names.filter(o => {
     return o.name.toLowerCase().includes(name);
   });
 }
+
+function filterEmails(emails, emailAddres) {
+  if (!emailAddres) return true;
+  return emails.filter(o => {
+    return o.email.toLowerCase().includes(emailAddres);
+  });
+}
+
 export default router;

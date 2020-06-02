@@ -12,6 +12,7 @@ import MenuBar from "./frontend/views/Menu";
 import Login from "./frontend/views/Login";
 import Register from "./frontend/views/Register";
 import ShoppingList from "./frontend/views/ShoppingList";
+import PersonalData from "./frontend/views/PersonalData";
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -51,6 +52,7 @@ const App = () => {
       <PrivateRoute exact path="/shoppingLists" component={ShoppingList} />
       <PrivateRoute exact path="/commonShoppingLists" component={ShoppingList} />
       <PrivateRoute path="/shoppingList/:name" component={ShoppingList} />
+      <PrivateRoute path="/personalData" component={PersonalData} />
       <PublicRoute exact path="/register" component={Register} />
       <Route path="/register/verification/:token" component={Register} />
       <Route render={() => <Redirect to="/" />} />

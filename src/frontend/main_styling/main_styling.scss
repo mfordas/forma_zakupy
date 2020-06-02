@@ -270,6 +270,23 @@ input::-webkit-calendar-picker-indicator {
   align-items: center;
 }
 
+.container-personaldata {
+  max-width: 80vw;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container-data {
+  width: 80%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
 @media (max-width: 1024px), (max-height: 420px){
   .registerCard {
     max-width: 75vw;

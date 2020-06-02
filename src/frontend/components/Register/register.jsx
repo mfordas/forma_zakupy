@@ -54,19 +54,16 @@ class Register extends React.Component {
     }
   }
 
-  checkEmail = async () => {
+  checkEmail = async (email) => {
     await axios({
-      url: '/api/users',
+      url: `/api/users/${email}`,
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
       }
     }).then((response) => {
-      response.data.forEach((data) => {
-        if (data.email === this.state.email) {
-          this.setState({ emailTaken: true })
-        }
-      })
+      if (response.data) return this.setState({ emailTaken: true });
+      if (!response.data) return this.setState({ emailTaken: false });
     }, (error) => {
       console.log(error);
     });
@@ -75,7 +72,7 @@ class Register extends React.Component {
   onButtonSubmit = async e => {
     e.preventDefault();
     this.setState({ emailTaken: false })
-    await this.checkEmail();
+    await this.checkEmail(this.state.email);
     this.nameValidate(e);
     this.emailValidate(e);
     this.passwordValidate(e);

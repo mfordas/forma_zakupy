@@ -1,15 +1,18 @@
 import React from 'react';
+import { NavLink, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../../Store';
-import ConfirmDeleteAccount from './confirmDeleteAccount';
 import '../../main_styling/main_styling.scss';
+
 
 
 class PersonalDataContent extends React.Component {
     constructor(props) {
         super(props)
 
+        
+        
         this.state = {
             name: '',
             email: '',
@@ -17,13 +20,14 @@ class PersonalDataContent extends React.Component {
         }
     }
 
+    static contextType = Store;
+
     showPersonalData = async () => {
         let personalData = await axios({
             url: `/api/users/me`,
             method: "GET",
             headers: setHeaders()
         });
-        console.log(personalData);
         this.setState({
             name: personalData.data.name,
             email: personalData.data.email
@@ -31,6 +35,7 @@ class PersonalDataContent extends React.Component {
     }
 
     deleteAccount = async () => {
+        
         try {
             const id = localStorage.getItem('id');
             const res = await axios({
@@ -42,9 +47,8 @@ class PersonalDataContent extends React.Component {
             if (res.status === 200) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('id');
-                Store.changeStore('isLogged', false);
-                Store.changeStore('hasCharacter', null);
                 this.setState({ accountDeleted: true })
+                this.context.changeStore('isLogged', false);
             }
 
         } catch (error) {
@@ -63,13 +67,14 @@ class PersonalDataContent extends React.Component {
         return (
             <>
                 {this.state.accountDeleted === false ? <div className="container-personaldata">
-                    <div>Dane, które przechowujemy:</div>
-                    <div className="container-personaldata">
+                        <div className="container-data">Dane, które przechowujemy:</div>
                         <div className="container-data">Imię: {name}</div>
                         <div className="container-data">E-mail: {email}</div>
-                        <div className="container-data">W każdej chwili możesz usunąć swoje dane - wiąże się to ze skasowaniem konta w najszej aplikacji.</div>
+                        <div className="container-data">W każdej chwili możesz usunąć swoje dane - wiąże się to ze skasowaniem konta w naszej aplikacji. Usunięcie konta
+                        spowoduje usunięcie wszystkich list zakupów oraz własnych produktów.</div>
                         <button className="button" style={{ backgroundColor: 'red' }} onClick={this.deleteAccount}>Usuń konto</button>
-                    </div></div> : <ConfirmDeleteAccount />}
+                        <NavLink className="button" to="/shoppingLists">Strona główna</NavLink>
+                    </div> : <Redirect to="/confirmDeleteAccount" />}
             </>
         );
     }

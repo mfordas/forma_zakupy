@@ -32,6 +32,7 @@ html,
 a,
 link {
   text-decoration: none;
+  color: black;
 }
 
 * {
@@ -72,15 +73,13 @@ h1 {
   margin: 0;
   font-size: 2vw;
   margin-right: 3.5vw;
-  // transform: translate(-2px, -15px) rotate(-25deg);
-  // color: $hearth-right-side-color;
 }
 
 .logo-container {
   box-sizing: border-box;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 1vh;
@@ -271,12 +270,13 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .container-personaldata {
-  max-width: 80vw;
+  max-width: 30vw;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  margin-top: 5vh;
 }
 
 .container-data {
@@ -285,6 +285,37 @@ input::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   margin: 10px;
+}
+
+.containerFooter {
+  width: 100vw;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin: auto;
+  flex-direction: column;
+}
+
+.linkFooter {
+  margin: 0 3vw 0 3vw;
+  color: black;
+}
+
+.containerFooterHorizontal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (max-width: 1024px), (max-height: 420px){

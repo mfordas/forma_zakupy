@@ -270,7 +270,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .container-personaldata {
-  max-width: 30vw;
+  min-width: 20vw;
+  max-width: 50vw;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-start;
@@ -289,19 +290,20 @@ input::-webkit-calendar-picker-indicator {
 
 .containerFooter {
   width: 100vw;
-  height: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: flex-end;
-  justify-self: flex-end;
   margin: auto;
   flex-direction: column;
+  border-top: 2px solid black;
 }
 
 .linkFooter {
   margin: 0 3vw 0 3vw;
   color: black;
+  font-size: 0.75rem;
+  padding: 0.5vh 0 0 0.5vh;
 }
 
 .containerFooterHorizontal {
@@ -316,6 +318,11 @@ input::-webkit-calendar-picker-indicator {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.dataProcessingAgreementContainer {
+  font-size: small;
+  padding: 1vh;
 }
 
 @media (max-width: 1024px), (max-height: 420px){
@@ -344,7 +351,8 @@ input::-webkit-calendar-picker-indicator {
   .buttonMenu.active {
     border-bottom: 2px solid black;
   }
-}
+
+  }
 
 @media (max-height: 420px){
     .logo {
@@ -360,3 +368,23 @@ input::-webkit-calendar-picker-indicator {
   }
   
 }
+
+@media (max-width: 420px){
+    .logo {
+    max-width: 90vw;
+    margin: -12.5vw 0 -14.5vw 0;
+    padding-top: 7vh;
+
+    h1 {
+      font-size: 6vw;
+      margin-right: 6vw;
+    }
+
+  }
+  .container-personaldata{
+    max-width: 90vw;
+  }
+  
+}
+
+

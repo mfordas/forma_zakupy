@@ -1,9 +1,10 @@
 import React from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../../Store';
 import '../../main_styling/main_styling.scss';
+import ConfirmDeleteAccount from './confirmDeleteAccount';
 
 
 
@@ -74,7 +75,7 @@ class PersonalDataContent extends React.Component {
                         spowoduje usunięcie wszystkich list zakupów oraz własnych produktów.</div>
                         <button className="button" style={{ backgroundColor: 'red' }} onClick={this.deleteAccount}>Usuń konto</button>
                         <NavLink className="button" to="/shoppingLists">Strona główna</NavLink>
-                    </div> : <Redirect to="/confirmDeleteAccount" />}
+                    </div> : <ConfirmDeleteAccount /> }
             </>
         );
     }

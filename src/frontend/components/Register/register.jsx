@@ -18,7 +18,8 @@ class Register extends React.Component {
       confirmPassword: '',
       emailTaken: false,
       invalidData: false,
-      confirm: false
+      confirm: false,
+      dataProcessingAgreement: false
     }
   }
   
@@ -108,6 +109,13 @@ class Register extends React.Component {
     else { return null }
   }
 
+  dataProcessingAgreementValidate = (e) => {
+    if ((this.state.dataProcessingAgreement === false) && this.state.invalidData) {
+      return <ErrorMessage message='Musisz zaakceptować zgodę na przetwarzanie danych'/>;
+    }
+    else { return null }
+  }
+
   
 
   render() {
@@ -127,6 +135,11 @@ class Register extends React.Component {
               <p>Hasło</p>
               <input type="password" onChange={e => this.setState({ confirmPassword: e.target.value })}></input>
               <p>Powierdź hasło</p>
+              <div className="dataProcessingAgreementContainer">
+                <input type="checkbox" id="agree" onClick={() => this.setState({dataProcessingAgreement: !this.state.dataProcessingAgreement})} />
+                <label htmlFor="agree">Zapoznałem się z regulaminem</label> 
+              </div>
+              {this.dataProcessingAgreementValidate()}
               <button className="button" onClick={this.onButtonSubmit}>Zarejestruj</button>
             </form>
           </div> : <Confirm name={this.state.name} email={this.state.email}/>}

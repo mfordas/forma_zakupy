@@ -6,7 +6,7 @@ const Footer = () => {
     const { isLogged } = useContext(Store);
 
     return ( <div className="containerFooter">
-        <div className="linkFooter">Copyright © <a href="https://formadietetyk.pl" target="_blank" rel='noreferrer'>FORMA Dietetyk Marta Fordas</a> 2020 </div>
+        <div className="linkFooter">Copyright © <a target="_blank" rel="noopener noreferrer" href="https://formadietetyk.pl" >FORMA Dietetyk Marta Fordas</a> 2020 </div>
         <div className="containerFooterHorizontal">
         {/* <NavLink className="linkFooter" to="/home">Polityka prywatności</NavLink> */}
     {!isLogged &&

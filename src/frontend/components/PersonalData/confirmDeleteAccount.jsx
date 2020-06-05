@@ -7,6 +7,10 @@ class ConfirmDeleteAccount extends React.Component {
 
     static contextType = Store;
 
+    componentDidMount() {
+        this.context.changeStore('isLogged', false);
+    }
+
     render() {
         return (
             <div className="container">

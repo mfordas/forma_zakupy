@@ -1,12 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../../Store';
 import '../../main_styling/main_styling.scss';
-import ConfirmDeleteAccount from './confirmDeleteAccount';
-
-
 
 class PersonalDataContent extends React.Component {
     constructor(props) {
@@ -49,7 +46,6 @@ class PersonalDataContent extends React.Component {
                 localStorage.removeItem('token');
                 localStorage.removeItem('id');
                 this.setState({ accountDeleted: true })
-                this.context.changeStore('isLogged', false);
             }
 
         } catch (error) {
@@ -75,7 +71,7 @@ class PersonalDataContent extends React.Component {
                         spowoduje usunięcie wszystkich list zakupów oraz własnych produktów.</div>
                         <button className="button" style={{ backgroundColor: 'red' }} onClick={this.deleteAccount}>Usuń konto</button>
                         <NavLink className="button" to="/shoppingLists">Strona główna</NavLink>
-                    </div> : <ConfirmDeleteAccount /> }
+                    </div> : <Redirect to="/confirmDeleteAccount"/> }
             </>
         );
     }

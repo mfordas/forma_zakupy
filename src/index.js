@@ -59,7 +59,7 @@ const App = () => {
       <PrivateRoute path="/shoppingList/:name" component={ShoppingList} />
       <PrivateRoute path="/personalData" component={PersonalData} />
       <PublicRoute exact path="/register" component={Register} />
-      <PublicRoute path="/confirmDeleteAccount" component={ConfirmDeleteAccount} />
+      <Route path="/confirmDeleteAccount" component={ConfirmDeleteAccount} />
       <Route path="/register/verification/:token" component={Register} />
       <Route render={() => <Redirect to="/" />} />
       </Switch>

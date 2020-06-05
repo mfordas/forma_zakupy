@@ -135,11 +135,11 @@ class Register extends React.Component {
               <p>Hasło</p>
               <input type="password" onChange={e => this.setState({ confirmPassword: e.target.value })}></input>
               <p>Powierdź hasło</p>
-              <div className="dataProcessingAgreementContainer">
+              {/* <div className="dataProcessingAgreementContainer">
                 <input type="checkbox" id="agree" onClick={() => this.setState({dataProcessingAgreement: !this.state.dataProcessingAgreement})} />
                 <label htmlFor="agree">Zapoznałem się z regulaminem</label> 
               </div>
-              {this.dataProcessingAgreementValidate()}
+              {this.dataProcessingAgreementValidate()} */}
               <button className="button" onClick={this.onButtonSubmit}>Zarejestruj</button>
             </form>
           </div> : <Confirm name={this.state.name} email={this.state.email}/>}

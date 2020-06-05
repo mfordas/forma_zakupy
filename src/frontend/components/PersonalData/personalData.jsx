@@ -69,7 +69,7 @@ class PersonalDataContent extends React.Component {
                         <div className="container-data">E-mail: {email}</div>
                         <div className="container-data">W każdej chwili możesz usunąć swoje dane - wiąże się to ze skasowaniem konta w naszej aplikacji. Usunięcie konta
                         spowoduje usunięcie wszystkich list zakupów oraz własnych produktów.</div>
-                        <button className="button" style={{ backgroundColor: 'red' }} onClick={this.deleteAccount}>Usuń konto</button>
+                        <button className="button" style={{ backgroundColor: 'red', color:'white' }} onClick={this.deleteAccount}>Usuń konto</button>
                         <NavLink className="button" to="/shoppingLists">Strona główna</NavLink>
                     </div> : <Redirect to="/confirmDeleteAccount"/> }
             </>

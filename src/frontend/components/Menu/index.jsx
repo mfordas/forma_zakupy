@@ -8,7 +8,6 @@ const Menu = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         changeStore('isLogged', false);
-        changeStore('hasCharacter', null)
         window.location.reload();
     };
 

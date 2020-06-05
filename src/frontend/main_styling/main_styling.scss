@@ -32,6 +32,7 @@ html,
 a,
 link {
   text-decoration: none;
+  color: black;
 }
 
 * {
@@ -72,15 +73,13 @@ h1 {
   margin: 0;
   font-size: 2vw;
   margin-right: 3.5vw;
-  // transform: translate(-2px, -15px) rotate(-25deg);
-  // color: $hearth-right-side-color;
 }
 
 .logo-container {
   box-sizing: border-box;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 1vh;
@@ -270,6 +269,63 @@ input::-webkit-calendar-picker-indicator {
   align-items: center;
 }
 
+.container-personaldata {
+  min-width: 20vw;
+  max-width: 50vw;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5vh;
+}
+
+.container-data {
+  width: 80%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.containerFooter {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  margin: auto;
+  flex-direction: column;
+  border-top: 2px solid black;
+  padding: 1vh;
+}
+
+.linkFooter {
+  margin: 0 3vw 0 3vw;
+  color: black;
+  font-size: 0.75rem;
+  padding: 0.5vh 0 0 0.5vh;
+}
+
+.containerFooterHorizontal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dataProcessingAgreementContainer {
+  font-size: small;
+  padding: 1vh;
+}
+
 @media (max-width: 1024px), (max-height: 420px){
   .registerCard {
     max-width: 75vw;
@@ -296,7 +352,8 @@ input::-webkit-calendar-picker-indicator {
   .buttonMenu.active {
     border-bottom: 2px solid black;
   }
-}
+
+  }
 
 @media (max-height: 420px){
     .logo {
@@ -310,5 +367,29 @@ input::-webkit-calendar-picker-indicator {
     }
 
   }
+
+  .container-personaldata{
+    max-width: 90vw;
+  }
   
 }
+
+@media (max-width: 420px){
+    .logo {
+    max-width: 90vw;
+    margin: -12.5vw 0 -14.5vw 0;
+    padding-top: 7vh;
+
+    h1 {
+      font-size: 6vw;
+      margin-right: 6vw;
+    }
+
+  }
+  .container-personaldata{
+    max-width: 90vw;
+  }
+  
+}
+
+

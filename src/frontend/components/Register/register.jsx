@@ -1,10 +1,11 @@
 import React from 'react';
-import Store from '../../../Store';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
 import '../../main_styling/main_styling.scss';
 import Confirm from './confirm';
-import ErrorMessage from '../ReusableComponents/ErrorMessage'
+import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import { postUser, checkEmail } from '../../redux_actions/registerActions';
 
 class Register extends React.Component {
 
@@ -16,101 +17,50 @@ class Register extends React.Component {
       email: '',
       password: '',
       confirmPassword: '',
-      emailTaken: false,
-      invalidData: false,
-      confirm: false,
       dataProcessingAgreement: false
     }
-  }
-  
-
-  static contextType = Store;
-
-  postUser = async () => {
-    try {
-      if (this.state.password !== this.state.confirmPassword) {
-        throw ErrorMessage('Wrong password');
-      }
-      const res = await axios({
-        method: 'post',
-        url: '/api/users',
-        data: {
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password,
-        },
-        headers: setHeaders()
-      });
-
-      if (res.status === 200) {
-        this.setState({confirm: true});
-      } else {
-        this.setState({ invalidData: true });
-        
-      }
-    }
-    catch (error) {
-      this.setState({ invalidData: true });
-      console.error('Error Registration:', error);
-    }
-  }
-
-  checkEmail = async (email) => {
-    await axios({
-      url: `/api/users/${email}`,
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      if (response.data) return this.setState({ emailTaken: true });
-      if (!response.data) return this.setState({ emailTaken: false });
-    }, (error) => {
-      console.log(error);
-    });
   }
 
   onButtonSubmit = async e => {
     e.preventDefault();
-    this.setState({ emailTaken: false })
-    await this.checkEmail(this.state.email);
-    this.nameValidate(e);
-    this.emailValidate(e);
-    this.passwordValidate(e);
-    if (this.state.emailTaken === false) {
-      this.postUser();
+    await this.props.checkEmail(this.state.email);
+    this.nameValidate();
+    this.emailValidate();
+    this.passwordValidate();
+    if (this.props.registerData.emailTaken === false) {
+      await this.props.postUser(this.state);
     }
   }
 
-  nameValidate = (e) => {
-    if (this.state.name.length < 3 && this.state.invalidData) {
+  nameValidate = () => {
+    if (this.state.name.length < 3 && this.props.registerData.invalidData) {
       return <ErrorMessage message='Imię powinno być dłuższe niż 3 znaki'/>;
     }
     else { return null }
   }
 
-  emailValidate = (e) => {
-    if (this.state.emailTaken === true) {
+  emailValidate = () => {
+    if (this.props.registerData.emailTaken === true) {
       return <ErrorMessage message='Email zajęty'/>;
     }
-    if (this.state.email.length === 0 && this.state.invalidData) {
+    if (this.state.email.length === 0 && this.props.registerData.invalidData) {
       return <ErrorMessage message='Wpisz e-mail'/>;
     }
     else { return null }
   }
 
-  passwordValidate = (e) => {
-    if ((this.state.password !== this.state.confirmPassword) && this.state.invalidData) {
+  passwordValidate = () => {
+    if ((this.state.password !== this.state.confirmPassword) && this.props.registerData.invalidData) {
       return <ErrorMessage message='Oba hasła powinny być takie same'/>;
     }
-    else if ((this.state.password.length < 8 || this.state.confirmPassword.length < 8) && this.state.invalidData) {
+    else if ((this.state.password.length < 8 || this.state.confirmPassword.length < 8) && this.props.registerData.invalidData) {
       return <ErrorMessage message='Hasło powinno mieć conajmniej 8 znaków'/>;
     }
     else { return null }
   }
 
-  dataProcessingAgreementValidate = (e) => {
-    if ((this.state.dataProcessingAgreement === false) && this.state.invalidData) {
+  dataProcessingAgreementValidate = () => {
+    if ((this.state.dataProcessingAgreement === false) && this.props.registerData.invalidData) {
       return <ErrorMessage message='Musisz zaakceptować zgodę na przetwarzanie danych'/>;
     }
     else { return null }
@@ -121,7 +71,7 @@ class Register extends React.Component {
   render() {
     return (
         <div className="container">
-          {this.state.confirm === false ? <div className="registerCard">
+          {this.props.registerData.confirm === false ? <div className="registerCard">
             <p>Witamy w programie Forma Zakupy. Jeśli jeszcze nie posiadasz konta - zarejestruj się</p>
             <form>
               <input onChange={e => this.setState({ name: e.target.value.toLowerCase() })}></input>
@@ -148,4 +98,13 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+
+const mapStateToProps = (state) => ({
+  registerData: state.registerData,
+});
+
+Register.propTypes = {
+  registerData: PropTypes.object
+}
+
+export default connect(mapStateToProps, { postUser, checkEmail })(Register);

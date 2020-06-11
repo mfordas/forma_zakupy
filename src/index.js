@@ -1,10 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-import axios from 'axios';
+import {Provider} from 'react-redux';
 
-import Store, { StoreProvider } from "./Store";
-import setHeaders from "./frontend/utils/setHeaders";
+import store from './frontend/redux_store/reduxStore'
 import Home from "./frontend/views/Homepage";
 import PublicRoute from "./frontend/components/PublicRoute";
 import PrivateRoute from "./frontend/components/PrivateRoute";
@@ -19,33 +18,34 @@ import ConfirmDeleteAccount from "./frontend/components/PersonalData/confirmDele
 import './frontend/main_styling/main_styling.scss';
 
 const App = () => {
-  const { isLogged, changeStore } = useContext(Store);
+  // const { isLogged, changeStore } = useContext(Store);
 
-  useEffect(() => {
-    if (!isLogged) return;
-    (async () => {
-      try {
-        const response = await axios({
-            url:  "/api/users/me",
-            method: "GET",
-            headers: setHeaders()
-          }
-          );
-        if (response.status === 400) {
-          localStorage.removeItem("token");
-          changeStore("isLogged", false);
-          changeStore("me", null);
-          return;
-        }
-        const data = await response.data;
-        changeStore("isLogged", true);
-        changeStore("me", data);
-      } catch (ex) {
-        console.error("Serwer nie odpowiada");
-        console.error("Error", ex);
-      }
-    })();
-  }, [changeStore, isLogged]);
+  // useEffect(() => {
+  //   if (!isLogged) return;
+  //   (async () => {
+  //     try {
+  //       const response = await axios({
+  //           url:  "/api/users/me",
+  //           method: "GET",
+  //           headers: setHeaders()
+  //         }
+  //         );
+  //       if (response.status === 400) {
+  //         localStorage.removeItem("token");
+  //         changeStore("isLogged", false);
+  //         changeStore("me", null);
+  //         logout();
+  //         return;
+  //       }
+  //       const data = await response.data;
+  //       changeStore("isLogged", true);
+  //       changeStore("me", data);
+  //     } catch (ex) {
+  //       console.error("Serwer nie odpowiada");
+  //       console.error("Error", ex);
+  //     }
+  //   })();
+  // }, [changeStore, isLogged]);
 
   return (
     <BrowserRouter>
@@ -70,8 +70,19 @@ const App = () => {
 };
 
 ReactDOM.render(
-  <StoreProvider>
+  <Provider store={store}>
     <App />
-  </StoreProvider>,
+  </Provider>,
   document.querySelector("#root")
 );
+
+
+// const mapStateToProps = (state) => ({
+//   loginData: state.loginData,
+// });
+
+// App.propTypes = {
+//   loginData: PropTypes.object
+// }
+
+// export default connect(mapStateToProps, { logout })(App);

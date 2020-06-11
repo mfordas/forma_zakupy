@@ -1,0 +1,6 @@
+export const TYPES = {
+    LOGIN: 'LOGIN',
+    REGISTER: 'REGISTER',
+    LOGOUT: 'LOGOUT',
+    GETMYDATA: 'GETMYDATA',
+}

@@ -10,7 +10,7 @@ const initialState = {
         invalidData: false
     },
     isLogged: localStorage.getItem("token") ? true : false,
-    me: null
+    me: {}
 };
 
 export default function (state = initialState, action) {
@@ -24,11 +24,14 @@ export default function (state = initialState, action) {
         case TYPES.LOGOUT:
             return {
                 ...state,
+                loginData: action.loginData,
                 isLogged: action.isLogged,
+                me: action.me
             };
         case TYPES.GETMYDATA:
             return {
                 ...state,
+                isLogged: action.isLogged,
                 me: action.me,
             };
         default:

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { getShoppingLists, setShoppingListInfo } from '../../redux_actions/shoppingListActions';
 import AddNewShoppingList from './addNewShoppingList';
 import DeleteShoppingList from './deleteShoppingList';
-import setHeaders from '../../utils/setHeaders';
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingLists extends React.Component {
@@ -11,33 +13,8 @@ class ShowShoppingLists extends React.Component {
         super(props)
 
         this.state = {
-            shoppingLists: [],
             addShoppingListActive: false
         }
-    }
-
-    getShoppingLists = async () => {
-        const id = localStorage.getItem('id');
-        let shoppingListIds = await axios(
-            {
-                url: `api/shoppingLists/${id}/shoppingLists`,
-                method: 'GET',
-                headers: setHeaders()
-            }
-        );
-
-        const idArray = shoppingListIds.data;
-
-        await Promise.all(idArray.map(async listId => (await axios(
-            {
-                url: `api/shoppingLists/${listId}`,
-                method: 'GET',
-                headers: setHeaders()
-            }
-
-        )
-            .then(res => res.data))))
-            .then(res => this.setState({ shoppingLists: res }));
     }
 
     openNewShoppingListForm = () => {
@@ -53,7 +30,7 @@ class ShowShoppingLists extends React.Component {
     }
 
     createListOfShoppingLists = (type) => {
-        return this.state.shoppingLists.map(list => this.shoppingListsCompareMethod(list.members_id, type) ?
+        return this.props.shoppingListsData.shoppingLists.map(list => this.shoppingListsCompareMethod(list.members_id, type) ?
             <div key={list._id} className="container-shoppingList">
                 <div className="shoppinglist-name">
                     <p>{list.name}</p>
@@ -61,14 +38,20 @@ class ShowShoppingLists extends React.Component {
                 <div className="shoppinglist-productsNumber">
                     <p>{list.products.length}</p>
                 </div>
-                <Link className="button" to={{ pathname: `/shoppingList/${list.name}`, listInfo: { id: list._id, name: list.name, members_id: list.members_id } }}>Przejdź</Link>
+                <Link className="button" to={{ pathname: `/shoppingList/${list.name}`}} onClick={async () => await this.props.setShoppingListInfo(list)}>Przejdź</Link>
 
-                <DeleteShoppingList onClick={this.getShoppingLists} id={list._id} /> </div> : null)
+                <DeleteShoppingList onClick={() => this.props.getShoppingLists} id={list._id} /> </div> : null)
     }
 
     componentDidMount() {
-        this.getShoppingLists();
+        this.props.getShoppingLists();
     }
+
+    componentDidUpdate(prevProps) {
+        if (JSON.stringify(this.props.shoppingListsData.shoppingLists) !== JSON.stringify(prevProps.shoppingListsData.shoppingLists)) {
+            this.createListOfShoppingLists();
+        }
+    };
 
 
     render() {
@@ -77,7 +60,7 @@ class ShowShoppingLists extends React.Component {
                 {this.props.type === 'private' ?
                     <>
                         <button className="button" onClick={this.openNewShoppingListForm}>Dodaj listę zakupów</button>
-                        {this.state.addShoppingListActive ? <AddNewShoppingList onClick={this.getShoppingLists} /> : null}
+                        {this.state.addShoppingListActive ? <AddNewShoppingList/> : null}
                     </>
                     : null}
                 {this.createListOfShoppingLists(this.props.type)}
@@ -86,4 +69,12 @@ class ShowShoppingLists extends React.Component {
     }
 }
 
-export default ShowShoppingLists;
+const mapStateToProps = (state) => ({
+    shoppingListsData: state.shoppingListsData,
+  });
+  
+  ShowShoppingLists.propTypes = {
+    shoppingListsData: PropTypes.object
+  }
+
+  export default connect(mapStateToProps, { getShoppingLists, setShoppingListInfo })(ShowShoppingLists);

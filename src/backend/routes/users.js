@@ -178,7 +178,7 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
 
 
 //finding users by name
-router.get("/:name", auth, async (req, res) => {
+router.get("/names/:name", auth, async (req, res) => {
   const User = res.locals.models.user;
 
   const nameParameter = req.params.name;

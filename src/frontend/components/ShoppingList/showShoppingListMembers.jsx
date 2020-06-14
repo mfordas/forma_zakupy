@@ -1,76 +1,37 @@
 import React from 'react';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { getMembersIds, getMembersData, deleteMemberFromShoppingList } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingListMembers extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            shoppingListId: this.props.id,
-            membersIds: [],
-            members: []
-        }
-    };
-
-    getMembersIds = async () => {
-        let members = await axios({
-            url: `/api/shoppingLists/${this.state.shoppingListId}/members`,
-            method: "GET",
-            headers: setHeaders()
-        });
-        this.setState({ membersIds: members.data });
-    }
-
-    getMembersData = async () => {
-        let membersArray = await Promise.all(this.state.membersIds.map(async memberId => (await axios({
-            url: `/api/users/byId/${memberId}`,
-            method: "GET",
-            headers: setHeaders()
-        }).then(res => res.data))));
-        this.setState({ members: membersArray });
-    };
-
-    deleteMemberFromShoppingList = async (memberId) => {
-        await axios({
-            url: `/api/users/${memberId}/shoppingList/${this.state.shoppingListId}`,
-            method: 'PUT',
-            headers: setHeaders()
-        }).then(res => {
-            if (res.status === 200) {
-                this.getMembersIds();
-            } else {
-                console.log('warrning');
-            }
-        },
-            error => {
-                console.log(error);
-            }
-        );
-    }
 
     async componentDidMount() {
-        await this.getMembersIds();
-        await this.getMembersData();
+        await this.props.getMembersData(this.props.shoppingListsData.shoppingListInfo.membersIds);
     }
 
-    async componentDidUpdate(prevProps, prevState) {
-        if (JSON.stringify(this.state.membersIds) !== JSON.stringify(prevState.membersIds)) {
-            await this.getMembersData();
+    async componentDidUpdate(prevProps) {
+        if (JSON.stringify(this.props.shoppingListsData.shoppingListInfo.membersIds) !== JSON.stringify(prevProps.shoppingListsData.shoppingListInfo.membersIds)) {
+            await this.props.getMembersData(this.props.shoppingListsData.shoppingListInfo.membersIds);
         }
     };
+
+    deleteMember = (member) => {
+        this.props.deleteMemberFromShoppingList(member._id, this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+        this.props.getMembersIds(this.props.shoppingListsData.shoppingListInfo.idShoppingList)
+    }
 
 
     render() {
         return (
             <div className="container-products">
-                {this.state.members.map(member => {
+                {this.props.shoppingListsData.members.map(member => {
                     return <div key={member._id} className="container-shoppingList">
                         <div className="shoppinglist-name">
                             <p >{member.name}</p>
                         </div>
-                        <button className="button" onClick={() => this.deleteMemberFromShoppingList(member._id)}>Usuń</button>
+                        <button className="button" onClick={() => this.deleteMember(member)}>Usuń</button>
                     </div>
                 })}
             </div>
@@ -78,4 +39,12 @@ class ShowShoppingListMembers extends React.Component {
     }
 }
 
-export default ShowShoppingListMembers;
+const mapStateToProps = (state) => ({
+    shoppingListsData: state.shoppingListsData,
+  });
+  
+  ShowShoppingListMembers.propTypes = {
+    shoppingListsData: PropTypes.object
+  }
+
+  export default connect(mapStateToProps, { getMembersIds, getMembersData, deleteMemberFromShoppingList })(ShowShoppingListMembers);

@@ -122,6 +122,7 @@ export const addProductToList = (id, productData) => async (dispatch) => {
             if (res.status === 200) {
                 dispatch({
                     type: TYPES.ADDPRODUCT,
+                    products: res.data.products,
                     productAdded: true
                 })
             } else {

@@ -119,7 +119,7 @@ router.put("/:id/product", auth, async (req, res) => {
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
 
-  res.send(product);
+  res.send(shoppingList);
 });
 
 //delte product from shoppingList

@@ -40,6 +40,7 @@ export default function (state = initialState, action) {
         case TYPES.ADDPRODUCT:
             return {
                 ...state,
+                products: action.products,
                 productAdded: action.productAdded
             };
         case TYPES.SHOWPRODUCTPROPOSALS:

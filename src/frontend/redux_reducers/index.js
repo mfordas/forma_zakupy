@@ -4,12 +4,12 @@ import registerReducer from './registerReducer';
 import personalDataReducer from './personalDataReducer';
 import shoppingListReducer from './shoppingListReducer';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'
+import sessionStorage from 'redux-persist/lib/storage/session'
 
 
 const shoppingListReducerConfig = {
   key: 'shoppingListData',
-  storage: storage,
+  storage: sessionStorage,
   whitelist: ['shoppingListInfo']
 }
 

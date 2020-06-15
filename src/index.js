@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import {Provider} from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
 
-import store from './frontend/redux_store/reduxStore'
+import {store, persistor } from './frontend/redux_store/reduxStore'
 import Home from "./frontend/views/Homepage";
 import PublicRoute from "./frontend/components/PublicRoute";
 import PrivateRoute from "./frontend/components/PrivateRoute";
@@ -43,7 +44,9 @@ const App = () => {
 
 ReactDOM.render(
   <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <App />
+    </PersistGate>
   </Provider>,
   document.querySelector("#root")
 );

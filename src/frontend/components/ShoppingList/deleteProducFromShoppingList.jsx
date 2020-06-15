@@ -1,6 +1,8 @@
 import React from 'react';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { showShoppingList, deleteProduct } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class DeleteProductFromShoppingList extends React.Component {
@@ -9,32 +11,12 @@ class DeleteProductFromShoppingList extends React.Component {
 
         this.state = {
             idProduct: this.props.idProd,
-            productDeleted: null,
-            idShoppingList: this.props.id
         }
     }
 
-
-    deleteProduct = async () => {
-        const id = this.state.idShoppingList;
-        const idProd = this.state.idProduct;
-        await axios({
-            url: `/api/shoppingLists/${id}/product/${idProd}`,
-            method: "DELETE",
-            headers: setHeaders()
-        }).then(res => {
-            if (res.status === 200) {
-                this.setState({ productDeleted: true});
-              } else {
-                this.setState({ productDeleted: false });
-              }
-            },
-            error => {
-              console.log(error);
-            }
-        );
-
-        this.props.onClick();
+    deleteProduct = () => {
+        this.props.deleteProduct(this.props.shoppingListsData.shoppingListInfo.idShoppingList, this.state.idProduct);
+        this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
     }
 
     render() {
@@ -44,4 +26,12 @@ class DeleteProductFromShoppingList extends React.Component {
     }
 }
 
-export default DeleteProductFromShoppingList;
+const mapStateToProps = (state) => ({
+    shoppingListsData: state.shoppingListsData,
+  });
+  
+  DeleteProductFromShoppingList.propTypes = {
+    shoppingListsData: PropTypes.object
+  }
+  
+  export default connect(mapStateToProps, { showShoppingList, deleteProduct })(DeleteProductFromShoppingList);

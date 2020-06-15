@@ -1,11 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import Store from '../../../Store';
-import axios from 'axios';
-import jwt from 'jwt-decode';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
 import '../../main_styling/main_styling.scss';
 import ErrorMessage from '../ReusableComponents/ErrorMessage';
-import setHeaders from '../../utils/setHeaders';
+import { login } from '../../redux_actions/loginActions';
 
 class Login extends React.Component {
   constructor(props){
@@ -14,59 +14,28 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailVerified: true,
-      invalidData: false
     }
   }
-  
-
-  static contextType = Store;
 
   onButtonSubmit = async e => {
     e.preventDefault();
     const data = {email: this.state.email,
       password:this.state.password};
-    delete this.state["invalidData"];
-    try {
-      const res = await axios({
-        method: 'post',
-        url: '/api/auth',
-        data: data,
-        headers: setHeaders(),
-      });
-      console.log(res.status);
-
-      if(res.status === 203) {
-        localStorage.setItem('email', this.state.email);
-        this.setState({emailVerified: false});
-      } else if (res.status === 200) {
-        const token = res.headers["x-auth-token"];
-        localStorage.setItem('token', token);
-        localStorage.setItem('id', jwt(token)._id);
-        this.context.changeStore('isLogged', true);
-        this.setState({ isLogged: true });
-      } else {
-        this.setState({ invalidData: true });
-      }
-    }
-    catch (error) {
-      console.error('Error Login:', error);
-      this.setState({ invalidData: true });
-    }
+    await this.props.login(data);
   }
 
   loginValidate = (e) => {
-    if (this.state.emailVerified === true && this.state.invalidData) {
+    if (this.props.loginData.loginData.emailVerified === true && this.props.loginData.loginData.invalidData) {
       return <ErrorMessage message='Zły e-mail lub hasło'/>
     }
-    if (this.state.emailVerified === false && this.state.invalidData){
+    if (this.props.loginData.loginData.emailVerified === false && this.props.loginData.loginData.invalidData){
       return <ErrorMessage message='Adres e-mail niezweryfikowany'/>
     }
     else { return null }
   }
 
   render() {
-    if (this.context.isLogged) return <Redirect to="/" />;
+    if (this.props.loginData.isLogged) return <Redirect to="/" />;
   
     return (
         <div className="container">
@@ -86,4 +55,12 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+  loginData: state.loginData,
+});
+
+Login.propTypes = {
+  loginData: PropTypes.object
+}
+
+export default connect(mapStateToProps, {login})(Login);

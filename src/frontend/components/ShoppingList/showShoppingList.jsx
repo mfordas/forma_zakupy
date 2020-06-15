@@ -1,9 +1,11 @@
 import React from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { TiArrowSync, TiUserAdd, TiArrowBack, TiGroup, TiPlus } from 'react-icons/ti';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { showShoppingList, crossProduct, resetShoppingList } from '../../redux_actions/shoppingListActions';
 import AddProduct from './addProduct';
-import setHeaders from '../../utils/setHeaders';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList';
 import AddUserToShoppingList from './addUserToShoppingList';
 import ProgressBar from './progressBar';
@@ -15,71 +17,10 @@ class ShowShoppingList extends React.Component {
         super(props)
 
         this.state = {
-            products: [],
-            name: this.props.location.listInfo.name,
-            idShoppingList: this.props.location.listInfo.id,
-            members: this.props.location.listInfo.members_id,
             addProductActive: false,
             addUserActive: false,
             showShoppingListMembers: false
         }
-    }
-
-    showShoppingList = async () => {
-        let products = await axios({
-            url: `/api/shoppingLists/${this.state.idShoppingList}/products`,
-            method: "GET",
-            headers: setHeaders()
-        });
-        const productsArray = products.data;
-        this.setState({ products: productsArray });
-    }
-
-    crossProduct = async (currentStatus, idProduct) => {
-        const id = this.state.idShoppingList;
-        await axios({
-            url: `/api/shoppingLists/${id}/product/${idProduct}`,
-            method: 'PUT',
-            headers: setHeaders(),
-            data: {
-                bought: !currentStatus,
-            }
-        }).then(res => {
-            if (res.status === 200) {
-                this.showShoppingList();
-            } else {
-                console.log('warrning');
-            }
-        },
-            error => {
-                console.log(error);
-            }
-        );
-
-    }
-
-    resetShoppingList = async () => {
-        const id = this.state.idShoppingList;
-        this.state.products.map(async product => {
-            await axios({
-                url: `/api/shoppingLists/${id}/product/${product._id}`,
-                method: 'PUT',
-                headers: setHeaders(),
-                data: {
-                    bought: false,
-                }
-            }).then(res => {
-                if (res.status === 200) {
-                    this.showShoppingList();
-                } else {
-                    console.log('warrning');
-                }
-            },
-                error => {
-                    console.log(error);
-                }
-            );
-        })
     }
 
     openNewProductForm = () => {
@@ -94,10 +35,18 @@ class ShowShoppingList extends React.Component {
     }
 
     componentDidMount() {
-        this.showShoppingList();
+        this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
     }
 
+    componentDidUpdate(prevProps) {
+        if (JSON.stringify(this.props.shoppingListsData.products) !== JSON.stringify(prevProps.shoppingListsData.products)) {
+            this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+        }
+    };
+
     render() {
+        const { idShoppingList, membersIds} = this.props.shoppingListsData.shoppingListInfo;
+        const { products } = this.props.shoppingListsData;
         return (
             <div className="container-products">
                 <div className="containerMenu">
@@ -114,21 +63,21 @@ class ShowShoppingList extends React.Component {
                         <p>Zobacz osoby</p>
                     </div>
                     <div className="button-container">
-                        <button className="button" onClick={this.resetShoppingList}><TiArrowSync /></button>
+                        <button className="button" onClick={() => {this.props.resetShoppingList(idShoppingList, products); this.props.showShoppingList(idShoppingList)}}><TiArrowSync /></button>
                         <p>Reset listy</p>
                     </div>
                     <div className="button-container">
-                        <Link className="button" to={this.state.members.length > 1 ? `/commonShoppingLists` : `/shoppingLists`}><TiArrowBack /></Link>
+                        <Link className="button" to={membersIds.length > 1 ? `/commonShoppingLists` : `/shoppingLists`}><TiArrowBack /></Link>
                         <p>Powrót</p>
                     </div>
                 </div>
-                {this.state.addProductActive ? <AddProduct onClick={this.showShoppingList} id={this.state.idShoppingList} /> : null}
-                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} id={this.state.idShoppingList} /> : null}
-                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={this.showShoppingList} id={this.state.idShoppingList} membersIds={this.state.members} /> : null}
-                <ProgressBar allProducts={this.state.products} onChange={this.showShoppingList} />
-                {this.state.products.map(product =>
+                {this.state.addProductActive ? <AddProduct onClick={() => this.props.showShoppingList(idShoppingList)} id={idShoppingList} /> : null}
+                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm}/> : null}
+                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={() => this.props.showShoppingList(idShoppingList)}/> : null}
+                <ProgressBar allProducts={products} onChange={() => this.props.showShoppingList(idShoppingList)} />
+                {products.map(product =>
                     <div key={product._id} className="container-product">
-                        <div className="product-name" onClick={() => this.crossProduct(product.bought, product._id)}>
+                        <div className="product-name" onClick={() => {this.props.crossProduct(idShoppingList, product.bought, product._id); this.props.showShoppingList(idShoppingList)}}>
                             <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.name}</p>
                         </div>
                         <div className="product-number">
@@ -137,11 +86,19 @@ class ShowShoppingList extends React.Component {
                         <div className="product-number">
                             <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.unit}</p>
                         </div>
-                        <DeleteProductFromShoppingList onClick={this.showShoppingList} id={this.state.idShoppingList} idProd={product._id} />
+                        <DeleteProductFromShoppingList onClick={() => this.props.showShoppingList(idShoppingList)} idProd={product._id} />
                     </div>)}
             </div>
         );
     }
 }
 
-export default ShowShoppingList;
+const mapStateToProps = (state) => ({
+    shoppingListsData: state.shoppingListsData,
+  });
+  
+  ShowShoppingList.propTypes = {
+    shoppingListsData: PropTypes.object
+  }
+  
+  export default connect(mapStateToProps, { showShoppingList, crossProduct, resetShoppingList })(ShowShoppingList);

@@ -227,7 +227,7 @@ router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
 
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
-  res.send(user);
+  res.send(shoppingList);
 });
 
 //delte user from shoppingList
@@ -275,7 +275,7 @@ router.put("/:id/user/:idUser", auth, async (req, res) => {
     if (!user)
       return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
 
-    res.send(user);
+    res.send(shoppingList);
 
 });
 

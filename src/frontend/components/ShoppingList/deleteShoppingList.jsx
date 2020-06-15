@@ -1,6 +1,8 @@
 import React from 'react';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { deleteShoppingListFromDataBase, removeShoppingListFromUsersShoppingLists, getShoppingLists } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class DeleteShoppingList extends React.Component {
@@ -8,57 +10,14 @@ class DeleteShoppingList extends React.Component {
         super(props)
 
         this.state = {
-            shoppingListName: '',
-            addShoppingListActive: false,
-            shoppingListDeleted: null,
             idShoppingList: this.props.id
         }
     }
 
-
-    removeShoppingListFromUsersShoppingLists = async () => {
-        const idUser = localStorage.getItem('id');
-        const id = this.state.idShoppingList;
-        await axios({
-            url: `api/shoppingLists/${id}/user/${idUser}`,
-            method: "PUT",
-            headers: setHeaders()
-        }).then(res => {
-            if (res.status === 200) {
-                this.setState({ shoppingListDeleted: true});
-              } else {
-                this.setState({ shoppingListDeleted: false });
-              }
-            },
-            error => {
-              console.log(error);
-            }
-        );
-    }
-
-    deleteShoppingListFromDataBase = async () => {
-        const idSL = this.state.idShoppingList;
-        await axios({
-            url: `api/shoppingLists/${idSL}`,
-            method: "DELETE",
-            headers: setHeaders()
-        }).then(res => {
-            if (res.status === 200) {
-                this.setState({ shoppingListDeleted: true});
-              } else {
-                this.setState({ shoppingListDeleted: false });
-              }
-            },
-            error => {
-              console.log(error);
-            }
-        );
-    }
-
     deleteShoppingList = async () => {
-        await this.removeShoppingListFromUsersShoppingLists();
-        await this.deleteShoppingListFromDataBase();
-        this.props.onClick();
+        await this.props.removeShoppingListFromUsersShoppingLists(this.state.idShoppingList);
+        this.props.getShoppingLists();
+        await this.props.deleteShoppingListFromDataBase(this.state.idShoppingList);
     }
 
     render() {
@@ -68,4 +27,12 @@ class DeleteShoppingList extends React.Component {
     }
 }
 
-export default DeleteShoppingList;
+const mapStateToProps = (state) => ({
+  shoppingListsData: state.shoppingListsData,
+});
+
+DeleteShoppingList.propTypes = {
+  shoppingListsData: PropTypes.object
+}
+
+export default connect(mapStateToProps, { deleteShoppingListFromDataBase, removeShoppingListFromUsersShoppingLists, getShoppingLists })(DeleteShoppingList);

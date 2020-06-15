@@ -1,18 +1,25 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Store from '../../../Store';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
-const Menu = () => {
-    const { isLogged, changeStore } = useContext(Store);
+import { logout, myData } from '../../redux_actions/loginActions';
+
+const Menu = ({loginData, logout, myData}) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
-        changeStore('isLogged', false);
+        localStorage.removeItem('email');
+        logout();
         window.location.reload();
     };
 
+    if(loginData.isLogged && loginData.me === null){
+        myData();
+    }
+
     return ( <div className="containerMenu">
-    {!isLogged &&
+    {!loginData.isLogged &&
         (
             <>
                 <NavLink className="buttonMenu" to="/home">Logowanie</NavLink>
@@ -20,7 +27,7 @@ const Menu = () => {
             </>
         )
         }
-    {isLogged &&
+    {loginData.isLogged &&
     (
         <>
         <NavLink className="buttonMenu" to="/shoppingLists">Moje Listy zakupów</NavLink>
@@ -33,6 +40,12 @@ const Menu = () => {
 
 }
 
-
-export default Menu;
-
+const mapStateToProps = (state) => ({
+    loginData: state.loginData,
+  });
+  
+  Menu.propTypes = {
+    loginData: PropTypes.object
+  }
+  
+  export default connect(mapStateToProps, { logout, myData })(Menu);

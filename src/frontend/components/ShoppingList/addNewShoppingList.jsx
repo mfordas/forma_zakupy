@@ -1,6 +1,8 @@
 import React from 'react';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { addShoppingList, getShoppingLists } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class AddNewShoppingList extends React.Component {
@@ -8,40 +10,9 @@ class AddNewShoppingList extends React.Component {
         super(props)
 
         this.state = {
-            shoppingListName: '',
-            addShoppingListActive: false,
-            shoppingListAdded: null
+            shoppingListName: ''
         }
     }
-
-
-    addShoppingList = async () => {
-        const id = localStorage.getItem('id');
-        await axios({
-            url: `api/shoppingLists/${id}/shoppingList`,
-            method: 'POST',
-            headers: setHeaders(),
-            data: {
-                name: this.state.shoppingListName
-            }
-        }).then(res => {
-            if (res.status === 200) {
-
-                this.setState({ shoppingListAdded: true});
-              } else {
-                this.setState({ shoppingListAdded: false });
-              }
-            },
-            error => {
-              console.log(error);
-            }
-        );
-
-        this.props.onClick();
-
-    }
-
-
 
     render() {
         return (
@@ -50,10 +21,18 @@ class AddNewShoppingList extends React.Component {
                 <p>Nazwa</p>
                 <input onChange={e => this.setState({ shoppingListName: e.target.value })}></input>
                 </div>
-                <button className="button" onClick={this.addShoppingList}>Dodaj</button>
+                <button className="button" onClick={() => {this.props.addShoppingList(this.state.shoppingListName); this.props.getShoppingLists()}}>Dodaj</button>
                 </div>
         );
     }
 }
 
-export default AddNewShoppingList;
+const mapStateToProps = (state) => ({
+    shoppingListsData: state.shoppingListsData,
+  });
+  
+  AddNewShoppingList.propTypes = {
+    shoppingListsData: PropTypes.object
+  }
+
+  export default connect(mapStateToProps, { addShoppingList, getShoppingLists })(AddNewShoppingList);

@@ -1,75 +1,30 @@
 import React from 'react';
 import { NavLink, Redirect } from 'react-router-dom';
-import axios from 'axios';
-import setHeaders from '../../utils/setHeaders';
-import Store from '../../../Store';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { deleteAccount } from '../../redux_actions/personalDataActions';
+import { myData } from '../../redux_actions/loginActions';
 import '../../main_styling/main_styling.scss';
 
 class PersonalDataContent extends React.Component {
-    constructor(props) {
-        super(props)
 
-        
-        
-        this.state = {
-            name: '',
-            email: '',
-            accountDeleted: false
-        }
-    }
-
-    static contextType = Store;
-
-    showPersonalData = async () => {
-        let personalData = await axios({
-            url: `/api/users/me`,
-            method: "GET",
-            headers: setHeaders()
-        });
-        this.setState({
-            name: personalData.data.name,
-            email: personalData.data.email
-        });
-    }
-
-    deleteAccount = async () => {
-        
-        try {
-            const id = localStorage.getItem('id');
-            const res = await axios({
-                url: `/api/users/${id}`,
-                method: "DELETE",
-                headers: setHeaders()
-            });
-
-            if (res.status === 200) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('id');
-                this.setState({ accountDeleted: true })
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-
-    componentDidMount() {
-        this.showPersonalData();
+    async componentDidMount() {
+        await this.props.myData();
     }
 
     render() {
-        const { name, email } = this.state;
+        const {name, email} = this.props.loginData.me;
 
         return (
             <>
-                {this.state.accountDeleted === false ? <div className="container-personaldata">
+                {this.props.personalData.accountDeleted === false ? <div className="container-personaldata">
                         <div className="container-data">Dane, które przechowujemy:</div>
                         <div className="container-data">Imię: {name}</div>
                         <div className="container-data">E-mail: {email}</div>
                         <div className="container-data">W każdej chwili możesz usunąć swoje dane - wiąże się to ze skasowaniem konta w naszej aplikacji. Usunięcie konta
                         spowoduje usunięcie wszystkich list zakupów oraz własnych produktów.</div>
-                        <button className="button" style={{ backgroundColor: 'red', color:'white' }} onClick={this.deleteAccount}>Usuń konto</button>
+                        <button className="button" style={{ backgroundColor: 'red', color:'white' }} onClick={() => this.props.deleteAccount()}>Usuń konto</button>
                         <NavLink className="button" to="/shoppingLists">Strona główna</NavLink>
                     </div> : <Redirect to="/confirmDeleteAccount"/> }
             </>
@@ -77,11 +32,14 @@ class PersonalDataContent extends React.Component {
     }
 }
 
-export default PersonalDataContent;
+const mapStateToProps = (state) => ({
+    loginData: state.loginData,
+    personalData: state.personalData,
+  });
+  
+  PersonalDataContent.propTypes = {
+    loginData: PropTypes.object,
+    personalData: PropTypes.object
+  }
 
-
-
-
-
-
-
+  export default connect(mapStateToProps, { deleteAccount, myData })(PersonalDataContent);

@@ -1,11 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
-import Store from '../../../Store';
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { isLogged } = useContext(Store);
-  return <Route {...rest} render={props => (isLogged ? <Component {...props} /> : <Redirect to="/" />)} />;
+const PrivateRoute = ({ component: Component, loginData, ...rest}) => {
+  return <Route {...rest} render={props => (loginData.isLogged ? <Component {...props} /> : <Redirect to="/" />)} />;
 };
 
-export default PrivateRoute;
+const mapStateToProps = (state) => ({
+  loginData: state.loginData,
+});
+
+PrivateRoute.propTypes = {
+  loginData: PropTypes.object
+}
+
+export default connect(mapStateToProps, {})(PrivateRoute);

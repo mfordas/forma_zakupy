@@ -14,9 +14,9 @@ const Menu = ({loginData, logout, myData}) => {
         window.location.reload();
     };
 
-    if(loginData.isLogged && loginData.me === null){
+    if(loginData.isLogged && JSON.stringify(loginData.me) === '{}'){
         myData();
-    }
+    };
 
     return ( <div className="containerMenu">
     {!loginData.isLogged &&

@@ -21,6 +21,12 @@ const Footer = ({loginData}) => {
         <NavLink className="linkFooter" to="/personalData">Moje dane</NavLink>
         </>
     )}
+    {loginData.me.isAdmin &&
+    (
+        <>
+        <NavLink className="linkFooter" to="/panelAdmina">Panel Admina</NavLink>
+        </>
+    )}
         </div></div>
     )
 

@@ -40,7 +40,8 @@ router.post("/", async (req, res) => {
   const token = jwt.sign(
     {
       _id: user._id,
-      name: user.name
+      name: user.name,
+      isAdmin: user.isAdmin
     },
     process.env.JWTPRIVATEKEY
   );

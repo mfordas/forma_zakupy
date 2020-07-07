@@ -1,14 +1,32 @@
 import React from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { deleteAccount } from '../../redux_actions/personalDataActions';
+import { getUsersList, deleteUserAccount } from '../../redux_actions/adminPanelActions';
 import '../../main_styling/main_styling.scss';
 
 class UsersList extends React.Component {
 
     async componentDidMount() {
+        await this.props.getUsersList();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (JSON.stringify(this.props.loginData.me) !== JSON.stringify(prevProps.loginData.me) || JSON.stringify(this.props.adminPanelData) !== JSON.stringify(prevProps.adminPanelData)) {
+            this.props.getUsersList();
+            this.createUserList();
+        }
+    };
+
+    createUserList = () => {
+        const { usersList } = this.props.adminPanelData;
+
+        return usersList.map(user =>
+            <div key={user._id} className="user">
+                <div className="header-data">{user.name}</div>
+                <div className="header-data">{user.email}</div>
+                <button className="button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => this.props.deleteUserAccount(user._id)}>X</button>
+            </div>)
     }
 
     render() {
@@ -17,35 +35,20 @@ class UsersList extends React.Component {
                 <div className="header-usersList">
                     <div className="header">Użytkownicy</div>
                 </div>
-                <div className="user">
-                    <div className="header-data">Jan</div>
-                    <div className="header-data">jan@email.com</div>
-                    <button className="button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => console.log('deleted')}>X</button>
-                </div>
-                <div className="user">
-                    <div className="header-data">Andrzej</div>
-                    <div className="header-data">andrzej@email.com</div>
-                    <button className="button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => console.log('deleted')}>X</button>
-                </div>
-                <div className="user">
-                    <div className="header-data">Ewa</div>
-                    <div className="header-data">ewa@email.com</div>
-                    <button className="button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => console.log('deleted')}>X</button>
-                </div>
-                
+                { this.createUserList() }
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
+    adminPanelData: state.adminPanelData,
     loginData: state.loginData,
-    personalData: state.personalData,
 });
 
 UsersList.propTypes = {
+    adminPanelData: PropTypes.object,
     loginData: PropTypes.object,
-    personalData: PropTypes.object
 }
 
-export default connect(mapStateToProps, { deleteAccount })(UsersList);
+export default connect(mapStateToProps, { deleteUserAccount, getUsersList })(UsersList);

@@ -4,6 +4,7 @@ import {
 
 const initialState = {
     usersList: [],
+    userInfo: {}
 
 };
 
@@ -18,7 +19,12 @@ export default function (state = initialState, action) {
                 return {
                     ...state,
                     usersList: action.usersList
-                }
+                };
+            case TYPES.GETUSERINFO:
+                return {
+                    ...state,
+                    userInfo: action.userInfo
+                };
             default:
                 return state;
     }

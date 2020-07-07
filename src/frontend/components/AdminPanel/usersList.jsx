@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getUsersList, deleteUserAccount } from '../../redux_actions/adminPanelActions';
+import { getUsersList, getUserInfo, deleteUserAccount } from '../../redux_actions/adminPanelActions';
 import '../../main_styling/main_styling.scss';
 
 class UsersList extends React.Component {
@@ -23,8 +24,8 @@ class UsersList extends React.Component {
 
         return usersList.map(user =>
             <div key={user._id} className="user">
-                <div className="header-data">{user.name}</div>
-                <div className="header-data">{user.email}</div>
+                <Link className="header-data" to={{ pathname: `/adminPanel/${user._id}`}} id={user._id} onClick={async () => await this.props.getUserInfo(user._id)}>{user.name}</Link>
+                <Link className="header-data" to={{ pathname: `/adminPanel/${user._id}`}} id={user._id} onClick={async () => await this.props.getUserInfo(user._id)}>{user.email}</Link>
                 <button className="button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => this.props.deleteUserAccount(user._id)}>X</button>
             </div>)
     }
@@ -51,4 +52,4 @@ UsersList.propTypes = {
     loginData: PropTypes.object,
 }
 
-export default connect(mapStateToProps, { deleteUserAccount, getUsersList })(UsersList);
+export default connect(mapStateToProps, { deleteUserAccount, getUsersList, getUserInfo })(UsersList);

@@ -71,10 +71,11 @@ router.get('/verification/:token', async (req, res) => {
   res.send(user);
 });
 
-router.get("/byId/:id", auth, async (req, res) => {
+router.get("/byId/:id", auth, admin, async (req, res) => {
   const User = res.locals.models.user;
 
   const user = await User.findById(req.params.id);
+  
   if (!user)
     return res.status(404).send("The user with the given ID was not found.");
 

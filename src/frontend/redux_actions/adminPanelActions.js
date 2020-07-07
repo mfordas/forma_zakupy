@@ -46,6 +46,27 @@ export const deleteUserAccount = (id) => async (dispatch) => {
 
 };
 
+export const getUserInfo = (id) => async (dispatch) => {
+    try {
+        const res = await axios({
+            url: `/api/users/byId/${id}`,
+            method: "GET",
+            headers: setHeaders()
+        });
+
+        if (res.status === 200) {
+            dispatch({
+                type: TYPES.GETUSERINFO,
+                userInfo: res.data
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+};
+
 export const resetPersonalDataState = () => async (dispatch) => {
     dispatch({
         type: TYPES.RESETPERSONALDATASTATE,

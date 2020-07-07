@@ -33,6 +33,7 @@ const App = () => {
       <PrivateRoute path="/shoppingList/:name" component={ShoppingList} />
       <PrivateRoute path="/personalData" component={PersonalData} />
       <PrivateRoute path="/adminPanel" component={AdminPanel} />
+      <PrivateRoute path="/adminPanel/:id" component={AdminPanel} />
       <PublicRoute exact path="/register" component={Register} />
       <Route path="/confirmDeleteAccount" component={ConfirmDeleteAccount} />
       <Route path="/register/verification/:token" component={Register} />

@@ -25,6 +25,11 @@ export default function (state = initialState, action) {
                     ...state,
                     userInfo: action.userInfo
                 };
+            case TYPES.SAVEUSERCHANGES:
+                return {
+                    ...state,
+                    userInfo: action.userInfo
+                };
             default:
                 return state;
     }

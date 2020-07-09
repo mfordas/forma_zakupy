@@ -12,15 +12,16 @@ class UsersList extends React.Component {
         await this.props.getUsersList();
     }
 
-    componentDidUpdate(prevProps) {
+    async componentDidUpdate(prevProps) {
         if (JSON.stringify(this.props.loginData.me) !== JSON.stringify(prevProps.loginData.me) || JSON.stringify(this.props.adminPanelData) !== JSON.stringify(prevProps.adminPanelData)) {
-            this.props.getUsersList();
+            await this.props.getUsersList();
             this.createUserList();
         }
     };
 
     createUserList = () => {
         const { usersList } = this.props.adminPanelData;
+
 
         return usersList.map(user =>
             <div key={user._id} className="user">

@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import _ from "lodash";
+import mongoose from 'mongoose';
 import {
   validateUser
 } from "../models/user.js";
@@ -74,12 +75,22 @@ router.get('/verification/:token', async (req, res) => {
 router.get("/byId/:id", auth, admin, async (req, res) => {
   const User = res.locals.models.user;
 
+
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) { 
+
   const user = await User.findById(req.params.id);
   
   if (!user)
     return res.status(404).send("The user with the given ID was not found.");
 
-  res.send(_.pick(user, ["_id", "name", "email"]));
+  res.send(_.pick(user, ["_id", "name", "email", "isAdmin", "isVerified", "shopping_lists_id", "common_shopping_lists_id", "custom_products"]));
+
+  } else {
+   
+    return res.status(422).send("Wrong format of id");
+
+  }
+
 });
 
 router.get("/", auth, admin, async (req, res) => {
@@ -210,7 +221,31 @@ router.delete("/:id", auth, async (req, res) => {
 
   }
   res.send('Document deleted');
-})
+});
+
+router.put('/byId/:id', auth, admin, async (req, res) => {
+  const User = res.locals.models.user;
+
+
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) { 
+
+  const user = await User.findByIdAndUpdate(req.params.id, req.body , {
+    new: true
+  });
+
+  
+  if (!user)
+  return res.status(404).send("The user with the given ID was not found.");
+  
+  res.send(user);
+
+  } else {
+   
+    return res.status(422).send("Wrong format of id");
+
+  }
+  
+});
 
 function filterByValue(names, name) {
   if (!name) return names;

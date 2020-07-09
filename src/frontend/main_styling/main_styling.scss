@@ -232,6 +232,21 @@ p {
   align-items: center;
 }
 
+.userCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.userOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 75%;
+  padding: 1vh 0;
+}
+
 .product-name {
   flex: 3;
   justify-content: start;

@@ -14,10 +14,16 @@ const shoppingListReducerConfig = {
   whitelist: ['shoppingListInfo']
 }
 
+const adminPanelDataReducerConfig = {
+  key: 'adminPanelData',
+  storage: sessionStorage,
+  whitelist: ['userInfo']
+}
+
 export default combineReducers({
   loginData: loginReducer,
   registerData: registerReducer,
   personalData: personalDataReducer,
   shoppingListsData: persistReducer(shoppingListReducerConfig, shoppingListReducer),
-  adminPanelData: adminPanelReducer, 
+  adminPanelData: persistReducer(adminPanelDataReducerConfig, adminPanelReducer), 
 });

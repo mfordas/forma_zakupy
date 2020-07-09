@@ -47,22 +47,55 @@ export const deleteUserAccount = (id) => async (dispatch) => {
 };
 
 export const getUserInfo = (id) => async (dispatch) => {
-    try {
-        const res = await axios({
-            url: `/api/users/byId/${id}`,
-            method: "GET",
-            headers: setHeaders()
-        });
-
-        if (res.status === 200) {
-            dispatch({
-                type: TYPES.GETUSERINFO,
-                userInfo: res.data
+    if (id !== undefined) {
+        try {
+            const res = await axios({
+                url: `/api/users/byId/${id}`,
+                method: "GET",
+                headers: setHeaders()
             });
-        }
 
-    } catch (error) {
-        console.log(error)
+            if (res.status === 200) {
+                dispatch({
+                    type: TYPES.GETUSERINFO,
+                    userInfo: res.data
+                });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        return console.log('Id undefined');
+    }
+
+};
+
+export const saveUserChanges = (id, userData) => async (dispatch) => {
+    if (id !== undefined) {
+        try {
+            const res = await axios({
+                url: `/api/users/byId/${id}`,
+                method: "PUT",
+                headers: setHeaders(),
+                data: {
+                    isAdmin: userData.isAdmin,
+                    isVerified: userData.isVerified,
+                }
+            });
+
+            if (res.status === 200) {
+                dispatch({
+                    type: TYPES.SAVEUSERCHANGES,
+                    userInfo: res.data
+                });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        return console.log('Id undefined');
     }
 
 };

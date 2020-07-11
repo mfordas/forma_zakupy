@@ -22,7 +22,7 @@ class DeleteShoppingList extends React.Component {
 
     render() {
         return (
-                <button className="button" onClick={this.deleteShoppingList}>Usuń</button>
+                <button className="button" style={{backgroundColor: 'red', color: 'white'}} onClick={this.deleteShoppingList}>Usuń</button>
         );
     }
 }

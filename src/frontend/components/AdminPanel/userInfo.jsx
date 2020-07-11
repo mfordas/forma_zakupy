@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
 
-import { getUserInfo, deleteUserAccount, saveUserChanges } from '../../redux_actions/adminPanelActions';
+import { getUserInfo, deleteUserAccount, saveUserChanges, getUserShoppingListsInfo } from '../../redux_actions/adminPanelActions';
+import UserShoppingLists from './userShoppingLists';
 import '../../main_styling/main_styling.scss';
 
 class UserInfo extends React.Component {
@@ -13,7 +14,10 @@ class UserInfo extends React.Component {
 
         this.state = {
             isAdmin: this.props.adminPanelData.userInfo.isAdmin,
-            isVerified: this.props.adminPanelData.userInfo.isVerified
+            isVerified: this.props.adminPanelData.userInfo.isVerified,
+            showPrivateShoppingLists: false,
+            showCommonShoppingLists: false,
+            shoppingListsType: 'prywatne'
         }
     }
 
@@ -37,6 +41,27 @@ class UserInfo extends React.Component {
             this.setValueOfSelectElement('isAdmin', this.props.adminPanelData.userInfo.isAdmin);
             this.setValueOfSelectElement('isVerified', this.props.adminPanelData.userInfo.isVerified);
         }
+    }
+
+    getListsInfo = async (listType) => {
+        const listsArray = listType === 'prywatne' ? this.props.adminPanelData.userInfo.shopping_lists_id : this.props.adminPanelData.userInfo.common_shopping_lists_id;
+        await this.props.getUserShoppingListsInfo(listsArray);
+    }
+
+    showShoppingLists = (type) => {
+        this.getListsInfo(type);
+        this.setState({
+            shoppingListsType: type,
+            showPrivateShoppingLists: !this.state.showPrivateShoppingLists,
+            showCommonShoppingLists: this.state.showPrivateShoppingLists,
+        });
+        type === 'prywatne' ? this.setState({
+            showCommonShoppingLists: false,
+            showPrivateShoppingLists: !this.state.showPrivateShoppingLists,
+        }) : this.setState({
+            showPrivateShoppingLists: false,
+            showCommonShoppingLists: !this.state.showCommonShoppingLists,
+        });
     }
 
     render() {
@@ -69,6 +94,11 @@ class UserInfo extends React.Component {
                             <option value='true'>true</option>
                         </select>
                     </div>
+                    <div className="userOption">
+                        <button className="button" onClick={() => this.showShoppingLists('prywatne')}>Listy zakupów</button>
+                        <button className="button" onClick={() => this.showShoppingLists('wspolne')}>Wspólne listy zakupów</button>
+                    </div>
+                    {this.state.showPrivateShoppingLists || this.state.showCommonShoppingLists ? <UserShoppingLists listsType={this.state.shoppingListsType} /> : <></>}
                 </div>
                 <button className="button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => this.props.saveUserChanges(userInfo._id, this.state)}>Zapisz</button>
             </div>
@@ -84,4 +114,4 @@ UserInfo.propTypes = {
     adminPanelData: PropTypes.object,
 }
 
-export default connect(mapStateToProps, { deleteUserAccount, getUserInfo, saveUserChanges })(UserInfo);
+export default connect(mapStateToProps, { deleteUserAccount, getUserInfo, saveUserChanges, getUserShoppingListsInfo })(UserInfo);

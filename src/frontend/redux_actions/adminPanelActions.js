@@ -71,6 +71,32 @@ export const getUserInfo = (id) => async (dispatch) => {
 
 };
 
+export const getUserShoppingListsInfo = (listsArray) => async (dispatch) => {
+    if (listsArray !== undefined || listsArray.length > 0) {
+        try {
+            await Promise.all(listsArray.map(async listId => (await axios({
+                            url: `/api/shoppingLists/${listId}`,
+                            method: 'GET',
+                            headers: setHeaders()
+                        }
+
+                    )
+                    .then(res => res.data))))
+                .then(res =>
+                    dispatch({
+                        type: TYPES.GETUSERLISTSINFO,
+                        userListsInfo: res
+                    }))
+
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        return console.log('Id undefined');
+    }
+
+};
+
 export const saveUserChanges = (id, userData) => async (dispatch) => {
     if (id !== undefined) {
         try {

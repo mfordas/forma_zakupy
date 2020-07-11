@@ -4,8 +4,8 @@ import {
 
 const initialState = {
     usersList: [],
-    userInfo: {}
-
+    userInfo: {},
+    userListsInfo: []
 };
 
 export default function (state = initialState, action) {
@@ -29,6 +29,11 @@ export default function (state = initialState, action) {
                 return {
                     ...state,
                     userInfo: action.userInfo
+                };
+            case TYPES.GETUSERLISTSINFO:
+                return {
+                    ...state,
+                    userListsInfo: action.userListsInfo
                 };
             default:
                 return state;

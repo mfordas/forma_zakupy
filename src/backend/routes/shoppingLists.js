@@ -9,6 +9,9 @@ import {
   validateProduct
 } from "../models/product.js";
 import { auth } from "../middleware/authorization.js";
+import {
+  admin
+} from "../middleware/admin.js";
 
 const router = express.Router();
 
@@ -27,7 +30,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 //get all shoppingLists
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, admin, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.find().sort("name");
   res.send(shoppingList);

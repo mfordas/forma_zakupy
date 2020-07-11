@@ -199,12 +199,52 @@ p {
   flex-direction: column;
 }
 
+.container-usersList {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .container-product {
   width: 80%;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.header-usersList {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.userOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 75%;
+  padding: 1vh 0;
 }
 
 .product-name {
@@ -218,6 +258,20 @@ p {
   .p{
     text-justify: auto;
   }
+}
+
+.header-data {
+  flex: 1;
+  justify-self: center;
+
+  .p{
+    text-justify: auto;
+  }
+}
+
+.header {
+  padding: 2vh 0;
+  font-size: large;
 }
 
 .container-add-shoppingList {

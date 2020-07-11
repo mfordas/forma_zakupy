@@ -13,6 +13,7 @@ import Login from "./frontend/views/Login";
 import Register from "./frontend/views/Register";
 import ShoppingList from "./frontend/views/ShoppingList";
 import PersonalData from "./frontend/views/PersonalData";
+import AdminPanel from "./frontend/views/AdminPanel";
 import FooterBar from "./frontend/views/FooterBar";
 import ConfirmDeleteAccount from "./frontend/components/PersonalData/confirmDeleteAccount";
 
@@ -31,6 +32,8 @@ const App = () => {
       <PrivateRoute exact path="/commonShoppingLists" component={ShoppingList} />
       <PrivateRoute path="/shoppingList/:name" component={ShoppingList} />
       <PrivateRoute path="/personalData" component={PersonalData} />
+      <PrivateRoute path="/adminPanel" component={AdminPanel} />
+      <PrivateRoute path="/adminPanel/:id" component={AdminPanel} />
       <PublicRoute exact path="/register" component={Register} />
       <Route path="/confirmDeleteAccount" component={ConfirmDeleteAccount} />
       <Route path="/register/verification/:token" component={Register} />

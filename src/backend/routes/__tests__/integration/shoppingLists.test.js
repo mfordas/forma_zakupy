@@ -40,6 +40,24 @@ describe('/api/shoppingLists', () => {
                 }
             ];
 
+            User = application.models.user;
+
+            const user = new User ({
+                    name: "Jan",
+                    email: 'adminEmail@Mail.com',
+                    password: '12345679',
+                    shopping_lists_id: [],
+                    common_shopping_lists_id: [],
+                    custom_products: [],
+                    isAdmin: true,
+                    isVerified: true
+            });
+
+
+            await user.save();
+
+            const adminToken = user.generateAuthToken();
+
             ShoppingList = application.models.shoppingList;
 
             const collectionShoppingList = ShoppingList.collection;
@@ -48,7 +66,7 @@ describe('/api/shoppingLists', () => {
             const res = await api.get('/api/shoppingLists')
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
-                .set('x-auth-token', token);
+                .set('x-auth-token', adminToken)
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(3);
         });

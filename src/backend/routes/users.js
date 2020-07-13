@@ -147,20 +147,24 @@ router.put("/:id/product", auth, async (req, res) => {
   res.send(user);
 });
 
+//delete shopping list from user shopping lists
 router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   const User = res.locals.models.user;
-  const ShoppingList = res.locals.models.shoppingList;
 
-  const userHandler = await User.findById(req.params.id, "common_shopping_lists_id", {
+  const userHandler = await User.findById(req.params.id, "shopping_lists_id common_shopping_lists_id", {
     lean: true
   });
-  const filteredIds = await userHandler.common_shopping_lists_id.filter(
+  const filteredShoppingListsIds = await userHandler.shopping_lists_id.filter(
+    el => el.toString() !== req.params.idSL
+  );
+  const filteredCommonShoppingListsIds = await userHandler.common_shopping_lists_id.filter(
     el => el.toString() !== req.params.idSL
   );
 
   const user = await User.findByIdAndUpdate(
     req.params.id, {
-      common_shopping_lists_id: filteredIds
+      shopping_lists_id: filteredShoppingListsIds,
+      common_shopping_lists_id: filteredCommonShoppingListsIds
     }, {
       new: true
     }
@@ -169,26 +173,7 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
 
-
-  const shoppingListHandler = await ShoppingList.findById(req.params.idSL, "members_id", {
-    lean: true
-  });
-  const filteredMembersIds = await shoppingListHandler.members_id.filter(
-    el => el.toString() !== req.params.id
-  );
-
-  const shoppingList = await ShoppingList.findByIdAndUpdate(
-    req.params.idSL, {
-      members_id: filteredMembersIds
-    }, {
-      new: true
-    }
-  );
-
-  if (!shoppingList)
-    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
-
-  res.send(shoppingList);
+  res.send(user);
 });
 
 

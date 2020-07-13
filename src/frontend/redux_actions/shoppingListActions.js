@@ -59,10 +59,9 @@ export const addShoppingList = (shoppingListName) => async (dispatch) => {
     );
 };
 
-export const removeShoppingListFromUsersShoppingLists = (id) => async (dispatch) => {
-    const idUser = localStorage.getItem('id');
+export const removeShoppingListFromUsersShoppingLists = (id, idSL) => async (dispatch) => {
     await axios({
-        url: `api/shoppingLists/${id}/user/${idUser}`,
+        url: `api/users/${id}/shoppingList/${idSL}`,
         method: "PUT",
         headers: setHeaders()
     }).then(res => {
@@ -267,7 +266,7 @@ export const getMembersData = (membersIds) => async (dispatch) => {
 
 export const deleteMemberFromShoppingList = (memberId, shoppingListId) =>  async (dispatch) => {
     await axios({
-        url: `/api/users/${memberId}/shoppingList/${shoppingListId}`,
+        url: `/api/shoppingLists/${shoppingListId}/user/${memberId}`,
         method: 'PUT',
         headers: setHeaders()
     }).then(res => {

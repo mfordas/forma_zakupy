@@ -40,7 +40,7 @@ class ShowShoppingLists extends React.Component {
                 </div>
                 <Link className="button" to={{ pathname: `/shoppingList/${list.name}`}} onClick={async () => await this.props.setShoppingListInfo(list)}>Przejdź</Link>
 
-                <DeleteShoppingList onClick={() => this.props.getShoppingLists} id={list._id} /> </div> : null)
+                <DeleteShoppingList id={list._id} membersIds={list.members_id} /> </div> : null)
     }
 
     componentDidMount() {

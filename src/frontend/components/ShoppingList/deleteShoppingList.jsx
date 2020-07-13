@@ -10,14 +10,21 @@ class DeleteShoppingList extends React.Component {
         super(props)
 
         this.state = {
-            idShoppingList: this.props.id
+            idShoppingList: this.props.id,
+            membersIds: this.props.membersIds
         }
     }
 
     deleteShoppingList = async () => {
-        await this.props.removeShoppingListFromUsersShoppingLists(this.state.idShoppingList);
-        this.props.getShoppingLists();
+        await this.deleteShoppingListsFromEachMembersShoppingLists();
         await this.props.deleteShoppingListFromDataBase(this.state.idShoppingList);
+        await this.props.getShoppingLists();
+    }
+
+    deleteShoppingListsFromEachMembersShoppingLists = async () => {
+        await this.state.membersIds.map(async id => 
+            await this.props.removeShoppingListFromUsersShoppingLists(id, this.state.idShoppingList)
+            );
     }
 
     render() {

@@ -83,12 +83,18 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 userAdded: action.userAdded,
+                usersProposals: action.usersProposals,
                 shoppingListInfo: {
                     ...state.shoppingListInfo,
                     membersIds: action.membersIds,
                 },
             };
         case TYPES.SHOWUSERSPROPOSAL:
+            return {
+                ...state,
+                usersProposals: action.usersProposals
+            };
+        case TYPES.RESETUSERSPROPOSAL:
             return {
                 ...state,
                 usersProposals: action.usersProposals

@@ -295,6 +295,7 @@ export const addUserToList = (idShoppingList ,idUser) => async (dispatch) => {
             dispatch({
                 type: TYPES.ADDSHOPPINGLISTMEMBER,
                 membersIds: res.data.members_id,
+                usersProposals: [],
                 userAdded: true
             });
         } else {
@@ -311,10 +312,10 @@ export const addUserToList = (idShoppingList ,idUser) => async (dispatch) => {
 };
 
 
-export const showUsersProposals = (e) => async (dispatch) => {
-    if (e.target.value.length >= 3) {
+export const showUsersProposals = (userNameInput) => async (dispatch) => {
+    if (userNameInput.length >= 3) {
         let usersList = await axios({
-            url: `/api/users/names/${e.target.value.toLowerCase()}`,
+            url: `/api/users/names/${userNameInput.toLowerCase()}`,
             method: 'GET',
             headers: setHeaders()
         });
@@ -352,4 +353,11 @@ export const deleteProduct = (idShoppingList, idProduct) => async (dispatch) => 
           console.log(error);
         }
     );
-}
+};
+
+export const resetUsersProposals = () => (dispatch) => {
+    dispatch({
+        type: TYPES.RESETUSERSPROPOSAL,
+        usersProposals: []
+    });
+};

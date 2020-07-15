@@ -41,7 +41,8 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 products: action.products,
-                productAdded: action.productAdded
+                productAdded: action.productAdded,
+                productsProposals: action.productsProposals,
             };
         case TYPES.SHOWPRODUCTPROPOSALS:
             return {
@@ -98,6 +99,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 usersProposals: action.usersProposals
+            };
+        case TYPES.RESETPRODUCTSPROPOSAL:
+            return {
+                ...state,
+                productsProposals: action.productsProposals
             };
         case TYPES.DELETEPRODUCTFROMSHOPPINGLIST:
             return {

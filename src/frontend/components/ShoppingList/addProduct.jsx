@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addProductToList, showProductsProposals, showShoppingList } from '../../redux_actions/shoppingListActions';
+import { addProductToList, showProductsProposals, showShoppingList, resetProductsProposals } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class AddProduct extends React.Component {
@@ -16,9 +16,13 @@ class AddProduct extends React.Component {
         }
     };
 
-    addProductToList = () => {
-        this.props.addProductToList(this.props.shoppingListsData.shoppingListInfo.idShoppingList, this.state);
-        this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList)
+    addProductToList = async () => {
+        await this.props.addProductToList(this.props.shoppingListsData.shoppingListInfo.idShoppingList, this.state);
+        await this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+    }
+
+    componentWillUnmount () {
+        this.props.resetProductsProposals();
     }
 
     render() {
@@ -26,9 +30,8 @@ class AddProduct extends React.Component {
             <div className="container-add-shoppingList">
                 <div className="horizontalFormContainer">
                     <p>Nazwa</p>
-                    <input list="productsProposals" onChange={e => {
-                        this.props.showProductsProposals(e);
-                        this.setState({ productName: e.target.value })
+                    <input list="productsProposals" onClick={(e) => e.target.value =''} onChange={e => {
+                        this.setState({ productName: e.target.value }, () => this.props.showProductsProposals(this.state.productName));
                     }} />
                     <datalist id="productsProposals">
                         {this.props.shoppingListsData.productsProposals.map(product => <option key={product._id} value={product.name} />)}
@@ -36,7 +39,7 @@ class AddProduct extends React.Component {
                 </div>
                 <div className="horizontalFormContainer">
                     <p >Ilość</p>
-                    <input style={{ maxWidth: '50px' }} onChange={e => this.setState({ productAmount: e.target.value })}></input>
+                    <input style={{ maxWidth: '50px' }} onClick={(e) => e.target.value =''} onChange={e => this.setState({ productAmount: e.target.value })}></input>
                     <select className="button" onChange={e => this.setState({ productUnit: e.target.value })}>
                         <option value='kg'>kg</option>
                         <option value='g'>g</option>
@@ -59,4 +62,4 @@ AddProduct.propTypes = {
     shoppingListsData: PropTypes.object
 }
 
-export default connect(mapStateToProps, { addProductToList, showProductsProposals, showShoppingList })(AddProduct);
+export default connect(mapStateToProps, { addProductToList, showProductsProposals, showShoppingList, resetProductsProposals })(AddProduct);

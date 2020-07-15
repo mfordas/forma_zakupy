@@ -122,6 +122,7 @@ export const addProductToList = (id, productData) => async (dispatch) => {
                 dispatch({
                     type: TYPES.ADDPRODUCT,
                     products: res.data.products,
+                    productsProposals: [],
                     productAdded: true
                 })
             } else {
@@ -138,10 +139,10 @@ export const addProductToList = (id, productData) => async (dispatch) => {
 };
 
 
-export const showProductsProposals = (e) => async (dispatch) => {
-    if (e.target.value.length >= 3) {
+export const showProductsProposals = (productNameInput) => async (dispatch) => {
+    if (productNameInput.length >= 3) {
         let productsList = await axios({
-            url: `/api/products/${e.target.value.toLowerCase()}`,
+            url: `/api/products/${productNameInput.toLowerCase()}`,
             method: 'GET',
             headers: setHeaders(),
         });
@@ -359,5 +360,12 @@ export const resetUsersProposals = () => (dispatch) => {
     dispatch({
         type: TYPES.RESETUSERSPROPOSAL,
         usersProposals: []
+    });
+};
+
+export const resetProductsProposals = () => (dispatch) => {
+    dispatch({
+        type: TYPES.RESETPRODUCTSPROPOSAL,
+        productsProposals: []
     });
 };

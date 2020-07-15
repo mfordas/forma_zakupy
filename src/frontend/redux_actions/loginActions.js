@@ -20,7 +20,8 @@ export const login = (data) => async (dispatch) => {
       dispatch({
         type: TYPES.LOGIN,
         loginData: {
-          emailVerified: false
+          emailVerified: false,
+          invalidData: true
         },
       });
     } else if (res.status === 200) {
@@ -41,10 +42,11 @@ export const login = (data) => async (dispatch) => {
     }
 
   } catch (error) {
-    console.error('Error Login:', error);
+    console.error('Error Login:', error.response.data);
     dispatch({
       type: TYPES.LOGIN,
       loginData: {
+        emailVerified: true,
         invalidData: true
       },
     });

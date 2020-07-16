@@ -50,7 +50,7 @@ export const getUserInfo = (id) => async (dispatch) => {
     if (id !== undefined) {
         try {
             const res = await axios({
-                url: `/api/users/byId/${id}`,
+                url: `/api/users/byIdAdmin/${id}`,
                 method: "GET",
                 headers: setHeaders()
             });

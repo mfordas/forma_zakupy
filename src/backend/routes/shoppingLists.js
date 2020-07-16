@@ -78,7 +78,10 @@ router.get("/:id/shoppingLists", auth, async (req, res) => {
   if (!user)
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
 
-  const shoppingLists = _.filter(user.shopping_lists_id);
+  const privateShoppingLists = _.filter(user.shopping_lists_id);
+  const commonShoppingLists = _.filter(user.common_shopping_lists_id);
+
+  const shoppingLists = privateShoppingLists.concat(commonShoppingLists);
 
   res.send(shoppingLists);
 });

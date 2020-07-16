@@ -61,7 +61,7 @@ export const addShoppingList = (shoppingListName) => async (dispatch) => {
 
 export const removeShoppingListFromUsersShoppingLists = (id, idSL) => async (dispatch) => {
     await axios({
-        url: `api/users/${id}/shoppingList/${idSL}`,
+        url: `/api/users/${id}/shoppingList/${idSL}`,
         method: "PUT",
         headers: setHeaders()
     }).then(res => {

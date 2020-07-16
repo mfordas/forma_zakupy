@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getMembersIds, getMembersData, deleteMemberFromShoppingList } from '../../redux_actions/shoppingListActions';
+import { getMembersIds, getMembersData, deleteMemberFromShoppingList, removeShoppingListFromUsersShoppingLists } from '../../redux_actions/shoppingListActions';
 import '../../main_styling/main_styling.scss';
 
 class ShowShoppingListMembers extends React.Component {
@@ -17,9 +17,10 @@ class ShowShoppingListMembers extends React.Component {
         }
     };
 
-    deleteMember = (member) => {
-        this.props.deleteMemberFromShoppingList(member._id, this.props.shoppingListsData.shoppingListInfo.idShoppingList);
-        this.props.getMembersIds(this.props.shoppingListsData.shoppingListInfo.idShoppingList)
+    deleteMember = async (member) => {
+        await this.props.removeShoppingListFromUsersShoppingLists(member._id, this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+        await this.props.deleteMemberFromShoppingList(member._id, this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+        await this.props.getMembersIds(this.props.shoppingListsData.shoppingListInfo.idShoppingList)
     }
 
 
@@ -47,4 +48,4 @@ const mapStateToProps = (state) => ({
     shoppingListsData: PropTypes.object
   }
 
-  export default connect(mapStateToProps, { getMembersIds, getMembersData, deleteMemberFromShoppingList })(ShowShoppingListMembers);
+  export default connect(mapStateToProps, { getMembersIds, getMembersData, deleteMemberFromShoppingList, removeShoppingListFromUsersShoppingLists })(ShowShoppingListMembers);

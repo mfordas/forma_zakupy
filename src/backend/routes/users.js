@@ -72,7 +72,29 @@ router.get('/verification/:token', async (req, res) => {
   res.send(user);
 });
 
-router.get("/byId/:id", auth, admin, async (req, res) => {
+router.get("/byId/:id", auth, async (req, res) => {
+  const User = res.locals.models.user;
+
+
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) { 
+
+  const user = await User.findById(req.params.id);
+  
+  if (!user)
+    return res.status(404).send("The user with the given ID was not found.");
+
+  res.send(_.pick(user, ["_id", "name"]));
+
+  } else {
+   
+    return res.status(422).send("Wrong format of id");
+
+  }
+
+});
+
+
+router.get("/byIdAdmin/:id", auth, admin, async (req, res) => {
   const User = res.locals.models.user;
 
 

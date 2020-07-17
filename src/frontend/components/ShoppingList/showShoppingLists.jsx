@@ -40,11 +40,12 @@ class ShowShoppingLists extends React.Component {
                 </div>
                 <Link className="button" to={{ pathname: `/shoppingList/${list.name}`}} onClick={async () => await this.props.setShoppingListInfo(list)}>Przejdź</Link>
 
-                <DeleteShoppingList id={list._id} membersIds={list.members_id} /> </div> : null)
+                {list.members_id[0] === localStorage.getItem('id') ?  <DeleteShoppingList id={list._id} membersIds={list.members_id} /> : <></>} </div> : null)
     }
 
     componentDidMount() {
         this.props.getShoppingLists();
+        
     }
 
     componentDidUpdate(prevProps) {

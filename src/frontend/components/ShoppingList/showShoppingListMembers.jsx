@@ -32,7 +32,8 @@ class ShowShoppingListMembers extends React.Component {
                         <div className="shoppinglist-name">
                             <p >{member.name}</p>
                         </div>
-                        <button className="button" onClick={() => this.deleteMember(member)}>Usuń</button>
+                        {this.props.shoppingListsData.shoppingListInfo.membersIds[0] === localStorage.getItem('id') ?
+                        <button className="button" onClick={() => this.deleteMember(member)}>Usuń</button> : <></>}
                     </div>
                 })}
             </div>

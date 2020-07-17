@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TiArrowSync, TiUserAdd, TiArrowBack, TiGroup, TiPlus } from 'react-icons/ti';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { showShoppingList, crossProduct, resetShoppingList } from '../../redux_actions/shoppingListActions';
@@ -45,7 +45,7 @@ class ShowShoppingList extends React.Component {
     };
 
     render() {
-        const { idShoppingList, membersIds} = this.props.shoppingListsData.shoppingListInfo;
+        const { idShoppingList, membersIds } = this.props.shoppingListsData.shoppingListInfo;
         const { products } = this.props.shoppingListsData;
         return (
             <div className="container-products">
@@ -54,16 +54,17 @@ class ShowShoppingList extends React.Component {
                         <button className="button" onClick={this.openNewProductForm}><TiPlus /></button>
                         <p>Dodaj produkt</p>
                     </div>
-                    <div className="button-container">
-                        <button className="button" onClick={this.openNewUserForm}><TiUserAdd /></button>
-                        <p>Dodaj osobę</p>
-                    </div>
+                    {this.props.shoppingListsData.shoppingListInfo.membersIds[0] === localStorage.getItem('id') ?
+                        <div className="button-container">
+                            <button className="button" onClick={this.openNewUserForm}><TiUserAdd /></button>
+                            <p>Dodaj osobę</p>
+                        </div> : <></>}
                     <div className="button-container">
                         <button className="button" onClick={this.showShoppingListMembers}><TiGroup /></button>
                         <p>Zobacz osoby</p>
                     </div>
                     <div className="button-container">
-                        <button className="button" onClick={() => {this.props.resetShoppingList(idShoppingList, products); this.props.showShoppingList(idShoppingList)}}><TiArrowSync /></button>
+                        <button className="button" onClick={() => { this.props.resetShoppingList(idShoppingList, products); this.props.showShoppingList(idShoppingList) }}><TiArrowSync /></button>
                         <p>Reset listy</p>
                     </div>
                     <div className="button-container">
@@ -72,12 +73,12 @@ class ShowShoppingList extends React.Component {
                     </div>
                 </div>
                 {this.state.addProductActive ? <AddProduct onClick={() => this.props.showShoppingList(idShoppingList)} id={idShoppingList} /> : null}
-                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm}/> : null}
-                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={() => this.props.showShoppingList(idShoppingList)}/> : null}
+                {this.state.addUserActive ? <AddUserToShoppingList onClick={this.openNewUserForm} /> : null}
+                {this.state.showShoppingListMembers ? <ShowShoppingListMembers onClick={() => this.props.showShoppingList(idShoppingList)} /> : null}
                 <ProgressBar allProducts={products} onChange={() => this.props.showShoppingList(idShoppingList)} />
                 {products.map(product =>
                     <div key={product._id} className="container-product">
-                        <div className="product-name" onClick={() => {this.props.crossProduct(idShoppingList, product.bought, product._id); this.props.showShoppingList(idShoppingList)}}>
+                        <div className="product-name" onClick={() => { this.props.crossProduct(idShoppingList, product.bought, product._id); this.props.showShoppingList(idShoppingList) }}>
                             <p style={product.bought ? { textDecorationLine: 'line-through', color: 'green' } : null}>{product.name}</p>
                         </div>
                         <div className="product-number">
@@ -95,10 +96,10 @@ class ShowShoppingList extends React.Component {
 
 const mapStateToProps = (state) => ({
     shoppingListsData: state.shoppingListsData,
-  });
-  
-  ShowShoppingList.propTypes = {
+});
+
+ShowShoppingList.propTypes = {
     shoppingListsData: PropTypes.object
-  }
-  
-  export default connect(mapStateToProps, { showShoppingList, crossProduct, resetShoppingList })(ShowShoppingList);
+}
+
+export default connect(mapStateToProps, { showShoppingList, crossProduct, resetShoppingList })(ShowShoppingList);

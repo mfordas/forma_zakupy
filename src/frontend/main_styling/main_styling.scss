@@ -5,12 +5,15 @@ $leaf-right-side-color: rgb(142, 193, 79);
 $leaf-left-side-color: rgb(119, 170, 49);
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Roboto");
 @font-face {
   font-family: "lovelo";
   src: url("../fonts/Lovelo-Black.eot");
   src: url("../fonts/Lovelo-Black.otf");
   src: url("../fonts/Lovelo-Black.ttf");
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto-Medium.ttf");
 }
 
 body,
@@ -379,6 +382,30 @@ input::-webkit-calendar-picker-indicator {
 .dataProcessingAgreementContainer {
   font-size: small;
   padding: 1vh;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  width: 110%;
+  margin: 1vh 1vw;
+
+  .googleButtonText {
+    font-family: 'Roboto';
+    margin: 0.5vh .5vw;
+  }
+
+  .googleButtonLogo {
+    margin: 0 .5vw 0 0;
+    box-shadow: none;
+  }
+}
+
+.googleButton:hover {
+  box-shadow: 2px 2px 15px grey;
 }
 
 @media (max-width: 1024px), (max-height: 420px){

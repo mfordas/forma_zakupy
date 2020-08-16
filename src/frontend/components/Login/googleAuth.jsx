@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import '../../main_styling/main_styling.scss';
+import googlelogo from '../../img/btn_google_light_normal_ios.svg';
+import { loginExternal } from '../../redux_actions/loginActions';
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ loginExternal }) => {
 
     const [authObject, setAuthObject] = useState(null);
-    const [isLogged, setStatus] = useState(false);
 
     useEffect(() => {
-
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
-                clientId: '',
+                clientId: process.env.REACT_APP_GOOGLE_AUTH_API_CLIENTID,
                 scope: 'email'
             }).then(() => {
                 setAuthObject(window.gapi.auth2.getAuthInstance());
@@ -23,30 +25,25 @@ const GoogleAuth = () => {
 
     const makeAuth = async () => {
         await authObject.signIn();
-        setStatus(authObject.isSignedIn.get());
-    }
-
-    const logOut = async () => {
-        await authObject.signOut();
-        setStatus(authObject.isSignedIn.get());
-    }
-
-    const checkData = () => {
-        console.log(authObject.currentUser.get().getAuthResponse().id_token);
-        console.log(authObject.currentUser.get().getBasicProfile());
-    }
-
-    const renderButton = () => {
-        return !isLogged ? <div className="button" onClick={() => makeAuth()}>LogIn with Google Account</div> :  <div className="button" onClick={() => logOut()}>LogOut</div>
+        loginExternal(authObject);
     }
 
     return (
-        <>
-            {renderButton()}           
-            <div className="button" onClick={() => checkData()}>CheckData</div>
-            <div className="button">{isLogged ? `${authObject.currentUser.get().getBasicProfile().getName()}` : `Niezalogowany`}</div>
-        </>
+        <div className="googleButton" onClick={() => makeAuth()}> 
+        <img className="googleButtonLogo" src={googlelogo} alt='google logo'/>
+        <div className="googleButtonText">Zaloguj przez Google</div>
+        </div>
+              
     )
 };
 
-export default GoogleAuth
+const mapStateToProps = (state) => ({
+    loginData: state.loginData,
+});
+
+GoogleAuth.propTypes = {
+    loginData: PropTypes.object
+}
+
+export default connect(mapStateToProps, { loginExternal })(GoogleAuth);
+

@@ -4,6 +4,7 @@ import path from "path";
 
 import home from "./routes/home.js";
 import auth from "./routes/auth.js";
+import auth_external from './routes/auth_external.js';
 import users from "./routes/users.js";
 import shoppingLists from "./routes/shoppingLists.js";
 import products from "./routes/products.js";
@@ -45,6 +46,7 @@ const main = async () => {
   app.use("/api/shoppingLists", shoppingLists);
   app.use("/api/products", products);
   app.use("/api/auth", auth);
+  app.use("/api/authexternal", auth_external);
 
   // Handle React routing, return all requests to React app
   app.get("*", function (req, res) {

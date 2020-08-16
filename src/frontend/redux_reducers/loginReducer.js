@@ -21,6 +21,12 @@ export default function (state = initialState, action) {
                 loginData: action.loginData,
                 isLogged: action.isLogged,
             };
+        case TYPES.LOGINEXTERNAL:
+            return {
+                ...state,
+                loginData: action.loginData,
+                isLogged: action.isLogged,
+            };
         case TYPES.LOGOUT:
             return {
                 ...state,

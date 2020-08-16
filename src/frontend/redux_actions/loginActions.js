@@ -53,6 +53,36 @@ export const login = (data) => async (dispatch) => {
   }
 };
 
+export const loginExternal = (authObject) => async (dispatch) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: '/api/authexternal',
+      data: {token: authObject.currentUser.get().getAuthResponse().id_token},
+  });
+
+    if (res.status === 200) {
+      const token = res.headers["x-auth-token"];
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', jwt(token)._id);
+      dispatch({
+        type: TYPES.LOGINEXTERNAL,
+        isLogged: true
+      });
+    } 
+
+  } catch (error) {
+    console.error('Error Login:', error.response.data);
+    dispatch({
+      type: TYPES.LOGINEXTERNAL,
+      loginData: {
+        emailVerified: true,
+        invalidData: true
+      },
+    });
+  }
+};
+
 export const logout = () => async (dispatch) => {
   dispatch({
     type: TYPES.LOGOUT,

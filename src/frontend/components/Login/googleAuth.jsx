@@ -25,15 +25,15 @@ const GoogleAuth = ({ loginExternal }) => {
 
     const makeAuth = async () => {
         await authObject.signIn();
-        loginExternal(authObject);
+        await loginExternal(authObject);
     }
 
     return (
-        <div className="googleButton" onClick={() => makeAuth()}> 
-        <img className="googleButtonLogo" src={googlelogo} alt='google logo'/>
-        <div className="googleButtonText">Zaloguj przez Google</div>
+        <div className="googleButton" onClick={() => makeAuth()}>
+            <img className="googleButtonLogo" src={googlelogo} alt='google logo' />
+            <div className="googleButtonText">Zaloguj przez Google</div>
         </div>
-              
+
     )
 };
 

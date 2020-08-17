@@ -10,6 +10,8 @@ const initialState = {
         invalidData: false
     },
     isLogged: localStorage.getItem("token") ? true : false,
+    createNewExternalUser: false,
+    newExternalUserData: {},
     me: {}
 };
 

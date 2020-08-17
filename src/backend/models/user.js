@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     minlength: 8,
     maxlength: 1024,
     trim: true
@@ -92,10 +91,9 @@ function validateUser(user) {
       .min(8)
       .max(1024)
       .trim()
-      .required()
       .messages({
         "string.empty": "Please type your password",
-        "string.min": "Passwowrd should have at least 8 characters",
+        "string.min": "Password should have at least 8 characters",
         "string.max": "Password should have maximum 1024 characters"
       }),
     shopping_lists_id: Joi.array().items(Joi.objectId()),

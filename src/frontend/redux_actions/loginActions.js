@@ -69,6 +69,13 @@ export const loginExternal = (authObject) => async (dispatch) => {
         type: TYPES.LOGINEXTERNAL,
         isLogged: true
       });
+    } else if (res.status === 202) {
+      dispatch({
+        type: TYPES.LOGINEXTERNAL,
+        isLogged: false,
+        createNewExternalUser: true,
+        newExternalUserData: res.body
+      });
     } 
 
   } catch (error) {

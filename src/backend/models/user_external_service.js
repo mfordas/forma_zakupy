@@ -11,7 +11,15 @@ const externalUserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
     trim: true,
-    default: "User"
+    default: "ExternalUser"
+  },
+  email: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+    unique: true,
+    trim: true
   },
   external_id: {
     type: String,
@@ -44,9 +52,8 @@ const externalUserSchema = new mongoose.Schema({
   }
 });
 
-externalUserSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign(
-    {
+externalUserSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({
       _id: this._id,
       isAdmin: this.isAdmin
     },
@@ -66,6 +73,18 @@ function validateExternalUser(user) {
         "string.empty": "Please type your name",
         "string.min": "Name should have at least 3 characters",
         "string.max": "Name should have maximum 26 characters"
+      }),
+    email: Joi.string()
+      .min(5)
+      .max(255)
+      .email()
+      .trim()
+      .required()
+      .messages({
+        "string.empty": "Please type your e-mail",
+        "string.min": "E-mail should have at least 5 characters",
+        "string.max": "E-mail should have maximum 255 characters",
+        "string.email": "E-mail should have following format: id@domain"
       }),
     external_id: Joi.string()
       .min(3)
@@ -91,4 +110,7 @@ function validateExternalUser(user) {
 
 const externalUser = externalUserSchema;
 
-export { externalUser, validateExternalUser };
+export {
+  externalUser,
+  validateExternalUser
+};

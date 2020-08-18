@@ -30,4 +30,12 @@ const Product = {
   virtuals: () => {}
 };
 
-export default { ExtensionBase, User, ShoppingList, Product };
+const ExternalUser = {
+  methods: () => {},
+  statics: () => {},
+  query: () => {},
+  indexes: () => {},
+  virtuals: () => {}
+};
+
+export default { ExtensionBase, User, ShoppingList, Product, ExternalUser };

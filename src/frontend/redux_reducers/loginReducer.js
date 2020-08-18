@@ -10,12 +10,20 @@ const initialState = {
         invalidData: false
     },
     isLogged: localStorage.getItem("token") ? true : false,
+    createNewExternalUser: false,
+    newExternalUserData: {},
     me: {}
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case TYPES.LOGIN:
+            return {
+                ...state,
+                loginData: action.loginData,
+                isLogged: action.isLogged,
+            };
+        case TYPES.LOGINEXTERNAL:
             return {
                 ...state,
                 loginData: action.loginData,

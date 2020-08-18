@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import '../../main_styling/main_styling.scss';
 import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import GoogleAuth from './googleAuth';
 import { login } from '../../redux_actions/loginActions';
 
 class Login extends React.Component {
@@ -50,6 +51,7 @@ class Login extends React.Component {
             <p>Hasło</p>
             {this.loginValidate()}
             <button className="button" onClick={this.onButtonSubmit}>Zaloguj</button>
+            <GoogleAuth />
           </form>
         </div>
       </div>

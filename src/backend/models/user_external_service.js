@@ -5,13 +5,13 @@ import mongoose from "mongoose";
 const ObjectId = mongoose.Schema.Types.ObjectId;
 Joi.objectId = JoiObjectId(Joi);
 
-const userSchema = new mongoose.Schema({
+const externalUserSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 3,
     maxlength: 255,
     trim: true,
-    default: "User"
+    default: "ExternalUser"
   },
   email: {
     type: String,
@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
-  password: {
+  external_id: {
     type: String,
-    minlength: 8,
-    maxlength: 1024,
+    minlength: 3,
+    maxlength: 255,
     trim: true
   },
   shopping_lists_id: {
@@ -48,13 +48,12 @@ const userSchema = new mongoose.Schema({
   },
   isVerified: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 
-userSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign(
-    {
+externalUserSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({
       _id: this._id,
       isAdmin: this.isAdmin
     },
@@ -63,7 +62,7 @@ userSchema.methods.generateAuthToken = function() {
   return token;
 };
 
-function validateUser(user) {
+function validateExternalUser(user) {
   const schema = Joi.object({
     name: Joi.string()
       .min(3)
@@ -87,14 +86,15 @@ function validateUser(user) {
         "string.max": "E-mail should have maximum 255 characters",
         "string.email": "E-mail should have following format: id@domain"
       }),
-    password: Joi.string()
-      .min(8)
-      .max(1024)
+    external_id: Joi.string()
+      .min(3)
+      .max(26)
       .trim()
+      .required()
       .messages({
-        "string.empty": "Please type your password",
-        "string.min": "Password should have at least 8 characters",
-        "string.max": "Password should have maximum 1024 characters"
+        "string.empty": "Please type your external id",
+        "string.min": "External id should have at least 3 characters",
+        "string.max": "External id should have maximum 26 characters"
       }),
     shopping_lists_id: Joi.array().items(Joi.objectId()),
     common_shopping_lists_id: Joi.array().items(Joi.objectId()),
@@ -108,6 +108,9 @@ function validateUser(user) {
   return schema.validate(user);
 }
 
-const user = userSchema;
+const externalUser = externalUserSchema;
 
-export { user, validateUser };
+export {
+  externalUser,
+  validateExternalUser
+};

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import '../../main_styling/main_styling.scss';
-import googlelogo from '../../img/btn_google_light_normal_ios.svg';
+import googlelogo from '../../img/g-logo.png';
 import { loginExternal } from '../../redux_actions/loginActions';
 
 const GoogleAuth = ({ loginExternal }) => {

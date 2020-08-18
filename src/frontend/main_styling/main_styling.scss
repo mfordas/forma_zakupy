@@ -390,17 +390,22 @@ input::-webkit-calendar-picker-indicator {
   justify-content: center;
   background-color: #FFFFFF;
   cursor: pointer;
-  width: 110%;
   margin: 1vh 1vw;
+  border-radius: 4px;
+  width: 200px;
 
   .googleButtonText {
     font-family: 'Roboto';
-    margin: 0.5vh .5vw;
+    margin: 0 8px 0 0;
+    font-size: 14px;
   }
 
   .googleButtonLogo {
-    margin: 0 .5vw 0 0;
+    box-sizing: border-box;
+    margin: 11px 24px 11px 8px;
     box-shadow: none;
+    width: 18px;
+    height: 18px;
   }
 }
 

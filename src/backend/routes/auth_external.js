@@ -8,9 +8,9 @@ import {
 } from "../models/user_external_service.js";
 const router = express.Router();
 
-const client = new GoogleAuth.OAuth2Client(process.env.REACT_APP_GOOGLE_AUTH_API_CLIENTID);
 
 router.post("/", async (req, res) => {
+  const client = new GoogleAuth.OAuth2Client(process.env.REACT_APP_GOOGLE_AUTH_API_CLIENTID);
   async function verify(req) {
     try {
       const ticket = await client.verifyIdToken({
@@ -39,7 +39,8 @@ router.post("/", async (req, res) => {
     const newExternalUser = {
       name: verificationResult.name,
       email: verificationResult.email,
-      external_id: verificationResult.sub
+      external_id: verificationResult.sub,
+      isVerified: true,
     };
     
     const {

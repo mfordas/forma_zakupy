@@ -23,10 +23,10 @@ let models;
 const main = async () => {
   const connection = await connect();
   models = load(connection);
-  if (process.env.NODE_ENV === 'test') {
+  // if (process.env.NODE_ENV === 'test') {
     await connection.dropDatabase();
     await initialize(models);
-  }
+  // }
 
   register(app, connection, models);
 

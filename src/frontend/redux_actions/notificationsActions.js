@@ -1,16 +1,18 @@
 import axios from 'axios';
 
 import setHeaders from '../utils/setHeaders';
+import notification from '../utils/notification';
 import {
     TYPES
 } from '../redux_actions/types';
 
-export const addNotification = (userId) => async (dispatch) => {
+export const addNotification = (user, actionCreator) => async (dispatch) => {
     try {
         const res = await axios({
-            url: `/api/notifications/${userId}/notification`,
+            url: `/api/notifications/${user._id}/notification`,
             method: "POST",
-            headers: setHeaders()
+            headers: setHeaders(),
+            data: notification(actionCreator),
         });
 
         if (res.status === 200) {

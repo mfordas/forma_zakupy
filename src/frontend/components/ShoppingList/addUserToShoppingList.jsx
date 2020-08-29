@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { addUserToList, showUsersProposals, getMembersIds, getMembersData, resetUsersProposals } from '../../redux_actions/shoppingListActions';
+import { addNotification } from '../../redux_actions/notificationsActions';
 import '../../main_styling/main_styling.scss';
 
 class AddUserToShoppingList extends React.Component {
@@ -19,6 +20,7 @@ class AddUserToShoppingList extends React.Component {
         this.props.addUserToList(idShoppingList, user._id);
         await this.props.getMembersIds(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
         await this.props.getMembersData(this.props.shoppingListsData.shoppingListInfo.membersIds);
+        await this.props.addNotification(user, this.props.loginData.me);
     }
 
     componentDidMount () {
@@ -52,10 +54,12 @@ class AddUserToShoppingList extends React.Component {
 
 const mapStateToProps = (state) => ({
     shoppingListsData: state.shoppingListsData,
+    loginData: state.loginData,
   });
   
   AddUserToShoppingList.propTypes = {
-    shoppingListsData: PropTypes.object
+    shoppingListsData: PropTypes.object,
+    loginData: PropTypes.object,
   }
 
-  export default connect(mapStateToProps, { addUserToList, showUsersProposals, getMembersIds, getMembersData, resetUsersProposals })(AddUserToShoppingList);
+  export default connect(mapStateToProps, { addUserToList, showUsersProposals, getMembersIds, getMembersData, resetUsersProposals, addNotification })(AddUserToShoppingList);

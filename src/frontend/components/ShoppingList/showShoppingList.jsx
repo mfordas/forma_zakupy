@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { showShoppingList, crossProduct, resetShoppingList } from '../../redux_actions/shoppingListActions';
+import { myData } from '../../redux_actions/loginActions';
 import AddProduct from './addProduct';
 import DeleteProductFromShoppingList from './deleteProducFromShoppingList';
 import AddUserToShoppingList from './addUserToShoppingList';
@@ -36,6 +37,7 @@ class ShowShoppingList extends React.Component {
 
     componentDidMount() {
         this.props.showShoppingList(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
+        this.props.myData();
     }
 
     componentDidUpdate(prevProps) {
@@ -102,4 +104,4 @@ ShowShoppingList.propTypes = {
     shoppingListsData: PropTypes.object
 }
 
-export default connect(mapStateToProps, { showShoppingList, crossProduct, resetShoppingList })(ShowShoppingList);
+export default connect(mapStateToProps, { showShoppingList, crossProduct, resetShoppingList, myData })(ShowShoppingList);

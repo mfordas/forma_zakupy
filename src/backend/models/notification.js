@@ -18,6 +18,10 @@ const notificationSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    date: {
+        type: Date,
+        default: new Date()
+    },
 
 });
 
@@ -41,7 +45,8 @@ function validateNotification(notification) {
                 "string.min": "Action should have at least 5 characters",
                 "string.max": "Action should have maximum 255 characters",
             }),
-        readByUser: Joi.boolean()
+        readByUser: Joi.boolean(),
+        date: Joi.date(),
     }).options({
         abortEarly: false
     });

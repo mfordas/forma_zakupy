@@ -8,37 +8,33 @@ import Notification from './notification';
 import { addNotification, getNotifications, readNotification } from '../../redux_actions/notificationsActions';
 import '../../main_styling/main_styling.scss';
 
-const NotificationDataContent = ({ getNotifications, notificationsData, readNotification }) => {
+const NotificationDataContent = ({ getNotifications, notificationsData, readNotification, loginData }) => {
     const [showNotifications, showHideNotifications] = useState(false);
     const [notificationCounter, setCounter] = useState(0);
 
-    const handlerNotification = async () => {
+    const handlerShowNotifications = async () => {
         await getNotifications();
-    }
-
-    const handlerShowNotifications = () => showHideNotifications(!showNotifications);
+        showHideNotifications(!showNotifications);
+    };
 
     const handleReadNotification = async (notification) => {
         await readNotification(notification._id);
         await getNotifications();
-    }
+    };
 
     const generateNotificationList = () => {
-        return notificationsData.notifications.map((notification, index) => <Notification 
+        const reversedNotificationsList = notificationsData.notifications.reverse();
+        return reversedNotificationsList.map((notification, index) => <Notification 
         key={index} 
-        actionCreator={notification.actionCreator} 
         action={notification.action}
         readByUser={notification.readByUser}
         notificationAction={() => handleReadNotification(notification)} />);
     };
 
     useEffect(() => {
-        const getNotificationsFromDataBase = async () => {
-             await handlerNotification();
-        };
-
-        getNotificationsFromDataBase();
-    }, []);
+        const getNotificationsFromDataBase = async () => await getNotifications();     
+        if(loginData.isLogged) getNotificationsFromDataBase();
+    }, [getNotifications, loginData.isLogged]);
 
     useEffect(() => {
         let unReadNotifications = notificationsData.notifications.length;
@@ -47,7 +43,9 @@ const NotificationDataContent = ({ getNotifications, notificationsData, readNoti
     }, [notificationCounter, notificationsData.notifications])
 
     return (
-        <>
+         <>
+         {loginData.isLogged ?
+         <>
             <div className="notificationBellContainer">
                 <div className="notificationBellContent">
                     <div onClick={() => {handlerShowNotifications()}}>< TiBell /></div>
@@ -55,16 +53,20 @@ const NotificationDataContent = ({ getNotifications, notificationsData, readNoti
                 </div>
             </div>
             {showNotifications? <div className="notificationsListContainer">{generateNotificationList()}</div> : null }
+            </>
+            : null}
         </>
     )
 };
 
 const mapStateToProps = (state) => ({
     notificationsData: state.notificationsData,
+    loginData: state.loginData,
 });
 
 NotificationDataContent.propTypes = {
-    notificationsData: PropTypes.object
+    notificationsData: PropTypes.object,
+    loginData: PropTypes.object,
 }
 
 export default connect(mapStateToProps, { addNotification, getNotifications, readNotification })(NotificationDataContent);

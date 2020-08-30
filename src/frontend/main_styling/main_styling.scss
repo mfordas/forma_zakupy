@@ -445,6 +445,7 @@ input::-webkit-calendar-picker-indicator {
   background-color: white;
   border: 2px solid black;
   border-radius: 10px;
+  overflow: hidden;
 
   .notificationContainer {
     display: flex;
@@ -457,6 +458,7 @@ input::-webkit-calendar-picker-indicator {
       width: 8px;
       height: 8px;
       border-radius: 4px;
+      margin: 0.5rem;
     }
 
     .notificationActionCreator {

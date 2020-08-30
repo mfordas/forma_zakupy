@@ -60,7 +60,6 @@ class ProgressBar extends React.Component {
     async componentDidUpdate(prevProps) {
         if (JSON.stringify(this.props.allProducts) !== JSON.stringify(prevProps.allProducts)) {
             await this.countPercentage();
-            console.log(this.props.shoppingListsData.shoppingListInfo);
             if(this.state.percentOfCompletedProducts === 100){this.props.shoppingListsData.shoppingListInfo.membersIds.map(async userId => await this.props.addNotification(userId, this.props.shoppingListsData.shoppingListInfo, 'shoppinglist'))};
         }
     };

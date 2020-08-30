@@ -12,10 +12,6 @@ const NotificationDataContent = ({ getNotifications, notificationsData, readNoti
     const [showNotifications, showHideNotifications] = useState(false);
     const [notificationCounter, setCounter] = useState(0);
 
-    const handlerNotification = async () => {
-        await getNotifications();
-    };
-
     const handlerShowNotifications = async () => {
         await getNotifications();
         showHideNotifications(!showNotifications);
@@ -36,12 +32,9 @@ const NotificationDataContent = ({ getNotifications, notificationsData, readNoti
     };
 
     useEffect(() => {
-        const getNotificationsFromDataBase = async () => {
-             await handlerNotification();
-        };
-
+        const getNotificationsFromDataBase = async () => await getNotifications();     
         if(loginData.isLogged) getNotificationsFromDataBase();
-    }, []);
+    }, [getNotifications, loginData.isLogged]);
 
     useEffect(() => {
         let unReadNotifications = notificationsData.notifications.length;

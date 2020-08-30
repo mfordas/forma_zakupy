@@ -39,6 +39,7 @@ const createAdminAccount = async models => {
     shopping_lists_id: [],
     common_shopping_lists_id: [],
     custom_products: [],
+    notifications:[],
     isAdmin: true,
     isVerified: true
   };

@@ -38,4 +38,12 @@ const ExternalUser = {
   virtuals: () => {}
 };
 
-export default { ExtensionBase, User, ShoppingList, Product, ExternalUser };
+const Notification = {
+  methods: () => {},
+  statics: () => {},
+  query: () => {},
+  indexes: () => {},
+  virtuals: () => {}
+};
+
+export default { ExtensionBase, User, ShoppingList, Product, ExternalUser, Notification };

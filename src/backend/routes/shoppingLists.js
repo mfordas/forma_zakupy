@@ -37,7 +37,7 @@ router.get("/", auth, admin, async (req, res) => {
 });
 
 //add new shoppingList only for patient
-router.post("/:id/shoppingList", async (req, res) => {
+router.post("/:id/shoppingList", auth, async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
   let shoppingList = new ShoppingList(req.body);

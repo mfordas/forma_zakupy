@@ -8,6 +8,7 @@ import auth_external from './routes/auth_external.js';
 import users from "./routes/users.js";
 import shoppingLists from "./routes/shoppingLists.js";
 import products from "./routes/products.js";
+import notifications from "./routes/notifications.js";
 import {
   load,
   register,
@@ -45,6 +46,7 @@ const main = async () => {
   app.use("/api/users", users);
   app.use("/api/shoppingLists", shoppingLists);
   app.use("/api/products", products);
+  app.use("/api/notifications", notifications);
   app.use("/api/auth", auth);
   app.use("/api/authexternal", auth_external);
 

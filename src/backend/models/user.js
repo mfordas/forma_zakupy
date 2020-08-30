@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
     ref: "Products",
     default: []
   },
+  notifications: {
+    type: [Object],
+    ref: "Notifications",
+    default: []
+  },
   isAdmin: {
     type: Boolean,
     default: false
@@ -99,6 +104,7 @@ function validateUser(user) {
     shopping_lists_id: Joi.array().items(Joi.objectId()),
     common_shopping_lists_id: Joi.array().items(Joi.objectId()),
     custom_products: Joi.array().items(Joi.object()),
+    notifications: Joi.array().items(Joi.object()),
     isAdmin: Joi.boolean(),
     isVerified: Joi.boolean()
   }).options({

@@ -16,6 +16,7 @@ import PersonalData from "./frontend/views/PersonalData";
 import AdminPanel from "./frontend/views/AdminPanel";
 import FooterBar from "./frontend/views/FooterBar";
 import ConfirmDeleteAccount from "./frontend/components/PersonalData/confirmDeleteAccount";
+import Notification from './frontend/views/Notification';
 
 import './frontend/main_styling/main_styling.scss';
 
@@ -24,6 +25,7 @@ const App = () => {
   return (
     <BrowserRouter>
     <div className="contentContainer">
+      <Notification />
       <Home />
       <MenuBar />
       <Switch>

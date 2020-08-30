@@ -5,12 +5,14 @@ $leaf-right-side-color: rgb(142, 193, 79);
 $leaf-left-side-color: rgb(119, 170, 49);
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
 @font-face {
   font-family: "lovelo";
   src: url("../fonts/Lovelo-Black.eot");
   src: url("../fonts/Lovelo-Black.otf");
   src: url("../fonts/Lovelo-Black.ttf");
 }
+
 @font-face {
   font-family: "Roboto";
   src: url("../fonts/Roboto-Medium.ttf");
@@ -89,6 +91,7 @@ h1 {
   margin-bottom: 1vh;
   margin-top: 3vh;
 }
+
 .logo {
   max-width: 35vw;
   box-sizing: border-box;
@@ -107,7 +110,7 @@ input {
 
 p {
   margin: 10px;
-  display:flex;
+  display: flex;
   align-items: center;
 }
 
@@ -156,6 +159,7 @@ p {
   margin: 10px;
   border-radius: 20px;
 }
+
 .buttonMenu.active {
   border-radius: 0;
   border: 2px solid white;
@@ -171,9 +175,10 @@ p {
   flex-direction: column;
   text-align: center;
   margin-bottom: 7px;
-  p{
+
+  p {
     margin: auto;
-   
+
     max-width: 50px;
     font-size: xx-small;
   }
@@ -255,11 +260,12 @@ p {
   flex: 3;
   justify-content: start;
 }
+
 .product-number {
   flex: 1;
   justify-self: center;
 
-  .p{
+  .p {
     text-justify: auto;
   }
 }
@@ -268,7 +274,7 @@ p {
   flex: 1;
   justify-self: center;
 
-  .p{
+  .p {
     text-justify: auto;
   }
 }
@@ -304,6 +310,7 @@ p {
   color: black;
   width: 100%;
 }
+
 .progress-bar-container {
   background-color: white;
   border: 2px solid black;
@@ -413,7 +420,62 @@ input::-webkit-calendar-picker-indicator {
   box-shadow: 2px 2px 15px grey;
 }
 
-@media (max-width: 1024px), (max-height: 420px){
+.notificationBellContainer {
+  font-size: 1.5rem;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+
+  .notificationBellCounter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: $heart-left-side-color;
+    z-index: 2;
+  }
+}
+
+.notificationsListContainer {
+  position: fixed;
+  top: 80px;
+  right: 15px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+
+  .notificationContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.2rem;
+
+    .notificationStatus {
+      background-color: $heart-left-side-color;
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      margin: 0.5rem;
+    }
+
+    .notificationActionCreator {
+      color: $heart-left-side-color;
+      padding: 0px 0.5rem;
+    }
+
+  }
+
+  .notificationContainer:hover {
+    background-color: #d9d9d9;
+  }
+
+}
+
+@media (max-width: 1024px),
+(max-height: 420px) {
   .registerCard {
     max-width: 75vw;
   }
@@ -440,10 +502,10 @@ input::-webkit-calendar-picker-indicator {
     border-bottom: 2px solid black;
   }
 
-  }
+}
 
-@media (max-height: 420px){
-    .logo {
+@media (max-height: 420px) {
+  .logo {
     max-width: 50vw;
     margin: -9.5vw 0 -8.5vw 0;
     padding-top: 7vh;
@@ -455,14 +517,14 @@ input::-webkit-calendar-picker-indicator {
 
   }
 
-  .container-personaldata{
+  .container-personaldata {
     max-width: 90vw;
   }
-  
+
 }
 
-@media (max-width: 420px){
-    .logo {
+@media (max-width: 420px) {
+  .logo {
     max-width: 90vw;
     margin: -12.5vw 0 -14.5vw 0;
     padding-top: 7vh;
@@ -473,10 +535,9 @@ input::-webkit-calendar-picker-indicator {
     }
 
   }
-  .container-personaldata{
+
+  .container-personaldata {
     max-width: 90vw;
   }
-  
+
 }
-
-

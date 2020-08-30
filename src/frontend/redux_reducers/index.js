@@ -4,6 +4,7 @@ import registerReducer from './registerReducer';
 import personalDataReducer from './personalDataReducer';
 import shoppingListReducer from './shoppingListReducer';
 import adminPanelReducer from './adminPanelReducer';
+import notificationsReducer from './notificationsReducer';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session'
 
@@ -25,5 +26,6 @@ export default combineReducers({
   registerData: registerReducer,
   personalData: personalDataReducer,
   shoppingListsData: persistReducer(shoppingListReducerConfig, shoppingListReducer),
-  adminPanelData: persistReducer(adminPanelDataReducerConfig, adminPanelReducer), 
+  adminPanelData: persistReducer(adminPanelDataReducerConfig, adminPanelReducer),
+  notificationsData: notificationsReducer,
 });

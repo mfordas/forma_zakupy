@@ -6,13 +6,13 @@ import {
     TYPES
 } from '../redux_actions/types';
 
-export const addNotification = (user, actionCreator) => async (dispatch) => {
+export const addNotification = (userId, actionCreator, type) => async (dispatch) => {
     try {
         const res = await axios({
-            url: `/api/notifications/${user._id}/notification`,
+            url: `/api/notifications/${userId}/notification`,
             method: "POST",
             headers: setHeaders(),
-            data: notification(actionCreator),
+            data: notification(actionCreator, type),
         });
 
         if (res.status === 200) {

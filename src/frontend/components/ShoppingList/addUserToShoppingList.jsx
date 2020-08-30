@@ -20,7 +20,7 @@ class AddUserToShoppingList extends React.Component {
         this.props.addUserToList(idShoppingList, user._id);
         await this.props.getMembersIds(this.props.shoppingListsData.shoppingListInfo.idShoppingList);
         await this.props.getMembersData(this.props.shoppingListsData.shoppingListInfo.membersIds);
-        await this.props.addNotification(user, this.props.loginData.me);
+        await this.props.addNotification(user._id, this.props.loginData.me, 'user');
     }
 
     componentDidMount () {

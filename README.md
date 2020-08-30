@@ -6,8 +6,3 @@ In application you can also share your shopping lists with your family and be al
 you need to buy. App will be avaible for everyone. 
 
 [![Build Status](https://travis-ci.org/mfordas/forma_zakupy.svg?branch=master)](https://travis-ci.org/mfordas/forma_zakupy)
-
-Running project:
-1. Create .env file with needed variables - pm me for more info.
-2. npm i
-3. npm run dev

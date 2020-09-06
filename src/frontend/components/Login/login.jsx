@@ -28,11 +28,14 @@ class Login extends React.Component {
   }
 
   loginValidate = (e) => {
-    if (this.props.loginData.loginData.emailVerified === true && this.props.loginData.loginData.invalidData) {
+    if (this.props.loginData.loginData.emailVerified === true && this.props.loginData.loginData.invalidData && this.props.loginData.createNewExternalUser === false) {
       return <ErrorMessage message='Zły e-mail lub hasło' />
     }
     if (this.props.loginData.loginData.emailVerified === false && this.props.loginData.loginData.invalidData) {
       return <ErrorMessage message='Adres e-mail niezweryfikowany' />
+    }
+    if (this.props.loginData.createNewExternalUser === true && this.props.loginData.loginData.invalidData) {
+      return <ErrorMessage message='Napierw załóż konto' />
     }
     else { return null }
   }

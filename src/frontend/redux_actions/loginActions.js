@@ -84,8 +84,9 @@ export const loginExternal = (authObject) => async (dispatch) => {
       type: TYPES.LOGINEXTERNAL,
       loginData: {
         emailVerified: true,
-        invalidData: true
+        invalidData: true,
       },
+      createNewExternalUser: true,
     });
   }
 };

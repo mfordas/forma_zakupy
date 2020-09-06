@@ -28,6 +28,7 @@ export default function (state = initialState, action) {
                 ...state,
                 loginData: action.loginData,
                 isLogged: action.isLogged,
+                createNewExternalUser: action.createNewExternalUser,
             };
         case TYPES.LOGOUT:
             return {

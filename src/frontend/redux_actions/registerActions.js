@@ -41,6 +41,40 @@ export const postUser = (data) => async (dispatch) => {
     }
 };
 
+export const postGoogleUser = (authObject) => async (dispatch) => {
+    try {
+        const res = await axios({
+            method: 'post',
+            url: '/api/users/googleUser',
+            data: {token: authObject.currentUser.get().getAuthResponse().id_token},
+        });
+
+        if (res.status === 200) {
+            dispatch({
+                type: TYPES.REGISTEREXTERNAL,
+                confirm: true,
+                googleUser: true,
+            });
+        } else {
+            dispatch({
+                type: TYPES.REGISTEREXTERNAL,
+                invalidData: true,
+                confirm: false,
+                googleUser: true,
+            });
+
+        }
+    } catch (error) {
+        dispatch({
+            type: TYPES.REGISTEREXTERNAL,
+            invalidData: true,
+            confirm: false,
+            googleUser: true,
+        });
+        console.error('Error Registration:', error);
+    }
+};
+
 export const checkEmail = (email) => async (dispatch) => {
     await axios({
         url: `/api/users/${email}`,
@@ -67,6 +101,7 @@ export const resetRegisterState = () => async (dispatch) => {
         type: TYPES.RESETREGISTERSTATE,
         invalidData: false,
         confirm: false,
-        emailTaken: false
+        emailTaken: false,
+        googleUser: false,
     })
 };

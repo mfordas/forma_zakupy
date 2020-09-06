@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 
 import '../../main_styling/main_styling.scss';
 import Confirm from './confirm';
+import ConfirmGoogle from './confirmGoogle';
 import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import GoogleRegister from './googleRegister';
 import { postUser, checkEmail } from '../../redux_actions/registerActions';
 
 class Register extends React.Component {
@@ -66,6 +68,11 @@ class Register extends React.Component {
     else { return null }
   }
 
+  registerConfirmation = () => {
+    console.log(this.props.registerData);
+    return this.props.registerData.confirm && !this.props.registerData.googleUser ? <Confirm name={this.state.name} email={this.state.email}/> : <ConfirmGoogle />
+  };
+
   
 
   render() {
@@ -91,8 +98,9 @@ class Register extends React.Component {
               </div>
               {this.dataProcessingAgreementValidate()} */}
               <button className="button" onClick={this.onButtonSubmit}>Zarejestruj</button>
+            <GoogleRegister />
             </form>
-          </div> : <Confirm name={this.state.name} email={this.state.email}/>}
+          </div> : this.registerConfirmation()}
         </div>
     );
   }

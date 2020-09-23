@@ -19,10 +19,10 @@ describe('/api/products', () => {
         await server.close();
     });
 
-    afterAll(async () => {
-        // await server.close();
-        await mongoose.connection.dropDatabase();
+    afterAll(async done => {
         await mongoose.connection.close();
+        await server.close();
+        done();
     });
 
     describe('GET /', () => {

@@ -1,5 +1,6 @@
 import * as request from 'supertest';
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import * as application from '../../../app';
 
 let api;
@@ -22,8 +23,10 @@ afterEach(async () => {
     await server.close();
 });
 
-afterAll(async () => {
+afterAll(async done => {
+    await mongoose.connection.close();
     await server.close();
+    done();
 })
 
 describe('/api/shoppingLists', () => {

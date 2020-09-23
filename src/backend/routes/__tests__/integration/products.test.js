@@ -1,30 +1,29 @@
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 import * as request from 'supertest';
 import * as application from '../../../app';
 let api;
 let server;
+let dbCon;
 const token = jwt.sign(
     {},
     process.env.JWTPRIVATEKEY
   );
 
+  beforeAll(async () => {
+    dbCon = await application.dbConnection();
+    server = application.main();
+    api = request.agent(server);
+  })
+
+afterAll(() => {
+    dbCon.close();
+    server.close();
+});
+
+
+
 describe('/api/products', () => {
-    beforeEach(async () => {
-        server = await application.main();
-        api = request.agent(server);
-    });
-    afterEach(async () => {
-        await server.close();
-    });
-
-    afterAll(async done => {
-        await mongoose.connection.close();
-        await server.close();
-        done();
-    });
-
     describe('GET /', () => {
         it('should return all products', async () => {
             const res = await api

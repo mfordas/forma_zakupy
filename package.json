@@ -44,7 +44,7 @@
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --runInBand",
-    "test-coverage": "set CI=true && react-scripts test --runInBand --force-exit --coverage",
+    "test-coverage": "set CI=true && react-scripts test --runInBand --coverage",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",

@@ -1,10 +1,10 @@
 import * as request from 'supertest';
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 import * as application from '../../../app';
 
 let api;
 let server;
+let dbCon;
 let ShoppingList;
 let User;
 
@@ -13,20 +13,15 @@ const token = jwt.sign(
     process.env.JWTPRIVATEKEY
   );
 
-
-beforeEach(async () => {
-    server = await application.main();
+  beforeAll(async () => {
+    dbCon = await application.dbConnection();
+    server = application.main();
     api = request.agent(server);
+  })
 
-});
-afterEach(async () => {
-    await server.close();
-});
-
-afterAll(async done => {
-    await mongoose.connection.close();
-    await server.close();
-    done();
+afterAll(() => {
+    dbCon.close();
+    server.close();
 })
 
 describe('/api/shoppingLists', () => {
@@ -59,7 +54,7 @@ describe('/api/shoppingLists', () => {
 
             await user.save();
 
-            const adminToken = user.generateAuthToken();
+            const adminToken = await user.generateAuthToken();
 
             ShoppingList = application.models.shoppingList;
 
@@ -123,7 +118,7 @@ describe('/api/shoppingLists', () => {
                 password: "12345678"
             });
 
-            user.save();
+            await user.save();
 
             const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
                 .set('Accept', 'application/json')
@@ -160,7 +155,7 @@ describe('/api/shoppingLists', () => {
                 password: "12345678"
             });
 
-            user.save();
+            await user.save();
 
             const res = await api.post(`/api/shoppingLists/${user._id}/shoppingList`)
                 .set('Accept', 'application/json')

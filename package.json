@@ -44,7 +44,7 @@
     "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --runInBand",
-    "test-coverage": "react-scripts test --env=jsdom --runInBand --force-exit --watchAll=false",
+    "test-coverage": "set CI=true && react-scripts test --runInBand --coverage",
     "eject": "react-scripts eject",
     "mon": "nodemon --experimental-modules ./src/backend/app.js",
     "start": "node --experimental-modules ./src/backend/app.js",
@@ -75,20 +75,12 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/path/to/dir/"
+      "!<rootDir>/node_modules/"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
-      }
-    },
     "coverageReporters": [
       "json",
-      "html"
+      "html",
+      "text"
     ]
   }
 }

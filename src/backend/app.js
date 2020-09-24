@@ -21,7 +21,7 @@ const app = express();
 let dirname = path.resolve();
 let models;
 
-const main = async () => {
+const dbConnection = async () => {
   const connection = await connect();
   models = load(connection);
   if (process.env.NODE_ENV === 'test') {
@@ -31,6 +31,10 @@ const main = async () => {
 
   register(app, connection, models);
 
+  return connection;
+}
+
+const main = () => {
   app.use(express.json());
   app.use(
     express.urlencoded({
@@ -63,10 +67,15 @@ const main = async () => {
   return server
 }
 
-if (process.env.NODE_ENV !== 'test') {
+const startApp = async () => {
+  await dbConnection();
   main();
 }
 
+if (process.env.NODE_ENV !== 'test') {
+  startApp();
+}
+
 export {
-  main, models
+  main, models, dbConnection
 };

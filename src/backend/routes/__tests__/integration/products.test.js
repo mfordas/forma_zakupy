@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-
 import * as request from 'supertest';
 import * as application from '../../../app';
 let api;

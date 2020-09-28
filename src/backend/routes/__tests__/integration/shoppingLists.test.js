@@ -8,16 +8,28 @@ let dbCon;
 let ShoppingList;
 let User;
 
-const token = jwt.sign(
-    {},
+const token = jwt.sign({},
     process.env.JWTPRIVATEKEY
-  );
+);
 
-  beforeAll(async () => {
+beforeAll(async () => {
     dbCon = await application.dbConnection();
     server = application.main();
     api = request.agent(server);
-  })
+    const newShoppingLists = [{
+            name: "Lidl"
+        },
+        {
+            name: "Castorama"
+        },
+        {
+            name: "Biedronka"
+        }
+    ];
+    ShoppingList = application.models.shoppingList;
+    const collectionShoppingList = ShoppingList.collection;
+    await collectionShoppingList.insertMany(newShoppingLists);
+})
 
 afterAll(() => {
     dbCon.close();
@@ -27,39 +39,22 @@ afterAll(() => {
 describe('/api/shoppingLists', () => {
     describe('GET /', () => {
         it('should return all shoppingLists', async () => {
-            const newShoppingLists = [{
-                    name: "Lidl"
-                },
-                {
-                    name: "Castorama"
-                },
-                {
-                    name: "Biedronka"
-                }
-            ];
-
             User = application.models.user;
 
-            const user = new User ({
-                    name: "Jan",
-                    email: 'adminEmail@Mail.com',
-                    password: '12345679',
-                    shopping_lists_id: [],
-                    common_shopping_lists_id: [],
-                    custom_products: [],
-                    isAdmin: true,
-                    isVerified: true
+            const user = new User({
+                name: "Jan",
+                email: 'adminEmail@Mail.com',
+                password: '12345679',
+                shopping_lists_id: [],
+                common_shopping_lists_id: [],
+                custom_products: [],
+                isAdmin: true,
+                isVerified: true
             });
-
 
             await user.save();
 
             const adminToken = await user.generateAuthToken();
-
-            ShoppingList = application.models.shoppingList;
-
-            const collectionShoppingList = ShoppingList.collection;
-            await collectionShoppingList.insertMany(newShoppingLists);
 
             const res = await api.get('/api/shoppingLists')
                 .set('Accept', 'application/json')
@@ -108,7 +103,7 @@ describe('/api/shoppingLists', () => {
 
         it('should save valid shoppinglist in database and user shoppinglists', async () => {
             const shoppingList = {
-                "name": "Lidl"
+                "name": "Tesco"
             };
 
             User = application.models.user;
@@ -131,7 +126,7 @@ describe('/api/shoppingLists', () => {
 
         it('should send 404 if invalid id is passed', async () => {
             const shoppingList = {
-                "name": "Lidl"
+                "name": "Makro"
             };
 
             const res = await api.post(`/api/shoppingLists/000000000000/shoppingList`)
@@ -165,8 +160,63 @@ describe('/api/shoppingLists', () => {
 
             expect(res.status).toBe(400);
         });
-    })
+    });
 
+    describe('GET /:id/shoppingLists', () => {
 
+        it('should return all shopping lists for user', async () => {
+            ShoppingList = application.models.shoppingList;
+
+            const shoppingLists = await ShoppingList.find();
+            const shoppingListsIds = await shoppingLists.map(shoppinglist => shoppinglist._id);
+
+            User = application.models.user;
+
+            const user = new User({
+                name: "Jan",
+                email: 'adminEmail@Mail.com',
+                password: '12345679',
+                shopping_lists_id: shoppingListsIds,
+                common_shopping_lists_id: [],
+                custom_products: [],
+                isAdmin: true,
+                isVerified: true
+            });
+
+            await user.save();
+
+            const res = await api.get(`/api/shoppingLists/${user._id}/shoppingLists`)
+                .set('Accept', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(shoppingLists.length);
+        });
+
+        it('should send 404 if invalid id is passed', async () => {
+            User = application.models.user;
+
+            const user = new User({
+                name: "Jan",
+                email: 'adminEmail@Mail.com',
+                password: '12345679',
+                shopping_lists_id: [],
+                common_shopping_lists_id: [],
+                custom_products: [],
+                isAdmin: true,
+                isVerified: true
+            });
+
+            await user.save();
+
+            const res = await api.get(`/api/shoppingLists/000000000000/shoppingLists`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+        });
+
+    });
 
 });

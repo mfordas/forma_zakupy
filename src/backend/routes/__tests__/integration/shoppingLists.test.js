@@ -193,7 +193,7 @@ describe('/api/shoppingLists', () => {
             expect(res.body.length).toBe(shoppingLists.length);
         });
 
-        it('should send 404 if invalid id is passed', async () => {
+        it('should send 404 if invalid user id is passed', async () => {
             User = application.models.user;
 
             const user = new User({
@@ -215,6 +215,94 @@ describe('/api/shoppingLists', () => {
                 .set('x-auth-token', token)
 
             expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono użytkowanika z takim ID.");
+        });
+
+    });
+
+    describe('GET /:id', () => {
+
+        it('should return shopping list with given id', async () => {
+            ShoppingList = application.models.shoppingList;
+
+            const shoppingLists = await ShoppingList.find();
+            const shoppingListId = shoppingLists[0]._id;
+
+            const res = await api.get(`/api/shoppingLists/${shoppingListId}`)
+                .set('Accept', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty("name");
+            expect(res.body).toHaveProperty("products");
+            expect(res.body).toHaveProperty("members_id");
+            expect(res.body).toHaveProperty("completed");
+            expect(res.body).toHaveProperty("_id", `${shoppingListId}`);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+
+            const res = await api.get(`/api/shoppingLists/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+    });
+
+    describe('PUT /:id/product', () => {
+
+        it('should add product to shopping list of given id', async () => {
+            ShoppingList = application.models.shoppingList;
+
+            const shoppingLists = await ShoppingList.find();
+
+            console.log(shoppingLists);
+
+            const shoppingListId = shoppingLists[0]._id;
+
+            console.log(shoppingListId);
+
+            const product = {
+                name: "Pomidor",
+                amount: 10,
+                unit: "kg",
+            }
+
+            const res = await api.put(`/api/shoppingLists/5f74e80d42d6642238ffc346/product`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+                .send(product);
+
+            console.log(res);
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty("name", "Pomidor");
+            expect(res.body).toHaveProperty("amount", 10);
+            expect(res.body).toHaveProperty("unit", "kg");
+            expect(res.body).toHaveProperty("bought", false);
+            expect(res.body).toHaveProperty("_id");
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const product = {
+                name: "Pomidor",
+                amount: 10,
+                unit: "kg",
+            }
+
+            const res = await api.put(`/api/shoppingLists/000000000000/product`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+                .send(product)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
         });
 
     });

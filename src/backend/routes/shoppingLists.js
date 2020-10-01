@@ -129,7 +129,7 @@ router.put("/:id/product", auth, async (req, res) => {
   res.send(shoppingList);
 });
 
-//delte product from shoppingList
+//delete product from shoppingList
 router.delete("/:id/product/:idProduct", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 

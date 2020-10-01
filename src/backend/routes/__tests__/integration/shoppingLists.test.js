@@ -367,4 +367,59 @@ describe('/api/shoppingLists', () => {
 
     });
 
+    describe('GET /:id/products', () => {
+
+        it('should get list of products from list of given id', async () => {
+            ShoppingList = application.models.shoppingList;
+
+            const shoppingLists = await ShoppingList.find();
+
+            const shoppingListId = shoppingLists[5]._id;
+
+            const newProducts = [{
+                    name: "Pomidor",
+                    amount: 10,
+                    unit: "kg",
+                },
+                {
+                    name: "Banan",
+                    amount: 3,
+                    unit: "szt",
+                },
+                {
+                    name: "Marchewka",
+                    amount: 5,
+                    unit: "kg",
+                },
+            ]
+
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    products: newProducts
+                }, {
+                    new: true
+                }
+            );
+
+            const res = await api.get(`/api/shoppingLists/${shoppingListId}/products`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(3);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.get(`/api/shoppingLists/000000000000/products`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+    });
+
 });

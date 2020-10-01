@@ -112,6 +112,10 @@ router.put("/:id/product", auth, async (req, res) => {
       lean: true
     }
   );
+  
+  if (!shoppingListHandler)
+    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
   shoppingListHandler.products.push(product);
 
   const shoppingList = await ShoppingList.findByIdAndUpdate(
@@ -122,13 +126,10 @@ router.put("/:id/product", auth, async (req, res) => {
     }
   );
 
-  if (!shoppingList)
-    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
-
   res.send(shoppingList);
 });
 
-//delte product from shoppingList
+//delete product from shoppingList
 router.delete("/:id/product/:idProduct", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 

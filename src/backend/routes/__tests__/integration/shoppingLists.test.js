@@ -1,5 +1,6 @@
 import * as request from 'supertest';
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import * as application from '../../../app';
 
 let api;
@@ -29,6 +30,28 @@ beforeAll(async () => {
     ShoppingList = application.models.shoppingList;
     const collectionShoppingList = ShoppingList.collection;
     await collectionShoppingList.insertMany(newShoppingLists);
+
+    const newUsers = [{
+            name: "User1",
+            email: "user1@email.com",
+            password: "123456789",
+        },
+        {
+            name: "User2",
+            email: "user1@email.com",
+            password: "123456789",
+        },
+        {
+            name: "User3",
+            email: "user1@email.com",
+            password: "123456789",
+        },
+    ];
+
+    User = application.models.user;
+    const collectionUser = User.collection;
+    await collectionUser.insertMany(newUsers);
+
 })
 
 afterAll(() => {
@@ -415,6 +438,409 @@ describe('/api/shoppingLists', () => {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
                 .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+    });
+
+    describe('GET /:id/members', () => {
+        let shoppingLists;
+        let shoppingListId;
+
+        beforeEach(async () => {
+            shoppingLists = await ShoppingList.find();
+
+            shoppingListId = shoppingLists[0]._id;
+
+            const newMembers = [
+                "000000000000",
+                "000000000001",
+                "000000000002",
+                "000000000003",
+
+            ]
+
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    members_id: newMembers
+                }, {
+                    new: true
+                }
+            );
+        });
+
+        afterEach(async () => {
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    members_id: []
+                }, {
+                    new: true
+                }
+            );
+        });
+
+
+        it('should get list of members from list of given id', async () => {
+            const res = await api.get(`/api/shoppingLists/${shoppingListId}/members`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(4);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.get(`/api/shoppingLists/000000000000/members`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+    });
+
+    describe('DELETE /:id/product/:idProduct', () => {
+        let shoppingLists;
+        let productId;
+        let shoppingListId;
+
+        beforeEach(async () => {
+            ShoppingList = application.models.shoppingList;
+
+            shoppingLists = await ShoppingList.find();
+
+            shoppingListId = shoppingLists[0]._id;
+
+            const newProducts = [{
+                    _id: 1,
+                    name: "Pomidor",
+                    amount: 10,
+                    unit: "kg",
+                },
+                {
+                    _id: 2,
+                    name: "Banan",
+                    amount: 3,
+                    unit: "szt",
+                },
+                {
+                    _id: 3,
+                    name: "Marchewka",
+                    amount: 5,
+                    unit: "kg",
+                },
+            ]
+
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    products: newProducts
+                }, {
+                    new: true
+                }
+            );
+
+            shoppingLists = await ShoppingList.find();
+
+            productId = shoppingLists[0].products[0]._id;
+        });
+
+        afterEach(async () => {
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    products: []
+                }, {
+                    new: true
+                }
+            );
+        });
+
+        it('should delete product of given id from shoppinglist of given id', async () => {
+            const res = await api.delete(`/api/shoppingLists/${shoppingListId}/product/${productId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.products.length).toBe(2);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.delete(`/api/shoppingLists/000000000000/product/${productId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+        it('shouldnt delete any product if wrong product id is passed', async () => {
+
+            const res = await api.delete(`/api/shoppingLists/${shoppingListId}/product/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.products.length).toBe(3);
+        });
+
+    });
+
+    describe('PUT /:id/product/:idProduct', () => {
+        let shoppingLists;
+        let productId;
+        let shoppingListId;
+
+        beforeEach(async () => {
+            ShoppingList = application.models.shoppingList;
+
+            shoppingLists = await ShoppingList.find();
+
+            shoppingListId = shoppingLists[0]._id;
+
+            const newProducts = [{
+                _id: new mongoose.Types.ObjectId(),
+                name: "Pomidor",
+                amount: 10,
+                unit: "kg",
+                bought: false,
+            }, ]
+
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    products: newProducts
+                }, {
+                    new: true
+                }
+            );
+
+            shoppingLists = await ShoppingList.find();
+
+            productId = shoppingLists[0].products[0]._id;
+        });
+
+        afterEach(async () => {
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    products: []
+                }, {
+                    new: true
+                }
+            );
+        });
+
+        it('should change status of product of given id to true from shoppinglist of given id', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/product/${productId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+                .send({
+                    bought: true
+                });
+
+            expect(res.status).toBe(200);
+            expect(res.body.products[0].bought).toBe(true);
+        });
+
+        it('should change status of product of given id to false from shoppinglist of given id', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/product/${productId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+                .send({
+                    bought: false
+                });
+
+            expect(res.status).toBe(200);
+            expect(res.body.products[0].bought).toBe(false);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.put(`/api/shoppingLists/000000000000/product/${productId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono produktu lub listy zakupów z takim ID.");
+        });
+
+        it('should send 200 and dont change product status if wrong product id is passed', async () => {
+
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/product/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token)
+                .send({
+                    bought: true
+                });
+
+            expect(res.status).toBe(200);
+            expect(res.body.products[0].bought).toBe(false);
+        });
+
+    });
+
+    describe('PUT /:id/commonShoppingList/:idUser', () => {
+        let shoppingLists;
+        let shoppingListId;
+        let users;
+        let userId;
+
+        beforeEach(async () => {
+            shoppingLists = await ShoppingList.find();
+            shoppingListId = shoppingLists[0]._id;
+
+            users = await User.find();
+            userId = users[0]._id;
+        });
+
+        afterEach(async () => {
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    members_id: []
+                }, {
+                    new: true
+                }
+            );
+        });
+
+        it('should add user of given id to shoppinglist of given id', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/commonShoppingList/${userId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+
+            expect(res.status).toBe(200);
+            expect(res.body.members_id.length).toBe(1);
+            expect(res.body.members_id[0]).toBe(`${userId}`);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.put(`/api/shoppingLists/000000000000/commonShoppingList/${userId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+        it('should send 404 if invalid user id is passed', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/commonShoppingList/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono użytkowanika z takim ID.");
+        });
+
+    });
+
+    describe('PUT /:id/user/:idUser', () => {
+        let shoppingLists;
+        let memberId;
+        let shoppingListId;
+
+        beforeEach(async () => {
+            shoppingLists = await ShoppingList.find();
+
+            shoppingListId = shoppingLists[0]._id;
+
+            const newUsers = [
+                new mongoose.Types.ObjectId(),
+                new mongoose.Types.ObjectId(),
+                new mongoose.Types.ObjectId(),
+            ]
+
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    members_id: newUsers
+                }, {
+                    new: true
+                }
+            );
+
+            shoppingLists = await ShoppingList.find();
+
+            memberId = shoppingLists[0].members_id[0]._id;
+        });
+
+        afterEach(async () => {
+            await ShoppingList.findByIdAndUpdate(
+                shoppingListId, {
+                    members_id: []
+                }, {
+                    new: true
+                }
+            );
+        });
+
+        it('should remove user of given id from shoppinglist of given id', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/user/${memberId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+
+            expect(res.status).toBe(200);
+            expect(res.body.members_id.length).toBe(2);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.put(`/api/shoppingLists/000000000000/user/${memberId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(404);
+            expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");
+        });
+
+        it('should send 200 and dont delete user if invalid user id is passed', async () => {
+            const res = await api.put(`/api/shoppingLists/${shoppingListId}/user/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+            expect(res.status).toBe(200);
+            expect(res.body.members_id.length).toBe(3);
+        });
+
+    });
+
+    describe('DELETE /:idSl', () => {
+        let shoppingListId;
+
+        beforeEach(async () => {
+            const shoppingLists = await ShoppingList.find();
+
+            shoppingListId = shoppingLists[0]._id;
+        });
+        it('should remove user of given id from shoppinglist of given id', async () => {
+            const res = await api.delete(`/api/shoppingLists/${shoppingListId}`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
+
+
+            expect(res.status).toBe(200);
+            expect(res.body._id).toBe(`${shoppingListId}`);
+        });
+
+        it('should send 404 if invalid shopping list id is passed', async () => {
+            const res = await api.delete(`/api/shoppingLists/000000000000`)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .set('x-auth-token', token);
 
             expect(res.status).toBe(404);
             expect(res.text).toContain("Nie znaleziono listy zakupów z takim ID.");

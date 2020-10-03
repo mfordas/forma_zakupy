@@ -139,6 +139,10 @@ router.delete("/:id/product/:idProduct", auth, async (req, res) => {
       lean: true
     }
   );
+
+  if (!shoppingListHandler)
+    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
   const filteredProducts = await shoppingListHandler.products.filter(
     el => el._id.toString() !== req.params.idProduct
   );
@@ -150,9 +154,7 @@ router.delete("/:id/product/:idProduct", auth, async (req, res) => {
       new: true
     }
   );
-
-  if (!shoppingList)
-    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+  
   res.send(shoppingList);
 });
 
@@ -181,7 +183,7 @@ router.get("/:id/members", auth, async (req, res) => {
 router.put("/:id/product/:idProduct", auth, async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
-  const product = await ShoppingList.findByIdAndUpdate({
+  const shoppingList = await ShoppingList.findByIdAndUpdate({
     _id: req.params.id
   }, {
     $set: {
@@ -194,10 +196,10 @@ router.put("/:id/product/:idProduct", auth, async (req, res) => {
     new: true
   });
 
-  if (!product)
-    return res.status(404).send("Nie znaleziono produktu z takim ID.");
+  if (!shoppingList)
+    return res.status(404).send("Nie znaleziono produktu lub listy zakupów z takim ID.");
 
-  res.send(product);
+  res.send(shoppingList);
 });
 
 //add user to shoppingList
@@ -208,6 +210,9 @@ router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
     lean: true
   });
 
+  if (!shoppingListHandler)
+    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
   shoppingListHandler.members_id.push(req.params.idUser);
   const shoppingList = await ShoppingList.findByIdAndUpdate(
     req.params.id, {
@@ -216,15 +221,17 @@ router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
       new: true
     }
   );
-  if (!shoppingList)
-    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
 
   const userHandler = await User.findById(req.params.idUser, "common_shopping_lists_id", {
     lean: true
   });
+
+  if (!userHandler)
+    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+
   userHandler.common_shopping_lists_id.push(req.params.id);
 
-  const user = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     req.params.idUser, {
       common_shopping_lists_id: userHandler.common_shopping_lists_id
     }, {
@@ -232,8 +239,6 @@ router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
     }
   );
 
-  if (!user)
-    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
   res.send(shoppingList);
 });
 
@@ -247,6 +252,10 @@ router.put("/:id/user/:idUser", auth, async (req, res) => {
       lean: true
     }
   );
+
+  if (!shoppingListHandler)
+  return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
+
   const filteredMembersId = await shoppingListHandler.members_id.filter(
     el => el._id.toString() !== req.params.idUser
   );
@@ -259,11 +268,7 @@ router.put("/:id/user/:idUser", auth, async (req, res) => {
     }
   );
 
-  if (!shoppingList)
-    return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
-
     res.send(shoppingList);
-
 });
 
 //delete shoppingList

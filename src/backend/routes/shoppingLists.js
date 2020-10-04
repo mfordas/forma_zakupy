@@ -15,8 +15,7 @@ import {
 
 const router = express.Router();
 
-//add new shoppingList
-router.post("/", auth, async (req, res) => {
+const addNewShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const {
     error
@@ -27,17 +26,19 @@ router.post("/", auth, async (req, res) => {
   await shoppingList.save();
 
   res.send(shoppingList);
-});
+};
 
-//get all shoppingLists
-router.get("/", auth, admin, async (req, res) => {
+router.post("/", auth, addNewShoppingList);
+
+const getAllShoppingListsFromDB = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.find().sort("name");
   res.send(shoppingList);
-});
+};
 
-//add new shoppingList only for patient
-router.post("/:id/shoppingList", auth, async (req, res) => {
+router.get("/", auth, admin, getAllShoppingListsFromDB);
+
+const addNewShoppingListForPatient = async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
   let shoppingList = new ShoppingList(req.body);
@@ -69,9 +70,11 @@ router.post("/:id/shoppingList", auth, async (req, res) => {
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
   
   res.send(user);
-});
+};
 
-router.get("/:id/shoppingLists", auth, async (req, res) => {
+router.post("/:id/shoppingList", auth, addNewShoppingListForPatient);
+
+const getPatientShoppingLists = async (req, res) => {
   const User = res.locals.models.user;
   const user = await User.findById(req.params.id);
 
@@ -84,19 +87,22 @@ router.get("/:id/shoppingLists", auth, async (req, res) => {
   const shoppingLists = privateShoppingLists.concat(commonShoppingLists);
 
   res.send(shoppingLists);
-});
+};
 
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id/shoppingLists", auth, getPatientShoppingLists);
+
+const getShoppingListWithGivenID = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.findById(req.params.id);
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
 
   res.send(shoppingList);
-});
+};
 
-//add product to shoppingList
-router.put("/:id/product", auth, async (req, res) => {
+router.get("/:id", auth, getShoppingListWithGivenID);
+
+const addProductToShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const Product = res.locals.models.product;
   const {
@@ -127,10 +133,11 @@ router.put("/:id/product", auth, async (req, res) => {
   );
 
   res.send(shoppingList);
-});
+};
 
-//delete product from shoppingList
-router.delete("/:id/product/:idProduct", auth, async (req, res) => {
+router.put("/:id/product", auth, addProductToShoppingList);
+
+const deleteProductFromShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingListHandler = await ShoppingList.findById(
@@ -156,9 +163,11 @@ router.delete("/:id/product/:idProduct", auth, async (req, res) => {
   );
   
   res.send(shoppingList);
-});
+};
 
-router.get("/:id/products", async (req, res) => {
+router.delete("/:id/product/:idProduct", auth, deleteProductFromShoppingList);
+
+const getProductsFromShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.findById(req.params.id);
   if (!shoppingList)
@@ -167,9 +176,11 @@ router.get("/:id/products", async (req, res) => {
   const products = _.filter(shoppingList.products);
 
   res.send(products);
-});
+};
 
-router.get("/:id/members", auth, async (req, res) => {
+router.get("/:id/products", getProductsFromShoppingList);
+
+const getShoppingListMembers = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingList = await ShoppingList.findById(req.params.id);
   if (!shoppingList)
@@ -178,9 +189,11 @@ router.get("/:id/members", auth, async (req, res) => {
   const members = _.filter(shoppingList.members_id);
 
   res.send(members);
-});
+};
 
-router.put("/:id/product/:idProduct", auth, async (req, res) => {
+router.get("/:id/members", auth, getShoppingListMembers);
+
+const changeProductStatusInShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingList = await ShoppingList.findByIdAndUpdate({
@@ -200,10 +213,11 @@ router.put("/:id/product/:idProduct", auth, async (req, res) => {
     return res.status(404).send("Nie znaleziono produktu lub listy zakupów z takim ID.");
 
   res.send(shoppingList);
-});
+};
 
-//add user to shoppingList
-router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
+router.put("/:id/product/:idProduct", auth, changeProductStatusInShoppingList);
+
+const addUserToShoppingList = async (req, res) => {
   const User = res.locals.models.user;
   const ShoppingList = res.locals.models.shoppingList;
   const shoppingListHandler = await ShoppingList.findById(req.params.id, "members_id", {
@@ -240,10 +254,11 @@ router.put("/:id/commonShoppingList/:idUser", auth, async (req, res) => {
   );
 
   res.send(shoppingList);
-});
+};
 
-//delete user from shoppingList
-router.put("/:id/user/:idUser", auth, async (req, res) => {
+router.put("/:id/commonShoppingList/:idUser", auth, addUserToShoppingList);
+
+const deleteUserFromShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingListHandler = await ShoppingList.findById(
@@ -269,10 +284,11 @@ router.put("/:id/user/:idUser", auth, async (req, res) => {
   );
 
     res.send(shoppingList);
-});
+};
 
-//delete shoppingList
-router.delete("/:idSl", auth, async (req, res) => {
+router.put("/:id/user/:idUser", auth, deleteUserFromShoppingList);
+
+const deleteShoppingList = async (req, res) => {
   const ShoppingList = res.locals.models.shoppingList;
 
   const shoppingList = await ShoppingList.findOneAndDelete(
@@ -283,6 +299,8 @@ router.delete("/:idSl", auth, async (req, res) => {
   if (!shoppingList)
     return res.status(404).send("Nie znaleziono listy zakupów z takim ID.");
   res.send(shoppingList);
-});
+};
+
+router.delete("/:idSl", auth, deleteShoppingList);
 
 export default router;

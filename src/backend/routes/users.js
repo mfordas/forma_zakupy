@@ -297,14 +297,14 @@ router.put('/byId/:id', auth, admin, async (req, res) => {
   
 });
 
-function filterByValue(names, name) {
+export function filterByValue(names, name) {
   if (!name) return names;
   return names.filter(o => {
     return o.name.toLowerCase().includes(name);
   });
 }
 
-function filterEmails(emails, emailAddres) {
+export function filterEmails(emails, emailAddres) {
   if (!emailAddres) return true;
   return emails.filter(o => {
     return o.email.toLowerCase().includes(emailAddres);

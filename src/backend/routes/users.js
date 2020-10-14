@@ -194,6 +194,10 @@ router.put("/:id/product", auth, async (req, res) => {
   const userHandler = await User.findById(req.params.id, "custom_products", {
     lean: true
   });
+
+  if (!userHandler)
+  return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+
   userHandler.custom_products.push(product);
 
   const user = await User.findByIdAndUpdate(
@@ -203,9 +207,7 @@ router.put("/:id/product", auth, async (req, res) => {
       new: true
     }
   );
-
-  if (!user)
-    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+  
   res.send(user);
 });
 
@@ -216,6 +218,10 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   const userHandler = await User.findById(req.params.id, "shopping_lists_id common_shopping_lists_id", {
     lean: true
   });
+
+  if (!userHandler)
+  return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
+
   const filteredShoppingListsIds = await userHandler.shopping_lists_id.filter(
     el => el.toString() !== req.params.idSL
   );
@@ -231,9 +237,6 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
       new: true
     }
   );
-
-  if (!user)
-    return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
 
   res.send(user);
 });
@@ -273,16 +276,16 @@ router.delete("/:id", auth, async (req, res) => {
 router.put('/byId/:id', auth, admin, async (req, res) => {
   const User = res.locals.models.user;
 
-
   if (mongoose.Types.ObjectId.isValid(req.params.id)) { 
+
+    const userHandler = await User.findById(req.params.id);
+
+  if (!userHandler)
+  return res.status(404).send("The user with the given ID was not found.");
 
   const user = await User.findByIdAndUpdate(req.params.id, req.body , {
     new: true
   });
-
-  
-  if (!user)
-  return res.status(404).send("The user with the given ID was not found.");
   
   res.send(user);
 
@@ -294,14 +297,14 @@ router.put('/byId/:id', auth, admin, async (req, res) => {
   
 });
 
-function filterByValue(names, name) {
+export function filterByValue(names, name) {
   if (!name) return names;
   return names.filter(o => {
     return o.name.toLowerCase().includes(name);
   });
 }
 
-function filterEmails(emails, emailAddres) {
+export function filterEmails(emails, emailAddres) {
   if (!emailAddres) return true;
   return emails.filter(o => {
     return o.email.toLowerCase().includes(emailAddres);

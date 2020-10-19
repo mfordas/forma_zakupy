@@ -5,46 +5,69 @@ import _ from "lodash";
 import express from "express";
 const router = express.Router();
 
-const authorizeUser = async (req, res) => {
-  function validate(req) {
-    const schema = Joi.object({
-      email: Joi.string()
-        .min(5)
-        .max(255)
-        .required()
-        .trim()
-        .email(),
-      password: Joi.string()
-        .min(8)
-        .max(26)
-        .required()
-        .trim()
-    });
+const createUserSchema = () => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .min(5)
+      .max(255)
+      .required()
+      .trim()
+      .email(),
+    password: Joi.string()
+      .min(8)
+      .max(26)
+      .required()
+      .trim()
+  });
 
-    return schema.validate(req);
-  }
+  return schema;
+}
 
-  const { error, value } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+const validateUser = (request, schema) => {
+  return schema.validate(request);
+};
 
-  let user = await res.locals.models.user.findOne({ email: value.email });
-  if (!user) return res.status(400).send("User not found.");
+const checkIfUserIsInDatabase = async (res, user) => {
+  const checkedUser = await res.locals.models.user.findOne({
+    email: user.email
+  });
+  return checkedUser;
+};
 
-  const validPassword = await bcrypt.compare(value.password, user.password);
-  if (!validPassword) return res.status(400).send("Invalid email or password.");
+const validateUserPassword = async (passwordFromRequest, passwordFromDatabase) => {
+  const validPassword = await bcrypt.compare(passwordFromRequest, passwordFromDatabase);
+  return validPassword;
+};
 
-  if (!user.isVerified) {
-    return res.status(203).send("You must first confirm the registration.");
-  }
-
-  const token = jwt.sign(
-    {
+const createToken = (user) => {
+  return jwt.sign({
       _id: user._id,
       name: user.name,
       isAdmin: user.isAdmin
     },
     process.env.JWTPRIVATEKEY
   );
+}
+
+const authorizeUser = async (req, res) => {
+  const schema = createUserSchema();
+  const {
+    error,
+    value
+  } = validateUser(req.body, schema);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const user = await checkIfUserIsInDatabase(res, value);
+  if (!user) return res.status(400).send("User not found.");
+
+  const validPassword = await validateUserPassword(value.password, user.password);
+  if (!validPassword) return res.status(400).send("Invalid email or password.");
+
+  if (!user.isVerified) {
+    return res.status(203).send("You must first confirm the registration.");
+  }
+
+  const token = createToken(user);
 
   res
     .header("x-auth-token", token)

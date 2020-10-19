@@ -7,8 +7,7 @@ import {
 } from "../models/notification.js";
 const router = express.Router();
 
-//add new notification
-router.post("/:id/notification", async (req, res) => {
+const addNewNotification = async (req, res) => {
   const User = res.locals.models.user;
   const Notification = res.locals.models.notification;
   let notification = new Notification(req.body);
@@ -42,9 +41,11 @@ router.post("/:id/notification", async (req, res) => {
     return res.status(404).send("Nie znaleziono użytkowanika z takim ID.");
 
   res.send(user);
-});
+};
 
-router.get("/:id", auth, async (req, res) => {
+router.post("/:id/notification", addNewNotification);
+
+const getNotifications = async (req, res) => {
   const User = res.locals.models.user;
   const user = await User.findById(req.params.id);
 
@@ -54,9 +55,11 @@ router.get("/:id", auth, async (req, res) => {
   const notifications = _.filter(user.notifications);
 
   res.send(notifications);
-});
+}
 
-router.put("/:id/notification/:idNotification", auth, async (req, res) => {
+router.get("/:id", auth, getNotifications);
+
+const setNotificationAsReaded = async (req, res) => {
   const User = res.locals.models.user;
   const userHandler = await User.findById(req.params.id, "notifications", {
     lean: true
@@ -75,6 +78,8 @@ router.put("/:id/notification/:idNotification", auth, async (req, res) => {
     );
 
   res.send(user);
-});
+};
+
+router.put("/:id/notification/:idNotification", auth, setNotificationAsReaded);
 
 export default router;

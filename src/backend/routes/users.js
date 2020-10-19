@@ -24,7 +24,7 @@ import express from "express";
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+const registerNewUser = async (req, res) => {
   const User = res.locals.models.user;
   const {
     error
@@ -51,9 +51,11 @@ router.post("/", async (req, res) => {
   res
     .header("x-auth-token", token)
     .send(_.pick(user, ["_id", "name", "email"]));
-});
+};
 
-router.post("/googleUser", async (req, res) => {
+router.post("/", registerNewUser );
+
+const registerNewGoogleUser = async (req, res) => {
   const verificationResult = await verify(req.body);
 
   if (verificationResult instanceof Error) return res.status(401).send(console.error(verificationResult));
@@ -86,10 +88,11 @@ router.post("/googleUser", async (req, res) => {
     return res
       .header("x-auth-token", token)
       .send(_.pick(user, ["_id", "name", "email"]));
-});
+};
 
+router.post("/googleUser", registerNewGoogleUser);
 
-router.get("/me", auth, async (req, res) => {
+const getMyData = async (req, res) => {
   const User = res.locals.models.user;
 
   const user = await User.findById(req.user._id);
@@ -97,9 +100,11 @@ router.get("/me", auth, async (req, res) => {
     return res.status(404).send("The user with the given ID was not found.");
 
   res.send(_.pick(user, ["_id", "name", "email", "isAdmin"]));
-});
+};
 
-router.get('/verification/:token', async (req, res) => {
+router.get("/me", auth, getMyData);
+
+const verifyUser = async (req, res) => {
   const User = res.locals.models.user;
 
   let user = jwt.verify(req.params.token, process.env.JWTPRIVATEKEY);
@@ -110,9 +115,11 @@ router.get('/verification/:token', async (req, res) => {
   });
 
   res.send(user);
-});
+};
 
-router.get("/byId/:id", auth, async (req, res) => {
+router.get('/verification/:token', verifyUser);
+
+const getUserDataById = async (req, res) => {
   const User = res.locals.models.user;
 
 
@@ -131,10 +138,11 @@ router.get("/byId/:id", auth, async (req, res) => {
 
   }
 
-});
+};
 
+router.get("/byId/:id", auth, getUserDataById);
 
-router.get("/byIdAdmin/:id", auth, admin, async (req, res) => {
+const getUserDataByIdForAdmin = async (req, res) => {
   const User = res.locals.models.user;
 
 
@@ -153,9 +161,11 @@ router.get("/byIdAdmin/:id", auth, admin, async (req, res) => {
 
   }
 
-});
+};
 
-router.get("/", auth, admin, async (req, res) => {
+router.get("/byIdAdmin/:id", auth, admin, getUserDataByIdForAdmin);
+
+const getUsersListForAdmin = async (req, res) => {
   const User = res.locals.models.user;
 
   const users = await User.find()
@@ -163,11 +173,11 @@ router.get("/", auth, admin, async (req, res) => {
     .sort("email");
 
   res.send(users);
-});
+};
 
+router.get("/", auth, admin, getUsersListForAdmin);
 
-//checking if email if taken
-router.get("/:email", async (req, res) => {
+const checkIfEmailIsAlreadyInDatabase = async (req, res) => {
   const User = res.locals.models.user;
 
   const emailParameter = req.params.email;
@@ -179,9 +189,11 @@ router.get("/:email", async (req, res) => {
   if (result.length >= 1) return res.send(true);
 
   if (result.length === 0) return res.send(false);
-});
+};
 
-router.put("/:id/product", auth, async (req, res) => {
+router.get("/:email", checkIfEmailIsAlreadyInDatabase);
+
+const addCustomProduct = async (req, res) => {
   const User = res.locals.models.user;
 
   const Product = res.locals.models.product;
@@ -209,10 +221,11 @@ router.put("/:id/product", auth, async (req, res) => {
   );
   
   res.send(user);
-});
+};
 
-//delete shopping list from user shopping lists
-router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
+router.put("/:id/product", auth, addCustomProduct);
+
+const removeShoppingListFromUserShoppingLists = async (req, res) => {
   const User = res.locals.models.user;
 
   const userHandler = await User.findById(req.params.id, "shopping_lists_id common_shopping_lists_id", {
@@ -239,11 +252,11 @@ router.put("/:id/shoppingList/:idSL", auth, async (req, res) => {
   );
 
   res.send(user);
-});
+};
 
+router.put("/:id/shoppingList/:idSL", auth, removeShoppingListFromUserShoppingLists);
 
-//finding users by name
-router.get("/names/:name", auth, async (req, res) => {
+const findUsersByName = async (req, res) => {
   const User = res.locals.models.user;
 
   const nameParameter = req.params.name;
@@ -253,10 +266,11 @@ router.get("/names/:name", auth, async (req, res) => {
   const result = filterByValue(users, nameParameter);
 
   res.send(result);
-});
+};
 
+router.get("/names/:name", auth, findUsersByName);
 
-router.delete("/:id", auth, async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const User = res.locals.models.user;
 
@@ -271,9 +285,11 @@ router.delete("/:id", auth, async (req, res) => {
 
   }
   res.send('Document deleted');
-});
+};
 
-router.put('/byId/:id', auth, admin, async (req, res) => {
+router.delete("/:id", auth, deleteUser);
+
+const modifyUserAccount = async (req, res) => {
   const User = res.locals.models.user;
 
   if (mongoose.Types.ObjectId.isValid(req.params.id)) { 
@@ -295,7 +311,9 @@ router.put('/byId/:id', auth, admin, async (req, res) => {
 
   }
   
-});
+};
+
+router.put('/byId/:id', auth, admin, modifyUserAccount);
 
 export function filterByValue(names, name) {
   if (!name) return names;

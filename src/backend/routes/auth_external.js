@@ -6,8 +6,7 @@ import verify from '../../frontend/utils/googleAuth.js'
 
 const router = express.Router();
 
-
-router.post("/", async (req, res) => {
+const authorizeExternalUser = async (req, res) => {
   const verificationResult = await verify(req.body);
 
   if (verificationResult instanceof Error) return res.status(400).send(console.error(verificationResult));
@@ -38,6 +37,8 @@ router.post("/", async (req, res) => {
   } else {
     res.status(401).send("Stop doing that you dumbass")
   }
-});
+};
+
+router.post("/", authorizeExternalUser);
 
 export default router;

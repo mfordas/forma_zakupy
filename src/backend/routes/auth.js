@@ -5,7 +5,7 @@ import _ from "lodash";
 import express from "express";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+const authorizeUser = async (req, res) => {
   function validate(req) {
     const schema = Joi.object({
       email: Joi.string()
@@ -49,6 +49,8 @@ router.post("/", async (req, res) => {
   res
     .header("x-auth-token", token)
     .send(_.pick(user, ["_id", "name", "email"]));
-});
+};
+
+router.post("/", authorizeUser);
 
 export default router;

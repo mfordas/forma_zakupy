@@ -2,7 +2,6 @@ import express from "express";
 import helmet from "helmet";
 import path from "path";
 
-import home from "./routes/home.js";
 import auth from "./routes/auth.js";
 import auth_external from './routes/auth_external.js';
 import users from "./routes/users.js";
@@ -46,7 +45,6 @@ const main = () => {
   app.use(helmet());
   app.use(express.static(path.join(dirname, "/./build")));
 
-  app.use("/", home);
   app.use("/api/users", users);
   app.use("/api/shoppingLists", shoppingLists);
   app.use("/api/products", products);

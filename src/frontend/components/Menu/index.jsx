@@ -4,16 +4,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { logout, myData } from '../../redux_actions/loginActions';
+import handleLogout from './handleLogout'
 
 const Menu = ({loginData, logout, myData}) => {
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('id');
-        localStorage.removeItem('email');
-        logout();
-        window.location.reload();
-    };
-
     if(loginData.isLogged && JSON.stringify(loginData.me) === '{}'){
         myData();
     };
@@ -32,12 +25,11 @@ const Menu = ({loginData, logout, myData}) => {
         <>
         <NavLink className="buttonMenu" to="/shoppingLists">Moje Listy zakupów</NavLink>
         <NavLink className="buttonMenu" to="/commonShoppingLists">Wspólne listy zakupów</NavLink>
-        <NavLink className="buttonMenu" to="/logout" onClick={handleLogout}>Wyloguj</NavLink>
+        <NavLink className="buttonMenu" to="/logout" onClick={() => handleLogout(logout)}>Wyloguj</NavLink>
         </>
     )}
         </div>
     )
-
 }
 
 const mapStateToProps = (state) => ({

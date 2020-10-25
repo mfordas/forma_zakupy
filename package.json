@@ -36,8 +36,10 @@
     "concurrently": "^4.1.2",
     "eslint": "^6.1.0",
     "file-loader": "^4.2.0",
+    "nock": "^13.0.4",
     "nodemon": "^1.19.3",
     "prettier": "1.18.2",
+    "redux-mock-store": "^1.5.4",
     "supertest": "^4.0.2"
   },
   "scripts": {

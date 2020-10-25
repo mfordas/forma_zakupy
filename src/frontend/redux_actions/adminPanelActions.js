@@ -125,10 +125,3 @@ export const saveUserChanges = (id, userData) => async (dispatch) => {
     }
 
 };
-
-export const resetPersonalDataState = () => async (dispatch) => {
-    dispatch({
-        type: TYPES.RESETPERSONALDATASTATE,
-        accountDeleted: false
-    })
-}

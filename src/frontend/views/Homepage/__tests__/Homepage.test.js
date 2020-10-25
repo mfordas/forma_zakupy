@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "../../../Utils/test-utils";
+import { render, screen } from "../../../utils/test-utils";
 import HomePage from '../../Homepage';
 
 it("renders without crashing", () => {

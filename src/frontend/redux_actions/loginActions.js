@@ -5,6 +5,7 @@ import setHeaders from '../utils/setHeaders';
 import {
   TYPES
 } from '../redux_actions/types';
+import generateAuthTokenForExternalUser from '../utils/generateAuthTokenForExternalUser';
 
 export const login = (data) => async (dispatch) => {
   try {
@@ -58,7 +59,7 @@ export const loginExternal = (authObject) => async (dispatch) => {
     const res = await axios({
       method: 'post',
       url: '/api/authexternal',
-      data: {token: authObject.currentUser.get().getAuthResponse().id_token},
+      data: {token: await generateAuthTokenForExternalUser(authObject)},
   });
 
     if (res.status === 200) {
@@ -117,7 +118,7 @@ export const myData = () => async (dispatch) => {
 
       dispatch({
         type: TYPES.GETMYDATA,
-        isLogged: true,
+        isLogged: false,
         me: {},
       });
       return;

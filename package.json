@@ -77,7 +77,10 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/"
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/src/Store.js",
+      "!<rootDir>/src/frontend/utils/generateAuthTokenForExternalUser.js",
+      "!<rootDir>/src/frontend/utils/googleAuth.js"
     ],
     "coverageReporters": [
       "json",

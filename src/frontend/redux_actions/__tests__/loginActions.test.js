@@ -19,10 +19,6 @@ const loginDataFromUser = {
   password: '123456'
 };
 
-const invalidLoginDataFromUser = {
-  email: 'sample@email.com',
-};
-
 describe("login actions ", () => {
   beforeEach(() => {})
   afterEach(() => {

@@ -8,11 +8,14 @@ import {
 export const deleteAccount = () => async (dispatch) => {
     try {
         const id = localStorage.getItem('id');
+        console.log('works1')
         const res = await axios({
             url: `/api/users/${id}`,
             method: "DELETE",
             headers: setHeaders()
         });
+
+        console.log('works2')
 
         if (res.status === 200) {
             localStorage.removeItem('token');

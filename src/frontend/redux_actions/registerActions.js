@@ -5,6 +5,8 @@ import {
     TYPES
 } from '../redux_actions/types';
 
+import generateAuthTokenForExternalUser from '../utils/generateAuthTokenForExternalUser';
+
 export const postUser = (data) => async (dispatch) => {
     try {
         const res = await axios({
@@ -46,7 +48,7 @@ export const postGoogleUser = (authObject) => async (dispatch) => {
         const res = await axios({
             method: 'post',
             url: '/api/users/googleUser',
-            data: {token: authObject.currentUser.get().getAuthResponse().id_token},
+            data: {token: await generateAuthTokenForExternalUser(authObject)},
         });
 
         if (res.status === 200) {

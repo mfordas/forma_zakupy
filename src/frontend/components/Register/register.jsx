@@ -69,7 +69,6 @@ class Register extends React.Component {
   }
 
   registerConfirmation = () => {
-    console.log(this.props.registerData);
     return this.props.registerData.confirm && !this.props.registerData.googleUser ? <Confirm name={this.state.name} email={this.state.email}/> : <ConfirmGoogle />
   };
 

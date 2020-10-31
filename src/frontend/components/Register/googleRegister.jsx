@@ -11,6 +11,7 @@ const GoogleRegister = ({ postGoogleUser }) => {
     const [authObject, setAuthObject] = useState(null);
 
     useEffect(() => {
+      
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
                 clientId: process.env.REACT_APP_GOOGLE_AUTH_API_CLIENTID,
@@ -20,12 +21,15 @@ const GoogleRegister = ({ postGoogleUser }) => {
             }
             );
         });
-
     }, []);
 
     const makeAuth = async () => {
+        try{
         await authObject.signIn();
         await postGoogleUser(authObject);
+    } catch (err) {
+        console.log(err);
+    }
     }
 
     return (

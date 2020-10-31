@@ -11,6 +11,7 @@ const GoogleAuth = ({ loginExternal }) => {
     const [authObject, setAuthObject] = useState(null);
 
     useEffect(() => {
+
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
                 clientId: process.env.REACT_APP_GOOGLE_AUTH_API_CLIENTID,
@@ -20,13 +21,16 @@ const GoogleAuth = ({ loginExternal }) => {
             }
             );
         });
-
     }, []);
 
     const makeAuth = async () => {
-        await authObject.signIn();
-        await loginExternal(authObject);
-    }
+        try {
+            await authObject.signIn();
+            await loginExternal(authObject);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div className="googleButton" onClick={() => makeAuth()}>
